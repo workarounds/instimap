@@ -1,6 +1,7 @@
 package com.mrane.campusmap;
 
 
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mrane.zoomview.SubsamplingScaleImageView;
+import com.mrane.zoomview.PinView;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -59,8 +60,11 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)rootView.findViewById(R.id.imageView);
+            PinView imageView = (PinView)rootView.findViewById(R.id.imageView);
             imageView.setImageAsset("map.png");
+            PointF marker = new PointF(3355f, 1575f);
+            imageView.setPin(marker);
+            imageView.setScaleAndCenter(imageView.getMaxScale(), marker);
             return rootView;
         }
     }

@@ -34,8 +34,10 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.lang.ref.WeakReference;
 import java.util.*;
+
 import com.mrane.campusmap.R.styleable;;
 /**
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,
@@ -1471,6 +1473,7 @@ public class SubsamplingScaleImageView extends View {
         this.sRequestedCenter = sCenter;
         invalidate();
     }
+    
 
     /**
      * Fully zoom out and return the image to the middle of the screen. This might be useful if you have a view pager

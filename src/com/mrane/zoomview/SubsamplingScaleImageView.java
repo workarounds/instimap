@@ -1313,7 +1313,7 @@ public class SubsamplingScaleImageView extends View {
      * Returns the minimum allowed scale.
      */
     private float minScale() {
-        return Math.min(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
+    	return Math.min(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
     }
 
     /**

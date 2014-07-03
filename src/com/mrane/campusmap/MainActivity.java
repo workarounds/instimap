@@ -8,6 +8,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +17,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import com.mrane.zoomview.PinView;
 import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity{
 	private static MainActivity mMainActivity;
+	boolean isOpened = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getSupportActionBar().hide();
-		
+
 		setContentView(R.layout.activity_main);
 		setmMainActivity(this);
 
@@ -38,7 +40,6 @@ public class MainActivity extends ActionBarActivity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 	}
-
 
 	public static MainActivity getmMainActivity() {
 		return mMainActivity;
@@ -58,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
 		HashMap<String, Marker> data;
 		View rootView;
 		PinView imageView;
-		AutoCompleteTextView textView;
+		CustomAutoCompleteView textView;
 
 		public PlaceholderFragment() {
 		}
@@ -77,19 +78,18 @@ public class MainActivity extends ActionBarActivity {
 
 			adapter = new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_dropdown_item_1line, KEYS);
-			textView = (AutoCompleteTextView) rootView
+			textView = (CustomAutoCompleteView) rootView
 					.findViewById(R.id.search);
 			textView.setAdapter(adapter);
 			textView.setOnItemClickListener(this);
-
 			return rootView;
 		}
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
+			textView.clearFocus();
 			setNewMarker(arg2);
-
 		}
 
 		private void setNewMarker(int arg2) {
@@ -100,10 +100,20 @@ public class MainActivity extends ActionBarActivity {
 					.animateScaleAndCenter(imageView.getMaxScale(), marker);
 			animationBuilder.withDuration(750).start();
 			imageView.animateScaleAndCenter(imageView.getMaxScale(), marker);
-			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-				      Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
-			textView.clearFocus();
+			InputMethodManager imm = (InputMethodManager) getActivity()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+		}
+	}
+
+	public void autoCompleteFocusChanged(boolean focused) {
+		LinearLayout linear = (LinearLayout) findViewById(R.id.list_background);
+		Log.d("testing"," I'm being called ");
+		if(focused) {
+			linear.setVisibility(View.VISIBLE);
+		}
+		else {
+			linear.setVisibility(View.GONE);
 		}
 	}
 

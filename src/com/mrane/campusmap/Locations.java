@@ -25,6 +25,7 @@ public class Locations {
 		String s5 = "Lecture Hall Complex";
 		Marker m5 = new Marker(3236f, 2010f);
 		data.put(s5, m5);
+		
 	}
 
 }

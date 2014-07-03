@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <AutoCompleteTextView
+    <com.mrane.campusmap.CustomAutoCompleteView
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,18 @@
         android:maxLines="1"
         android:paddingTop ="7dp"
         android:paddingBottom="7dp"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:dropDownVerticalOffset="15dp" />
+    
+    <LinearLayout 
+        android:id="@+id/list_background"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="#CCFFFFFF"
+        android:orientation="vertical"
+        android:visibility="gone">
+        
+    </LinearLayout>
     
     </LinearLayout>
 

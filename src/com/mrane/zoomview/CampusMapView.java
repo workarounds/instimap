@@ -36,7 +36,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void initialise(){
 		float density = getResources().getDisplayMetrics().density;
-        bluePin = BitmapFactory.decodeResource(this.getResources(), drawable.pushpin_blue);
+        bluePin = BitmapFactory.decodeResource(this.getResources(), drawable.test_marker);
         float w = pinWidth*density;
         float h = bluePin.getHeight() * (w/bluePin.getWidth());
         bluePin = Bitmap.createScaledBitmap(bluePin, (int)w, (int)h, true);

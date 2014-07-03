@@ -34,8 +34,10 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.lang.ref.WeakReference;
 import java.util.*;
+
 import com.mrane.campusmap.R.styleable;;
 /**
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,
@@ -725,13 +727,16 @@ public class SubsamplingScaleImageView extends View {
     private synchronized void initialiseBaseLayer(Point maxTileDimensions) {
 
         fitToBounds(true);
+        
+        fullImageSampleSize = calculateInSampleSize();
 
         // Load double resolution - next level will be split into four tiles and at the center all four are required,
         // so don't bother with tiling until the next level 16 tiles are needed.
-        fullImageSampleSize = calculateInSampleSize();
-        if (fullImageSampleSize > 1) {
-            fullImageSampleSize /= 2;
-        }
+        
+//        if (fullImageSampleSize > 1) {
+//            fullImageSampleSize /= 2;
+//        }
+        
 
         initialiseTileMap(maxTileDimensions);
 
@@ -1313,7 +1318,7 @@ public class SubsamplingScaleImageView extends View {
      * Returns the minimum allowed scale.
      */
     private float minScale() {
-    	return Math.min(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
+    	return Math.max(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
     }
 
     /**
@@ -1471,6 +1476,7 @@ public class SubsamplingScaleImageView extends View {
         this.sRequestedCenter = sCenter;
         invalidate();
     }
+    
 
     /**
      * Fully zoom out and return the image to the middle of the screen. This might be useful if you have a view pager

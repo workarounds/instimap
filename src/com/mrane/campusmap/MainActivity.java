@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,12 +18,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 
-import com.mrane.zoomview.PinView;
-import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
+import com.mrane.zoomview.CampusMapView;
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity {
 	private static MainActivity mMainActivity;
 	boolean isOpened = false;
 
@@ -58,8 +59,8 @@ public class MainActivity extends ActionBarActivity{
 		ArrayAdapter<String> adapter;
 		HashMap<String, Marker> data;
 		View rootView;
-		PinView imageView;
-		CustomAutoCompleteView textView;
+		CampusMapView imageView;
+		AutoCompleteTextView textView;
 
 		public PlaceholderFragment() {
 		}
@@ -69,10 +70,11 @@ public class MainActivity extends ActionBarActivity{
 				Bundle savedInstanceState) {
 			rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
-			imageView = (PinView) rootView.findViewById(R.id.imageView);
+			imageView = (CampusMapView) rootView.findViewById(R.id.imageView);
 			imageView.setImageAsset("map.png");
 			Locations mLocations = new Locations();
 			data = mLocations.data;
+			imageView.setData(data);
 			Set<String> keys = data.keySet();
 			String[] KEYS = keys.toArray(new String[keys.size()]);
 
@@ -94,25 +96,22 @@ public class MainActivity extends ActionBarActivity{
 
 		private void setNewMarker(int arg2) {
 			String key = adapter.getItem(arg2);
-			PointF marker = data.get(key).point;
-			imageView.setPin(marker);
-			AnimationBuilder animationBuilder = imageView
-					.animateScaleAndCenter(imageView.getMaxScale(), marker);
-			animationBuilder.withDuration(750).start();
-			imageView.animateScaleAndCenter(imageView.getMaxScale(), marker);
+			Marker marker = data.get(key);
+			imageView.removeHighlightedMarkers();
+			imageView.goToMarker(marker);
 			InputMethodManager imm = (InputMethodManager) getActivity()
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+			textView.clearFocus();
 		}
 	}
 
 	public void autoCompleteFocusChanged(boolean focused) {
 		LinearLayout linear = (LinearLayout) findViewById(R.id.list_background);
-		Log.d("testing"," I'm being called ");
-		if(focused) {
+		Log.d("testing", " I'm being called ");
+		if (focused) {
 			linear.setVisibility(View.VISIBLE);
-		}
-		else {
+		} else {
 			linear.setVisibility(View.GONE);
 		}
 	}

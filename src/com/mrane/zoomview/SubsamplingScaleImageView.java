@@ -727,13 +727,16 @@ public class SubsamplingScaleImageView extends View {
     private synchronized void initialiseBaseLayer(Point maxTileDimensions) {
 
         fitToBounds(true);
+        
+        fullImageSampleSize = calculateInSampleSize();
 
         // Load double resolution - next level will be split into four tiles and at the center all four are required,
         // so don't bother with tiling until the next level 16 tiles are needed.
-        fullImageSampleSize = calculateInSampleSize();
-        if (fullImageSampleSize > 1) {
-            fullImageSampleSize /= 2;
-        }
+        
+//        if (fullImageSampleSize > 1) {
+//            fullImageSampleSize /= 2;
+//        }
+        
 
         initialiseTileMap(maxTileDimensions);
 
@@ -1315,7 +1318,7 @@ public class SubsamplingScaleImageView extends View {
      * Returns the minimum allowed scale.
      */
     private float minScale() {
-    	return Math.min(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
+    	return Math.max(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
     }
 
     /**

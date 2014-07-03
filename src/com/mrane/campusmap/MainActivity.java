@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.mrane.zoomview.CampusMapView;
 
@@ -64,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
 		CampusMapView imageView;
 		AutoCompleteTextView textView;
 		ListView listView;
-
+		
 		public PlaceholderFragment() {
 		}
 
@@ -75,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
 					false);
 			imageView = (CampusMapView) rootView.findViewById(R.id.imageView);
 			imageView.setImageAsset("map.png");
-			listView = (ListView) rootView.findViewById(R.id.suggestion_list);
+			// listView = (ListView) rootView.findViewById(R.id.suggestion_list);
 			Locations mLocations = new Locations();
 			data = mLocations.data;
 			imageView.setData(data);
@@ -87,8 +90,8 @@ public class MainActivity extends ActionBarActivity {
 			textView = (CustomAutoCompleteView) rootView
 					.findViewById(R.id.search);
 			textView.setAdapter(adapter);
-			listView.setAdapter(adapter);
-			listView.setOnItemClickListener(this);
+			// listView.setAdapter(adapter);
+			// listView.setOnItemClickListener(this);
 			textView.setOnItemClickListener(this);
 			return rootView;
 		}
@@ -102,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
 		private void setNewMarker(int arg2) {
 			String key = adapter.getItem(arg2);
 			Marker marker = data.get(key);
-			textView.setText(key);;
+			textView.setText(key);
 			InputMethodManager imm = (InputMethodManager) getActivity()
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
@@ -113,11 +116,17 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void autoCompleteFocusChanged(boolean focused) {
-		LinearLayout linear = (LinearLayout) findViewById(R.id.list_background);
-		Log.d("testing", " I'm being called ");
+		LinearLayout listContainer;
+		RelativeLayout linear = (RelativeLayout) findViewById(R.id.list_background);
+		listContainer = (LinearLayout) findViewById(R.id.list_container);
+		// ListView list = (ListView) findViewById(R.id.suggestion_list);
 		if (focused) {
 			linear.setVisibility(View.VISIBLE);
+			listContainer.setBackgroundColor(Color.DKGRAY);
+			// list.setVisibility(View.VISIBLE);
 		} else {
+			listContainer.setBackgroundColor(Color.TRANSPARENT);
+			// list.setVisibility(View.GONE);
 			linear.setVisibility(View.GONE);
 		}
 	}

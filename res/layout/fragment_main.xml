@@ -32,26 +32,24 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="#CCFFFFFF"
-            android:dropDownWidth="0dp"
             android:maxLines="1"
             android:paddingBottom="7dp"
             android:paddingLeft="10dp"
             android:paddingTop="7dp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/list_background"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:background="#CCFFFFFF"
-            android:orientation="vertical"
+            android:background="#FFCCCCCC"
             android:visibility="gone" >
 
             <ListView
                 android:id="@+id/suggestion_list"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent" >
+                android:layout_height="wrap_content" >
             </ListView>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </FrameLayout>

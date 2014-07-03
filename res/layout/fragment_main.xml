@@ -20,15 +20,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <AutoCompleteTextView
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#CCFFFFFF" 
-        android:layout_margin="5dp"
+        android:layout_margin="8dp"
         android:maxLines="1"
-        android:paddingTop ="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop ="7dp"
+        android:paddingBottom="7dp"
         android:paddingLeft="10dp" />
+    
+    </LinearLayout>
 
 </FrameLayout>

@@ -27,6 +27,7 @@ public class PinView extends SubsamplingScaleImageView {
 
     private PointF sPin;
     private Bitmap pin;
+    Paint paint = new Paint();
 
     public PinView(Context context) {
         this(context, null);
@@ -59,13 +60,13 @@ public class PinView extends SubsamplingScaleImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        paint.setAntiAlias(true);
         // Don't draw pin before image is ready so it doesn't move around during setup.
         if (!isImageReady()) {
             return;
         }
 
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
+        
 
         if (sPin != null && pin != null) {
             PointF vPin = sourceToViewCoord(sPin);

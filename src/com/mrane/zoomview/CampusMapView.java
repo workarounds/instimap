@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.mrane.campusmap.Marker;
 import com.mrane.campusmap.R.drawable;
@@ -55,6 +56,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		highlightedMarkerList.add(marker);
 		AnimationBuilder anim = animateScaleAndCenter(getMaxScale(), marker.point);
 		anim.withDuration(750).start();
+		Log.d("testing", "goToMarkerCalled");
 	}
 	
 	public void removeHighlightedMarkers(){

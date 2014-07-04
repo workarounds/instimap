@@ -24,25 +24,54 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/header_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content" >
+
+            <ImageButton
+                android:id="@+id/search_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:src="@android:drawable/ic_menu_search" />
 
             <com.mrane.campusmap.CustomAutoCompleteView
                 android:id="@+id/search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
                 android:background="#CCFFFFFF"
-                android:maxLines="1"
-                android:hint="Search"
                 android:dropDownHeight="0dp"
-                android:paddingBottom="7dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="7dp" />
-        </LinearLayout>
+                android:hint="Search"
+                android:maxLines="1"
+                android:paddingBottom="8dp"
+                android:paddingLeft="36dp"
+                android:paddingTop="8dp" />
+
+            <ImageButton
+                android:id="@+id/delete_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_preferences"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/list_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_agenda" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/fragment_container"

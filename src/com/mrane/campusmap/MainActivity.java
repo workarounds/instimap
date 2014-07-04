@@ -3,48 +3,67 @@ package com.mrane.campusmap;
 import java.util.HashMap;
 import java.util.Set;
 
+import com.mrane.zoomview.CampusMapView;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 
-import com.mrane.zoomview.CampusMapView;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements
+		OnItemClickListener {
 	private static MainActivity mMainActivity;
 	boolean isOpened = false;
+	private ArrayAdapter<String> adapter;
+	private FragmentManager fragmentManager;
+	private ListFragment listFragment;
+	AutoCompleteTextView textView;
+	HashMap<String, Marker> data;
+	FragmentTransaction transaction;
+	CampusMapView imageView;
+	private boolean itemSelected = false;
+	private boolean isFirstFragment = true;
+	private final String firstStackTag = "FIRST_TAG";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setmMainActivity(this);
+
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_main);
-		setmMainActivity(this);
 
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+		Locations mLocations = new Locations();
+		data = mLocations.data;
+		Set<String> keys = data.keySet();
+		String[] KEYS = keys.toArray(new String[keys.size()]);
+
+		adapter = new ArrayAdapter<String>(this, R.layout.row_layout,
+				R.id.label, KEYS);
+		textView = (CustomAutoCompleteView) findViewById(R.id.search);
+		textView.setAdapter(adapter);
+
+		imageView = (CampusMapView) findViewById(R.id.imageView);
+		imageView.setImageAsset("map.png");
+		imageView.setData(mMainActivity.data);
+
+		fragmentManager = getSupportFragmentManager();
+		listFragment = new ListFragment();
+
 	}
 
 	public static MainActivity getmMainActivity() {
@@ -55,80 +74,72 @@ public class MainActivity extends ActionBarActivity {
 		MainActivity.mMainActivity = mMainActivity;
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment implements
-			OnItemClickListener {
-
-		ArrayAdapter<String> adapter;
-		HashMap<String, Marker> data;
-		View rootView;
-		CampusMapView imageView;
-		AutoCompleteTextView textView;
-		ListView listView;
-		
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			imageView = (CampusMapView) rootView.findViewById(R.id.imageView);
-			imageView.setImageAsset("map.png");
-			// listView = (ListView) rootView.findViewById(R.id.suggestion_list);
-			Locations mLocations = new Locations();
-			data = mLocations.data;
-			imageView.setData(data);
-			Set<String> keys = data.keySet();
-			String[] KEYS = keys.toArray(new String[keys.size()]);
-
-			adapter = new ArrayAdapter<String>(getActivity(),
-					R.layout.row_layout, R.id.label, KEYS);
-			textView = (CustomAutoCompleteView) rootView
-					.findViewById(R.id.search);
-			textView.setAdapter(adapter);
-			// listView.setAdapter(adapter);
-			// listView.setOnItemClickListener(this);
-			textView.setOnItemClickListener(this);
-			return rootView;
-		}
-
-		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
-			setNewMarker(arg2);
-		}
-
-		private void setNewMarker(int arg2) {
-			String key = adapter.getItem(arg2);
-			Marker marker = data.get(key);
-			textView.setText(key);
-			InputMethodManager imm = (InputMethodManager) getActivity()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
-			textView.clearFocus();
-			imageView.removeHighlightedMarkers();
-			imageView.goToMarker(marker);
+	public void autoCompleteFocusChanged(boolean focused) {
+		LinearLayout headerContainer;
+		headerContainer = (LinearLayout) findViewById(R.id.header_container);
+		if (focused) {
+			itemSelected = false;
+			headerContainer.setBackgroundColor(Color.DKGRAY);
+			putFragment(listFragment);
+		} else {
+			if (itemSelected) {
+				fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				isFirstFragment = true;
+			} else {
+				
+			}
+			headerContainer.setBackgroundColor(Color.TRANSPARENT);
 		}
 	}
 
-	public void autoCompleteFocusChanged(boolean focused) {
-		LinearLayout listContainer;
-		RelativeLayout linear = (RelativeLayout) findViewById(R.id.list_background);
-		listContainer = (LinearLayout) findViewById(R.id.list_container);
-		// ListView list = (ListView) findViewById(R.id.suggestion_list);
-		if (focused) {
-			linear.setVisibility(View.VISIBLE);
-			listContainer.setBackgroundColor(Color.DKGRAY);
-			// list.setVisibility(View.VISIBLE);
+	private void putFragment(Fragment fragment) {
+		transaction = fragmentManager.beginTransaction();
+		if (isFirstFragment) {
+			transaction.add(R.id.fragment_container, fragment);
+			transaction.addToBackStack(firstStackTag);
+			isFirstFragment = false;
 		} else {
-			listContainer.setBackgroundColor(Color.TRANSPARENT);
-			// list.setVisibility(View.GONE);
-			linear.setVisibility(View.GONE);
+			transaction.replace(R.id.fragment_container, fragment);
+			transaction.addToBackStack(null);
 		}
+		transaction.commit();
+	}
+
+	public ArrayAdapter<String> getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(ArrayAdapter<String> adapter) {
+		this.adapter = adapter;
+	}
+
+	@Override
+	public void onBackPressed() {
+		textView.clearFocus();
+		super.onBackPressed();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		String key = adapter.getItem(arg2);
+		setAutoCompleteText(key);
+		fragmentManager.popBackStack();
+		resultMarker(key);
+	}
+
+	private void setAutoCompleteText(String key) {
+		textView.setText(key);
+		textView.clearFocus();
+		InputMethodManager imm = (InputMethodManager) this
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+	}
+
+	public void resultMarker(String key) {
+		Log.d("testing", "resultMarker");
+		Marker marker = mMainActivity.data.get(key);
+		imageView.removeHighlightedMarkers();
+		imageView.goToMarker(marker);
 	}
 
 }

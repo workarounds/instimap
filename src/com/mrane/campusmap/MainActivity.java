@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -41,6 +45,8 @@ public class MainActivity extends ActionBarActivity implements
 	ImageButton searchIcon;
 	ImageButton removeIcon;
 	ImageButton indexIcon;
+	LocationManager locationManager;
+	LocationListener locationListener;
 	private boolean itemSelected = false;
 	private boolean isFirstFragment = true;
 	private final String firstStackTag = "FIRST_TAG";
@@ -78,6 +84,19 @@ public class MainActivity extends ActionBarActivity implements
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
+		
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		boolean enabled = locationManager
+				  .isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+				if (!enabled) {
+				  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				  startActivity(intent);
+				} 
+		// Define a listener that responds to location updates
+		locationListener = new LocationListenerClass();
+		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
 	}
 
@@ -143,6 +162,7 @@ public class MainActivity extends ActionBarActivity implements
 		setAutoCompleteText(key);
 		fragmentManager.popBackStack();
 		resultMarker(key);
+		inIndexMode = false;
 	}
 
 	private void setAutoCompleteText(String key) {
@@ -172,9 +192,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	public void indexClick(View v) {
 		if (!inIndexMode) {
-			putFragment(indexFragment);
-			textView.clearFocus();
 			hideSoftKeyboard();
+			textView.clearFocus();
+			putFragment(indexFragment);
 			indexIcon.setImageResource(R.drawable.ic_action_sort_by_size);
 			inIndexMode = true;
 		} else {
@@ -186,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void removeClick(View v) {
-		textView.setText("");
+		textView.getText().clear();
 	}
 
 	@Override
@@ -212,4 +232,5 @@ public class MainActivity extends ActionBarActivity implements
 		}
 	}
 
+	
 }

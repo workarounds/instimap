@@ -12,11 +12,17 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+import android.widget.Toast;
 
+import com.mrane.campusmap.MainActivity;
 import com.mrane.campusmap.Marker;
 import com.mrane.campusmap.R.drawable;
 
 public class CampusMapView extends SubsamplingScaleImageView {
+	private MainActivity mMainActivity;
 	private HashMap<String, Marker> data;
 	private Collection<Marker> markerList;
 	private ArrayList<Marker> highlightedMarkerList;
@@ -44,8 +50,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
         highlightedBluePin = Bitmap.createScaledBitmap(bluePin, (int)(1.5*w), (int)(1.5*h), true);
         paint = new Paint();
         paint.setAntiAlias(true);
+        mMainActivity  = MainActivity.getmMainActivity();
+        setGestureDetector();
 	}
-	
+
 	public void setData(HashMap<String, Marker> markerData){
 		data = markerData;
 		markerList = data.values();
@@ -90,5 +98,40 @@ public class CampusMapView extends SubsamplingScaleImageView {
         }
 
     }
+	
+	private Marker getNearestMarker(PointF touchPoint) {
+		Marker resultMarker = null;
+		float minDist = 100000000f;
+		for(Marker marker: markerList){
+			PointF point = marker.point;
+			float xDiff = point.x - touchPoint.x;
+			float yDiff = point.y - touchPoint.y;
+			float dist  = (float) Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+			
+			if(dist < minDist){
+				minDist = dist;
+				resultMarker = marker;
+			}
+		}
+		return resultMarker;
+	}
+	
+	private void setGestureDetector() {
+		final GestureDetector gestureDetector = new GestureDetector(mMainActivity, new GestureDetector.SimpleOnGestureListener(){
+			@Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                if (isImageReady()) {
+                    PointF sCoord = viewToSourceCoord(e.getX(), e.getY());
+                    Marker marker = getNearestMarker(sCoord);
+                    
+                } else {
+                    
+                }
+                return true;
+            }
+		});
+		
+	}
+
 
 }

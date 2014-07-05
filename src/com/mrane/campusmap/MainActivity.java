@@ -175,7 +175,7 @@ public class MainActivity extends ActionBarActivity implements
 			putFragment(indexFragment);
 			textView.clearFocus();
 			hideSoftKeyboard();
-			indexIcon.setImageResource(R.drawable.ic_action_sort_by_size);
+			indexIcon.setImageResource(R.drawable.ic_action_map);
 			inIndexMode = true;
 		} else {
 			fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);

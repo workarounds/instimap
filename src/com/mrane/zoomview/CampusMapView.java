@@ -110,10 +110,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	            canvas.drawBitmap(bluePin, vX, vY, paint);
 //	            canvas.drawBitmap(markerText, vX + bluePin.getWidth(), vY, paint);
 	            Rect bounds = new Rect(); 
-	            textPaint.getTextBounds(marker.name, 0, marker.name.length() - 1, bounds);
+	            String name;
+	            if(marker.shortName.isEmpty()) name = marker.name;
+	            else name = marker.shortName;
+	            textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
 	            float tX = vX + 0.75f*bluePin.getWidth();
 	            float tY = vY + bluePin.getHeight()/2 + 4*density;
-	            canvas.drawText(marker.name, tX, tY, textPaint);
+	            canvas.drawText(name, tX, tY, textPaint);
         	}
         }
 

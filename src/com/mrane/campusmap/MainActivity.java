@@ -88,13 +88,13 @@ public class MainActivity extends ActionBarActivity implements
 		
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-		boolean enabled = locationManager
-				  .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-				if (!enabled) {
-				  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				  startActivity(intent);
-				} 
+//		boolean enabled = locationManager
+//				  .isProviderEnabled(LocationManager.GPS_PROVIDER);
+//
+//				if (!enabled) {
+//				  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//				  startActivity(intent);
+//				} 
 		// Define a listener that responds to location updates
 		locationListener = new LocationListenerClass();
 		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);

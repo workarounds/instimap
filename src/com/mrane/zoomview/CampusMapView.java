@@ -8,8 +8,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -27,9 +30,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private ArrayList<Marker> highlightedMarkerList;
 	private Bitmap bluePin;
 	private Bitmap highlightedBluePin;
-	private float pinWidth = 24;
+	private Bitmap markerText;
+	private float pinWidth = 48;
 	private static final float SHOW_PINS_AT_SCALE = 1f;
-	private Paint paint = new Paint();
+	private Paint paint;
+	private Paint textPaint;
 
 	public CampusMapView(Context context) {
 		this(context, null);
@@ -42,13 +47,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void initialise(){
 		float density = getResources().getDisplayMetrics().density;
-        bluePin = BitmapFactory.decodeResource(this.getResources(), drawable.test_marker);
+        bluePin = BitmapFactory.decodeResource(this.getResources(), drawable.markerdot);
+        markerText = BitmapFactory.decodeResource(this.getResources(), drawable.text);
         float w = pinWidth*density;
         float h = bluePin.getHeight() * (w/bluePin.getWidth());
         bluePin = Bitmap.createScaledBitmap(bluePin, (int)w, (int)h, true);
+        markerText = Bitmap.createScaledBitmap(markerText, (int)(markerText.getWidth()*h/markerText.getHeight()), (int)h, true);
         highlightedBluePin = Bitmap.createScaledBitmap(bluePin, (int)(1.5*w), (int)(1.5*h), true);
         paint = new Paint();
         paint.setAntiAlias(true);
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+        textPaint.setColor(Color.rgb(254, 250, 217));
+        //textPaint.setColor(Color.WHITE);
+        textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
+        textPaint.setTextSize(16*density);
+        textPaint.setTypeface(Typeface.SANS_SERIF);
         mMainActivity  = MainActivity.getmMainActivity();
         setGestureDetector();
 	}
@@ -74,6 +88,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	@Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        float density = getResources().getDisplayMetrics().density;
 
         // Don't draw pin before image is ready so it doesn't move around during setup.
         if (!isImageReady()) {
@@ -91,8 +106,14 @@ public class CampusMapView extends SubsamplingScaleImageView {
         	else if(super.getScale() > SHOW_PINS_AT_SCALE){
 	            PointF vPin = sourceToViewCoord(marker.point);
 	            float vX = vPin.x - (bluePin.getWidth()/2);
-	            float vY = vPin.y - bluePin.getHeight();
+	            float vY = vPin.y - (bluePin.getHeight()/2);
 	            canvas.drawBitmap(bluePin, vX, vY, paint);
+//	            canvas.drawBitmap(markerText, vX + bluePin.getWidth(), vY, paint);
+	            Rect bounds = new Rect(); 
+	            textPaint.getTextBounds(marker.name, 0, marker.name.length() - 1, bounds);
+	            float tX = vX + 0.75f*bluePin.getWidth();
+	            float tY = vY + bluePin.getHeight()/2 + 4*density;
+	            canvas.drawText(marker.name, tX, tY, textPaint);
         	}
         }
 

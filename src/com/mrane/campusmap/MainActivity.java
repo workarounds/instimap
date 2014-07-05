@@ -151,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements
 		hideSoftKeyboard();
 	}
 
-	private void hideSoftKeyboard() {
+	public void hideSoftKeyboard() {
 		InputMethodManager imm = (InputMethodManager) this
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);

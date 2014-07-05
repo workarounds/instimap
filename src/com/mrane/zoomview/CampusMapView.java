@@ -13,9 +13,8 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
-import android.widget.Toast;
+import android.view.View;
 
 import com.mrane.campusmap.MainActivity;
 import com.mrane.campusmap.Marker;
@@ -104,9 +103,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		float minDist = 100000000f;
 		for(Marker marker: markerList){
 			PointF point = marker.point;
-			float xDiff = point.x - touchPoint.x;
-			float yDiff = point.y - touchPoint.y;
-			float dist  = (float) Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+			float dist  = (float) calculateDistance(point, touchPoint);
 			
 			if(dist < minDist){
 				minDist = dist;
@@ -116,6 +113,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		return resultMarker;
 	}
 	
+	private double calculateDistance(PointF point1, PointF point2){
+		float xDiff = point1.x - point2.x;
+		float yDiff = point1.y - point2.y;
+		
+		return Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+	}
+	
 	private void setGestureDetector() {
 		final GestureDetector gestureDetector = new GestureDetector(mMainActivity, new GestureDetector.SimpleOnGestureListener(){
 			@Override
@@ -123,7 +127,9 @@ public class CampusMapView extends SubsamplingScaleImageView {
                 if (isImageReady()) {
                     PointF sCoord = viewToSourceCoord(e.getX(), e.getY());
                     Marker marker = getNearestMarker(sCoord);
-                    
+                    if(isMarkerInTouchRegion(marker, sCoord)){
+                    	mMainActivity.resultMarker(marker.name);
+                    }
                 } else {
                     
                 }
@@ -131,6 +137,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
             }
 		});
 		
+		setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+		});
+		
+	}
+	
+
+	private boolean isMarkerInTouchRegion(Marker marker, PointF origin) {
+		PointF point  = marker.point;
+		float dist = (float) calculateDistance(point, origin);
+		float density = getResources().getDisplayMetrics().density;
+		if(dist < pinWidth*density/2 ){ return true;}
+		return false;
 	}
 
 

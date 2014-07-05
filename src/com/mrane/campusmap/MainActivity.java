@@ -94,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements
 		headerContainer = (ViewGroup) findViewById(R.id.header_container);
 		if (focused) {
 			itemSelected = false;
-			headerContainer.setBackgroundColor(Color.GRAY);
+			headerContainer.setBackgroundColor(Color.rgb(208, 208, 208));
 			putFragment(listFragment);
 			inIndexMode = false;
 		} else {

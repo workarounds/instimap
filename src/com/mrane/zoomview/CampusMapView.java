@@ -54,7 +54,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	
 	public void goToMarker(Marker marker){
 		highlightedMarkerList.add(marker);
-//		setScaleAndCenter(getMaxScale(), marker.point);
 		AnimationBuilder anim = animateScaleAndCenter(getMaxScale(), marker.point);
 		anim.withDuration(750).start();
 		Log.d("testing", "goToMarkerCalled");

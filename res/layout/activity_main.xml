@@ -14,7 +14,7 @@
     </LinearLayout>
 
     <com.mrane.zoomview.CampusMapView
-        android:id="@+id/imageView"
+        android:id="@+id/campusMapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -29,48 +29,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <ImageButton
-                android:id="@+id/search_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="8dp"
-                android:src="@android:drawable/ic_menu_search" />
-
             <com.mrane.campusmap.CustomAutoCompleteView
                 android:id="@+id/search"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
-                android:background="#CCFFFFFF"
+                android:background="@drawable/searchbar_background"
                 android:dropDownHeight="0dp"
                 android:hint="Search"
                 android:maxLines="1"
                 android:paddingBottom="8dp"
-                android:paddingLeft="36dp"
+                android:paddingLeft="48dp"
                 android:paddingTop="8dp" />
 
             <ImageButton
-                android:id="@+id/delete_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:id="@+id/search_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="search"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_action_search"
+                android:onClick="searchClick"
+                android:background="@android:color/transparent" />
+            
+            <ImageButton
+                android:id="@+id/remove_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
-                android:padding="6dp"
-                android:src="@android:drawable/ic_menu_preferences"
-                android:visibility="gone" />
+                android:contentDescription="remove"
+                android:padding="8dp"
+                android:src="@drawable/ic_action_remove"
+                android:visibility="gone"
+                android:onClick="removeClick" 
+                android:background="@android:color/transparent"/>
 
             <ImageButton
-                android:id="@+id/list_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:id="@+id/index_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentRight="true"
+                android:contentDescription="index"
                 android:layout_margin="8dp"
-                android:padding="6dp"
-                android:src="@android:drawable/ic_menu_agenda" />
+                android:padding="8dp"
+                android:src="@drawable/ic_action_view_as_list" 
+                android:onClick="indexClick"
+                android:background="@android:color/transparent"/>
         </RelativeLayout>
 
         <LinearLayout

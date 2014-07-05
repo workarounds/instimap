@@ -3,8 +3,6 @@ package com.mrane.campusmap;
 import java.util.HashMap;
 import java.util.Set;
 
-import com.mrane.zoomview.CampusMapView;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,18 +10,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.mrane.zoomview.CampusMapView;
 
 public class MainActivity extends ActionBarActivity implements
-		OnItemClickListener {
+		OnItemClickListener, TextWatcher {
 	private static MainActivity mMainActivity;
 	boolean isOpened = false;
 	private ArrayAdapter<String> adapter;
@@ -32,7 +36,10 @@ public class MainActivity extends ActionBarActivity implements
 	AutoCompleteTextView textView;
 	HashMap<String, Marker> data;
 	FragmentTransaction transaction;
-	CampusMapView imageView;
+	CampusMapView campusMapView;
+	ImageButton searchIcon;
+	ImageButton removeIcon;
+	ImageButton indexIcon;
 	private boolean itemSelected = false;
 	private boolean isFirstFragment = true;
 	private final String firstStackTag = "FIRST_TAG";
@@ -56,10 +63,15 @@ public class MainActivity extends ActionBarActivity implements
 				R.id.label, KEYS);
 		textView = (CustomAutoCompleteView) findViewById(R.id.search);
 		textView.setAdapter(adapter);
+		textView.addTextChangedListener(this);
 
-		imageView = (CampusMapView) findViewById(R.id.imageView);
-		imageView.setImageAsset("map.png");
-		imageView.setData(mMainActivity.data);
+		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
+		campusMapView.setImageAsset("map.png");
+		campusMapView.setData(mMainActivity.data);
+		
+		searchIcon = (ImageButton) findViewById(R.id.search_icon);
+		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
+		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
@@ -75,11 +87,11 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void autoCompleteFocusChanged(boolean focused) {
-		LinearLayout headerContainer;
-		headerContainer = (LinearLayout) findViewById(R.id.header_container);
+		ViewGroup headerContainer;
+		headerContainer = (ViewGroup) findViewById(R.id.header_container);
 		if (focused) {
 			itemSelected = false;
-			headerContainer.setBackgroundColor(Color.DKGRAY);
+			headerContainer.setBackgroundColor(Color.GRAY);
 			putFragment(listFragment);
 		} else {
 			if (itemSelected) {
@@ -138,8 +150,47 @@ public class MainActivity extends ActionBarActivity implements
 	public void resultMarker(String key) {
 		Log.d("testing", "resultMarker");
 		Marker marker = mMainActivity.data.get(key);
-		imageView.removeHighlightedMarkers();
-		imageView.goToMarker(marker);
+		campusMapView.removeHighlightedMarkers();
+		campusMapView.goToMarker(marker);
+	}
+	
+	public void searchClick(View v){
+		Toast t = Toast.makeText(mMainActivity, "search", Toast.LENGTH_LONG);
+		t.show();
+	}
+	
+	public void indexClick(View v){
+		
+	}
+	
+	public void removeClick(View v){
+		textView.setText("");
+	}
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		
+		
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		String text = arg0.toString();
+		if(text.equals(null) || text.equals("")){
+			removeIcon.setVisibility(View.GONE);
+			indexIcon.setVisibility(View.VISIBLE);
+		}
+		else{
+			removeIcon.setVisibility(View.VISIBLE);
+			indexIcon.setVisibility(View.GONE);
+		}
 	}
 
 }

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -159,23 +160,20 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		String key = adapter.getItem(arg2);
-		setAutoCompleteText(key);
+		setAutoCompleteText(arg3, arg2, key);
 		fragmentManager.popBackStack();
 		resultMarker(key);
 		inIndexMode = false;
 	}
 
-	private void setAutoCompleteText(String key) {
+	private void setAutoCompleteText(long id, int index, String key) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		CompletionInfo completion = new CompletionInfo(id, index, (CharSequence)key);
+		CompletionInfo[] completions = {completion};
+		imm.displayCompletions(textView, completions);
+		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
 		textView.setText(key);
 		textView.clearFocus();
-		hideSoftKeyboard();
-	}
-
-	private void hideSoftKeyboard() {
-		InputMethodManager imm = (InputMethodManager) this
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
-
 	}
 
 	public void resultMarker(String key) {
@@ -192,10 +190,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	public void indexClick(View v) {
 		if (!inIndexMode) {
-			hideSoftKeyboard();
-			textView.clearFocus();
 			putFragment(indexFragment);
-			indexIcon.setImageResource(R.drawable.ic_action_sort_by_size);
+			setAutoCompleteText(0, 0, null);
+			indexIcon.setImageResource(R.drawable.ic_action_map);
 			inIndexMode = true;
 		} else {
 			fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);

@@ -33,6 +33,7 @@ public class MainActivity extends ActionBarActivity implements
 	private ArrayAdapter<String> adapter;
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
+	private IndexFragment indexFragment;
 	AutoCompleteTextView textView;
 	HashMap<String, Marker> data;
 	FragmentTransaction transaction;
@@ -43,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements
 	private boolean itemSelected = false;
 	private boolean isFirstFragment = true;
 	private final String firstStackTag = "FIRST_TAG";
+	private boolean inIndexMode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +70,14 @@ public class MainActivity extends ActionBarActivity implements
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.png");
 		campusMapView.setData(mMainActivity.data);
-		
+
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
+		indexFragment = new IndexFragment();
 
 	}
 
@@ -93,12 +96,14 @@ public class MainActivity extends ActionBarActivity implements
 			itemSelected = false;
 			headerContainer.setBackgroundColor(Color.GRAY);
 			putFragment(listFragment);
+			inIndexMode = false;
 		} else {
 			if (itemSelected) {
-				fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				fragmentManager.popBackStack(firstStackTag,
+						FragmentManager.POP_BACK_STACK_INCLUSIVE);
 				isFirstFragment = true;
 			} else {
-				
+
 			}
 			headerContainer.setBackgroundColor(Color.TRANSPARENT);
 		}
@@ -109,6 +114,7 @@ public class MainActivity extends ActionBarActivity implements
 		if (isFirstFragment) {
 			transaction.add(R.id.fragment_container, fragment);
 			transaction.addToBackStack(firstStackTag);
+			transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			isFirstFragment = false;
 		} else {
 			transaction.replace(R.id.fragment_container, fragment);
@@ -142,9 +148,14 @@ public class MainActivity extends ActionBarActivity implements
 	private void setAutoCompleteText(String key) {
 		textView.setText(key);
 		textView.clearFocus();
+		hideSoftKeyboard();
+	}
+
+	private void hideSoftKeyboard() {
 		InputMethodManager imm = (InputMethodManager) this
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+
 	}
 
 	public void resultMarker(String key) {
@@ -153,41 +164,49 @@ public class MainActivity extends ActionBarActivity implements
 		campusMapView.removeHighlightedMarkers();
 		campusMapView.goToMarker(marker);
 	}
-	
-	public void searchClick(View v){
+
+	public void searchClick(View v) {
 		Toast t = Toast.makeText(mMainActivity, "search", Toast.LENGTH_LONG);
 		t.show();
 	}
-	
-	public void indexClick(View v){
-		
+
+	public void indexClick(View v) {
+		if (!inIndexMode) {
+			putFragment(indexFragment);
+			textView.clearFocus();
+			hideSoftKeyboard();
+			indexIcon.setImageResource(R.drawable.ic_action_sort_by_size);
+			inIndexMode = true;
+		} else {
+			fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			isFirstFragment = true;
+			inIndexMode = false;
+			indexIcon.setImageResource(R.drawable.ic_action_view_as_list);
+		}
 	}
-	
-	public void removeClick(View v){
+
+	public void removeClick(View v) {
 		textView.setText("");
 	}
 
 	@Override
 	public void afterTextChanged(Editable arg0) {
-		
-		
+
 	}
 
 	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
-		
-		
+
 	}
 
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		String text = arg0.toString();
-		if(text.equals(null) || text.equals("")){
+		if (text.equals(null) || text.equals("")) {
 			removeIcon.setVisibility(View.GONE);
 			indexIcon.setVisibility(View.VISIBLE);
-		}
-		else{
+		} else {
 			removeIcon.setVisibility(View.VISIBLE);
 			indexIcon.setVisibility(View.GONE);
 		}

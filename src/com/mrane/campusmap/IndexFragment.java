@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ListFragment extends Fragment {
+public class IndexFragment extends Fragment {
 	
 	MainActivity mMainActivity;
 	ArrayAdapter<String> adapter;
@@ -18,7 +18,7 @@ public class ListFragment extends Fragment {
 	View rootView;
 	ListView list;
 	
-	public ListFragment() {
+	public IndexFragment() {
 	}
 	
 	@Override

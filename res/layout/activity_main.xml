@@ -107,7 +107,7 @@
 	
     <RelativeLayout>
         <ImageButton 
-            android:id="@+id/locateButton"
+            android:id="@+id/locate_icon"
             android:src="@drawable/ic_action_location_searching"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -123,7 +123,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="0dp"
 	        android:background="@drawable/searchbar_background"
-	        android:layout_below="@id/locateButton">
+	        android:layout_below="@id/locate_icon">
 	
 	        <TextView
 	            android:id="@+id/place_name"

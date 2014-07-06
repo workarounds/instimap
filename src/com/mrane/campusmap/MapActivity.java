@@ -47,6 +47,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton removeIcon;
 	public ImageButton indexIcon;
 	public ImageButton mapIcon;
+	public ImageButton locateIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	private boolean itemSelected = false;
@@ -99,6 +100,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
+		locateIcon = (ImageButton) findViewById(R.id.locate_icon);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();

@@ -30,7 +30,8 @@ public class Marker {
 		this.shortName = shortName;
 	}
 	
-	public static int getColor(int group){
+	public int getColor(){
+		int group = this.groupIndex;
 		Integer[] blueGroup = new Integer[] {HOSTELS};
 		Integer[] orangeGroup = new Integer[] {DEPARTMENTS, HALLS_N_AUDITORIUMS};
 		Integer[] redGroup = new Integer[] {RESIDENCES};

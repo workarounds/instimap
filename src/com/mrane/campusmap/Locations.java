@@ -55,7 +55,7 @@ public class Locations {
 		Marker m28 = new Marker(s28, "", 4207f, 1732f, 1);
 		data.put(s28, m28);
 		String s31 = "IRCC";
-		Marker m31 = new Marker(s31, "", 3505f, 1867f, 1);
+		Marker m31 = new Marker(s31, " ", 3505f, 1867f, 1);
 		data.put(s31, m31);
 		String s32 = "KReSIT Building";
 		Marker m32 = new Marker(s32, "", 3301f, 2106f, 1);
@@ -214,7 +214,7 @@ public class Locations {
 		Marker m93 = new Marker(s93, "", 2989f, 2154f, 5);
 		data.put(s93, m93);
 		String s94 = "Nestle Cafe (Coffee Shack)";
-		Marker m94 = new Marker(s94, "", 3492f, 1784f, 5);
+		Marker m94 = new Marker(s94, "Coffee Shack", 3492f, 1784f, 5);
 		data.put(s94, m94);
 		String s95 = "Staff Canteen";
 		Marker m95 = new Marker(s95, "", 3622f, 1547f, 5);

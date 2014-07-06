@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		placeCard  = (RelativeLayout) findViewById(R.id.place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
+		placeCard.setOnTouchListener(new CardTouchListener());
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;

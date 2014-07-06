@@ -104,26 +104,38 @@
             android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/place_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/searchbar_background"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/place_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:fontFamily="sans_serif_light"
+	
+    <RelativeLayout>
+        <ImageButton 
+            android:id="@+id/locateButton"
+            android:src="@drawable/ic_action_location_searching"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:padding="8dp"
-            android:textSize="24sp" >
-        </TextView>
+            android:background="@drawable/searchbar_background"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/search"/>
+	    <RelativeLayout
+	        android:id="@+id/place_card"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="0dp"
+	        android:background="@drawable/searchbar_background"
+	        android:layout_below="@id/locateButton">
+	
+	        <TextView
+	            android:id="@+id/place_name"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:fontFamily="sans_serif_light"
+	            android:padding="8dp"
+	            android:textSize="24sp" >
+	        </TextView>
+	    </RelativeLayout>
     </RelativeLayout>
 
 </FrameLayout>

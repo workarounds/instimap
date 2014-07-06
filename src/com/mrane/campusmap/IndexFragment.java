@@ -1,38 +1,63 @@
 package com.mrane.campusmap;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 public class IndexFragment extends Fragment {
-	
+
 	MainActivity mMainActivity;
-	ArrayAdapter<String> adapter;
+	ExpandableListAdapter adapter;
 	HashMap<String, Marker> data;
 	View rootView;
-	ListView list;
-	
+	ExpandableListView list;
+	List<String> headers = new ArrayList<String>();
+	HashMap<String, List<String>> childData = new HashMap<String, List<String>>();
+
 	public IndexFragment() {
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mMainActivity = MainActivity.getmMainActivity();
-		adapter = mMainActivity.getAdapter();
-		rootView = inflater.inflate(R.layout.list_fragment, container,
-				false);
-		list = (ListView) rootView.findViewById(R.id.suggestion_list);
+		data = mMainActivity.data;
+		if (headers.isEmpty()) {
+			setHeaderAndChildData();
+		}
+		adapter = new ExpandableListAdapter(mMainActivity, headers, childData);
+		rootView = inflater.inflate(R.layout.index_fragment, container, false);
+		list = (ExpandableListView) rootView.findViewById(R.id.index_list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mMainActivity);
-		
+
 		return rootView;
+	}
+
+	private void setChildData() {
+		Collection<Marker> keys = data.values();
+		for (Marker key : keys) {
+			List<String> child = childData.get(key.getGroupName());
+			child.add(key.name);
+		}
+	}
+
+	private void setHeaderAndChildData() {
+		String[] headerString = Marker.getGroupNames();
+		Collections.addAll(headers, headerString);
+		for (String header : headers) {
+			childData.put(header, new ArrayList<String>());
+		}
+		setChildData();
 	}
 
 }

@@ -3,32 +3,38 @@ package com.mrane.campusmap;
 import java.util.HashMap;
 import java.util.Set;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.zoomview.CampusMapView;
 
 public class MainActivity extends ActionBarActivity implements
-		OnItemClickListener, TextWatcher {
+		OnItemClickListener, TextWatcher, OnEditorActionListener {
 	private static MainActivity mMainActivity;
 	boolean isOpened = false;
 	private ArrayAdapter<String> adapter;
@@ -47,8 +53,22 @@ public class MainActivity extends ActionBarActivity implements
 	private boolean itemSelected = false;
 	private boolean isFirstFragment = true;
 	private final String firstStackTag = "FIRST_TAG";
+	private final int MSG_ANIMATE = 1;
+	private final long DELAY_ANIMATE = 50;
 	private boolean inIndexMode = false;
 
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case MSG_ANIMATE:
+				resultMarker((String)msg.obj);
+				break;
+			}
+		}
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements
 		textView = (CustomAutoCompleteView) findViewById(R.id.search);
 		textView.setAdapter(adapter);
 		textView.addTextChangedListener(this);
+		textView.setOnEditorActionListener(this);
 
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.png");
@@ -157,7 +178,10 @@ public class MainActivity extends ActionBarActivity implements
 		String key = adapter.getItem(arg2);
 		setAutoCompleteText(arg3, arg2, key);
 		fragmentManager.popBackStack();
-		resultMarker(key);
+		
+		Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
+		mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
+		
 		inIndexMode = false;
 	}
 
@@ -170,7 +194,6 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void resultMarker(String key) {
-		Log.d("testing", "resultMarker");
 		Marker marker = mMainActivity.data.get(key);
 		campusMapView.removeHighlightedMarkers();
 		campusMapView.goToMarker(marker);
@@ -220,6 +243,15 @@ public class MainActivity extends ActionBarActivity implements
 			removeIcon.setVisibility(View.VISIBLE);
 			indexIcon.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch(actionId){
+		case EditorInfo.IME_ACTION_SEARCH:
+			onItemClick(null, v, 0, 0);
+		}
+		return false;
 	}
 
 	

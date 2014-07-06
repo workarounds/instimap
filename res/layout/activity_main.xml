@@ -40,7 +40,8 @@
                 android:dropDownHeight="0dp"
                 android:hint="Search"
                 android:fontFamily="sans-serif-light"
-                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionSearch"
                 android:paddingBottom="8dp"
                 android:paddingLeft="48dp"
                 android:paddingTop="8dp" />

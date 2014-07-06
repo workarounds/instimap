@@ -38,6 +38,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
 	public RelativeLayout placeCard;
+	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
 	public AutoCompleteTextView editText;
 	public HashMap<String, Marker> data;
@@ -77,6 +78,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		setContentView(R.layout.activity_main);
 
+		bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
 		placeCard = (RelativeLayout) findViewById(R.id.place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 
@@ -175,7 +177,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 	
 	public void displayMap() {
-		// get key from autocomplete view
+		String key = editText.getText().toString();
 		// add delay if necessary
 		// get Marker object if exists
 		// display and zoom to marker if exists

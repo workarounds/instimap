@@ -105,7 +105,11 @@
         </LinearLayout>
     </LinearLayout>
 	
-    <RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
         <ImageButton 
             android:id="@+id/locate_icon"
             android:src="@drawable/ic_action_location_searching"

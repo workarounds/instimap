@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,8 +17,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -58,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setmMainActivity(this);
 
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_main);
@@ -167,10 +162,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void setAutoCompleteText(long id, int index, String key) {
+		textView.dismissDropDown();
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-		CompletionInfo completion = new CompletionInfo(id, index, (CharSequence)key);
-		CompletionInfo[] completions = {completion};
-		imm.displayCompletions(textView, completions);
 		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
 		textView.setText(key);
 		textView.clearFocus();

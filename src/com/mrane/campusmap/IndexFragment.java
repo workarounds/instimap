@@ -1,5 +1,8 @@
 package com.mrane.campusmap;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,42 +14,50 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 public class IndexFragment extends Fragment {
-	
+
 	MainActivity mMainActivity;
 	ExpandableListAdapter adapter;
 	HashMap<String, Marker> data;
 	View rootView;
 	ExpandableListView list;
-	List<String> headers;
-	HashMap<String, List<String>> childData;
-	
+	List<String> headers = new ArrayList<String>();
+	HashMap<String, List<String>> childData = new HashMap<String, List<String>>();
+
 	public IndexFragment() {
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mMainActivity = MainActivity.getmMainActivity();
-		setHeaders();
-		setChildData();
+		data = mMainActivity.data;
+		if (headers.isEmpty()) {
+			setHeaderAndChildData();
+		}
 		adapter = new ExpandableListAdapter(mMainActivity, headers, childData);
-		rootView = inflater.inflate(R.layout.index_fragment, container,
-				false);
+		rootView = inflater.inflate(R.layout.index_fragment, container, false);
 		list = (ExpandableListView) rootView.findViewById(R.id.index_list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mMainActivity);
-		
+
 		return rootView;
 	}
 
 	private void setChildData() {
-		// TODO Auto-generated method stub
-		
+		Collection<Marker> keys = data.values();
+		for (Marker key : keys) {
+			List<String> child = childData.get(key.getGroupName());
+			child.add(key.name);
+		}
 	}
 
-	private void setHeaders() {
-		// TODO Auto-generated method stub
-		
+	private void setHeaderAndChildData() {
+		String[] headerString = Marker.getGroupNames();
+		Collections.addAll(headers, headerString);
+		for (String header : headers) {
+			childData.put(header, new ArrayList<String>());
+		}
+		setChildData();
 	}
 
 }

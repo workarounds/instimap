@@ -14,4 +14,7 @@ public class CardTouchListener implements OnTouchListener {
 		return false;
 	}
 
+	public class AnimationBuilder{
+		
+	}
 }

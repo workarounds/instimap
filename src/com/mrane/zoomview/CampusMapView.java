@@ -271,10 +271,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 	
 
-	private boolean isMarkerInTouchRegion(Marker marker, PointF origin) {
-		PointF point  = marker.point;
+	private boolean isMarkerInTouchRegion(Marker marker, PointF o) {
+		PointF point  = sourceToViewCoord(marker.point);
+		PointF origin = sourceToViewCoord(o);
 		float dist = (float) calculateDistance(point, origin);
-		if(dist < pinWidth*density/2 ){ return true;}
+		if(dist < pinWidth*density*2 ){ return true;}
 		return false;
 	}
 

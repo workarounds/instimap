@@ -19,7 +19,7 @@ public class CardTouchListener implements OnTouchListener {
 	private float displayWidth;
 	@Override
 	public boolean onTouch(View arg0, MotionEvent arg1) {
-		Toast.makeText(MainActivity.getmMainActivity(), "Card touched",
+		Toast.makeText(MapActivity.getMainActivity(), "Card touched",
 				Toast.LENGTH_LONG).show();
 		return false;
 	}

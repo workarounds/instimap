@@ -15,7 +15,7 @@ import android.widget.ExpandableListView;
 
 public class IndexFragment extends Fragment {
 
-	MainActivity mMainActivity;
+	MapActivity mainActivity;
 	ExpandableListAdapter adapter;
 	HashMap<String, Marker> data;
 	View rootView;
@@ -29,16 +29,16 @@ public class IndexFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mMainActivity = MainActivity.getmMainActivity();
-		data = mMainActivity.data;
+		mainActivity = MapActivity.getMainActivity();
+		data = mainActivity.data;
 		if (headers.isEmpty()) {
 			setHeaderAndChildData();
 		}
-		adapter = new ExpandableListAdapter(mMainActivity, headers, childData);
+		adapter = new ExpandableListAdapter(mainActivity, headers, childData);
 		rootView = inflater.inflate(R.layout.index_fragment, container, false);
 		list = (ExpandableListView) rootView.findViewById(R.id.index_list);
 		list.setAdapter(adapter);
-		list.setOnItemClickListener(mMainActivity);
+		list.setOnItemClickListener(mainActivity);
 
 		return rootView;
 	}

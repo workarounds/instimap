@@ -10,7 +10,7 @@ public class LocationListenerClass implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location arg0) {
-		Toast.makeText(MainActivity.getmMainActivity(), arg0.toString(), Toast.LENGTH_LONG).show();
+		Toast.makeText(MapActivity.getMainActivity(), arg0.toString(), Toast.LENGTH_LONG).show();
 		Log.d("Testing",arg0.toString());
 
 	}

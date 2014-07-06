@@ -17,27 +17,37 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.mrane.zoomview.CampusMapView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
-		OnEditorActionListener, OnItemClickListener {
+		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
+		OnTouchListener {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
 	private ArrayAdapter<String> adapter;
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
+	private Fragment fragment;
 	public RelativeLayout placeCard;
+	private LinearLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
 	public AutoCompleteTextView editText;
@@ -52,8 +62,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
-	private boolean itemSelected = false;
-	private boolean isFirstFragment = true;
+	private boolean noFragments = true;
+	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final long DELAY_ANIMATE = 75;
@@ -64,8 +74,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_ANIMATE:
-				// call map showing function
-				showReslutOnMap((String)msg.obj);
+				showReslutOnMap((String) msg.obj);
 				break;
 			}
 		}
@@ -89,12 +98,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Set<String> keys = data.keySet();
 		String[] KEYS = keys.toArray(new String[keys.size()]);
 
+		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
+		fragmentContainer.setOnTouchListener(this);
+
 		adapter = new ArrayAdapter<String>(this, R.layout.row_layout,
 				R.id.label, KEYS);
-		editText = (CustomAutoCompleteView) findViewById(R.id.search);
+		editText = (AutoCompleteTextView) findViewById(R.id.search);
 		editText.setAdapter(adapter);
 		editText.addTextChangedListener(this);
 		editText.setOnEditorActionListener(this);
+		editText.setOnFocusChangeListener(this);
 
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.png");
@@ -143,13 +156,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
+		this.setCorrectIcons();
 
 	}
 
 	@Override
-	public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
-		// TODO Auto-generated method stub
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch (actionId) {
+		case EditorInfo.IME_ACTION_SEARCH:
+			onItemClick(null, v, 0, 0);
+		}
 		return false;
 	}
 
@@ -161,83 +177,210 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		MapActivity.mainActivity = mainActivity;
 	}
 
-	public void autoCompleteFocusChanged(boolean focused) {
-
+	private void putFragment(Fragment tempFragment) {
+		locateIcon.setVisibility(View.GONE);
+		this.dismissCard();
+		transaction = fragmentManager.beginTransaction();
+		fragment = tempFragment;
+		if (noFragments) {
+			transaction.add(R.id.fragment_container, tempFragment);
+			transaction.addToBackStack(firstStackTag);
+			transaction.commit();
+		} else {
+			transaction.replace(R.id.fragment_container, tempFragment);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		}
+		noFragments = false;
 	}
 
-	private void putFragment(Fragment fragment) {
-
+	private void backToMap() {
+		noFragments = true;
+		this.hideKeyboard();
+		fragmentManager.popBackStack(firstStackTag,
+				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		this.removeEditTextFocus(null);
+		this.setCorrectIcons();
+		this.displayMap();
 	}
 
 	@Override
 	public void onBackPressed() {
+		if (noFragments) {
+			if (!this.removeMarker()) {
+				super.onBackPressed();
+			} else {
+				if (editText.length() > 0) {
+					editText.getText().clear();
+				}
+			}
+		} else {
+			backToMap();
+			this.removeEditTextFocus("");
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
+		String selection = adapter.getItem(id);
+		editText.dismissDropDown();
+		this.hideKeyboard();
+		this.removeEditTextFocus(selection);
+		this.backToMap();
+		// this.backToMap();
 
 	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-	
-	}
-	
+
 	public void displayMap() {
-		//get text from auto complete text box
+		// get text from auto complete text box
 		String key = editText.getText().toString();
-		
+
 		// get Marker object if exists
 		Marker marker = data.get(key);
-		
+
 		// display and zoom to marker if exists
-		if(marker != null){
+		if (marker != null) {
 			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
 		}
 	}
-	
-	private void showReslutOnMap(String key){
+
+	private void showReslutOnMap(String key) {
 		Marker marker = data.get(key);
-		campusMapView.setAndShowResultMarker(marker);
 		showCard(marker);
+		campusMapView.setAndShowResultMarker(marker);
 	}
-	
+
 	private void showCard(Marker marker) {
-		
-		
+
 	}
 
 	public void dismissCard() {
-		
+
 	}
-	
+
 	public boolean removeMarker() {
-		return false; 
+		return false;
 	}
-	
+
 	public void searchClick(View v) {
-		
+		Toast toast = Toast.makeText(this,
+				"Use the text box and search for a place", Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 	public void removeClick(View v) {
-		
+		this.editText.setText("");
 	}
 
 	public void indexClick(View v) {
-		
+		this.putFragment(indexFragment);
+		this.removeEditTextFocus(null);
+		this.setCorrectIcons();
 	}
 
 	public void mapClick(View v) {
-		
+		this.backToMap();
+		this.removeEditTextFocus("");
 	}
-	
+
+	private void removeEditTextFocus(String text) {
+		if (this.editTextFocused) {
+			this.hideKeyboard();
+			editText.clearFocus();
+		}
+
+		if (text == null) {
+
+		} else if (text.equals("")) {
+			this.setOldText();
+		} else {
+			editText.setText(text);
+		}
+
+	}
+
+	public ArrayAdapter<String> getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(ArrayAdapter<String> adapter) {
+		this.adapter = adapter;
+	}
+
+	private void setOldText() {
+		Marker oldMarker = campusMapView.getResultMarker();
+		if (oldMarker == null) {
+			if (editText.length() > 0) {
+				editText.getText().clear();
+			}
+		} else {
+			editText.setText(oldMarker.name);
+		}
+	}
+
+	private void setCorrectIcons() {
+		if (noFragments) {
+			this.setVisibleButton(indexIcon);
+		} else {
+			if (fragment instanceof ListFragment) {
+				this.indexOrRemove();
+			} else {
+				setVisibleButton(mapIcon);
+			}
+		}
+	}
+
+	private void indexOrRemove() {
+		if (editTextFocused) {
+			String text = editText.getText().toString();
+			if (text.isEmpty() || text.equals(null)) {
+				this.setVisibleButton(indexIcon);
+			} else {
+				this.setVisibleButton(removeIcon);
+			}
+		} else {
+			this.setVisibleButton(indexIcon);
+		}
+	}
+
+	private void setVisibleButton(ImageButton icon) {
+		indexIcon.setVisibility(View.GONE);
+		mapIcon.setVisibility(View.GONE);
+		removeIcon.setVisibility(View.GONE);
+
+		icon.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onFocusChange(View v, boolean focus) {
+		this.editTextFocused = focus;
+		if (focus) {
+			this.putFragment(listFragment);
+		}
+		this.setCorrectIcons();
+	}
+
+	private void hideKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		if (imm.isActive()) {
+			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+		}
+
+	}
+
+	@Override
+	public boolean onTouch(View arg0, MotionEvent arg1) {
+		removeEditTextFocus(null);
+		return false;
+	}
+
 	public void locateClick(View v) {
-		
+
 	}
-	
+
 	public void addMarkerClick(View v) {
-		
-	}
-	
-	private void removeEditTextFocus() {
-		// set the text as required
+
 	}
 
 }

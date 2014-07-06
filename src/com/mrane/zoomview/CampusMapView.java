@@ -321,7 +321,4 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		return false;
 	}
 
-	public Marker getResultMarker() {
-		return null;
-	}
 }

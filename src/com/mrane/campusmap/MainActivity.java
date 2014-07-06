@@ -5,7 +5,6 @@ import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -47,6 +45,7 @@ public class MainActivity extends ActionBarActivity implements
 	CampusMapView campusMapView;
 	ImageButton searchIcon;
 	ImageButton removeIcon;
+	ImageButton mapIcon;
 	ImageButton indexIcon;
 	LocationManager locationManager;
 	LocationListener locationListener;
@@ -55,20 +54,19 @@ public class MainActivity extends ActionBarActivity implements
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final long DELAY_ANIMATE = 50;
-	private boolean inIndexMode = false;
 
 	@SuppressLint("HandlerLeak")
-	private Handler mHandler = new Handler(){
+	private Handler mHandler = new Handler() {
 		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
 			case MSG_ANIMATE:
-				resultMarker((String)msg.obj);
+				resultMarker((String) msg.obj);
 				break;
 			}
 		}
 	};
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,23 +95,26 @@ public class MainActivity extends ActionBarActivity implements
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
+		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-		
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-//		boolean enabled = locationManager
-//				  .isProviderEnabled(LocationManager.GPS_PROVIDER);
-//
-//				if (!enabled) {
-//				  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//				  startActivity(intent);
-//				} 
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		// boolean enabled = locationManager
+		// .isProviderEnabled(LocationManager.GPS_PROVIDER);
+		//
+		// if (!enabled) {
+		// Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		// startActivity(intent);
+		// }
 		// Define a listener that responds to location updates
 		locationListener = new LocationListenerClass();
-		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+		// 0, 0, locationListener);
 
 	}
 
@@ -125,14 +126,10 @@ public class MainActivity extends ActionBarActivity implements
 		MainActivity.mMainActivity = mMainActivity;
 	}
 
-	public void autoCompleteFocusChanged(boolean focused) {
-		ViewGroup headerContainer;
-		headerContainer = (ViewGroup) findViewById(R.id.header_container);
+	public void autoCompleteFocusChanged(boolean focused) { 
 		if (focused) {
 			itemSelected = false;
-			headerContainer.setBackgroundColor(Color.rgb(208, 208, 208));
 			putFragment(listFragment);
-			inIndexMode = false;
 		} else {
 			if (itemSelected) {
 				fragmentManager.popBackStack(firstStackTag,
@@ -141,7 +138,6 @@ public class MainActivity extends ActionBarActivity implements
 			} else {
 
 			}
-			headerContainer.setBackgroundColor(Color.TRANSPARENT);
 		}
 	}
 
@@ -150,7 +146,8 @@ public class MainActivity extends ActionBarActivity implements
 		if (isFirstFragment) {
 			transaction.add(R.id.fragment_container, fragment);
 			transaction.addToBackStack(firstStackTag);
-			transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			transaction
+					.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			isFirstFragment = false;
 		} else {
 			transaction.replace(R.id.fragment_container, fragment);
@@ -170,7 +167,12 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onBackPressed() {
 		textView.clearFocus();
-		super.onBackPressed();
+		if (!isFirstFragment) {
+			fragmentManager.popBackStack(firstStackTag,
+					FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 	@Override
@@ -178,11 +180,9 @@ public class MainActivity extends ActionBarActivity implements
 		String key = adapter.getItem(arg2);
 		setAutoCompleteText(arg3, arg2, key);
 		fragmentManager.popBackStack();
-		
+
 		Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 		mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
-		
-		inIndexMode = false;
 	}
 
 	private void setAutoCompleteText(long id, int index, String key) {
@@ -205,17 +205,19 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void indexClick(View v) {
-		if (!inIndexMode) {
-			putFragment(indexFragment);
-			setAutoCompleteText(0, 0, null);
-			indexIcon.setImageResource(R.drawable.ic_action_map);
-			inIndexMode = true;
-		} else {
-			fragmentManager.popBackStack(firstStackTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			isFirstFragment = true;
-			inIndexMode = false;
-			indexIcon.setImageResource(R.drawable.ic_action_view_as_list);
-		}
+		setAutoCompleteText(0, 0, null);
+		putFragment(indexFragment);
+		indexIcon.setVisibility(View.GONE);
+		mapIcon.setVisibility(View.VISIBLE);
+	}
+
+	public void mapClick(View v) {
+		setAutoCompleteText(0, 0, null);
+		fragmentManager.popBackStack(firstStackTag,
+				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		mapIcon.setVisibility(View.GONE);
+		indexIcon.setVisibility(View.VISIBLE);
+		isFirstFragment = true;
 	}
 
 	public void removeClick(View v) {
@@ -237,22 +239,23 @@ public class MainActivity extends ActionBarActivity implements
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		String text = arg0.toString();
 		if (text.equals(null) || text.equals("")) {
-			removeIcon.setVisibility(View.GONE);
 			indexIcon.setVisibility(View.VISIBLE);
+			mapIcon.setVisibility(View.GONE);
+			removeIcon.setVisibility(View.GONE);
 		} else {
 			removeIcon.setVisibility(View.VISIBLE);
+			mapIcon.setVisibility(View.GONE);
 			indexIcon.setVisibility(View.GONE);
 		}
 	}
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		switch(actionId){
+		switch (actionId) {
 		case EditorInfo.IME_ACTION_SEARCH:
 			onItemClick(null, v, 0, 0);
 		}
 		return false;
 	}
 
-	
 }

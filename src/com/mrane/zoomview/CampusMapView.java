@@ -18,13 +18,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mrane.campusmap.MainActivity;
 import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.Marker;
 import com.mrane.campusmap.R.drawable;
 
 public class CampusMapView extends SubsamplingScaleImageView {
-	private MainActivity mMainActivity;
 	private MapActivity mainActivity;
 	private HashMap<String, Marker> data;
 	private Collection<Marker> markerList;
@@ -61,7 +59,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
         
         initPaints();
         
-        mMainActivity  = MainActivity.getmMainActivity();
         mainActivity = MapActivity.getMainActivity();
         
         setGestureDetector();
@@ -279,7 +276,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 	
 	private void setGestureDetector() {
-		final GestureDetector gestureDetector = new GestureDetector(mMainActivity, new GestureDetector.SimpleOnGestureListener(){
+		final GestureDetector gestureDetector = new GestureDetector(mainActivity, new GestureDetector.SimpleOnGestureListener(){
 			@Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 if (isImageReady()) {

@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <com.mrane.campusmap.CustomAutoCompleteView
+            <AutoCompleteTextView
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -109,7 +109,8 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
+        android:background="@android:color/transparent"
+        android:visibility="gone">
         <ImageButton 
             android:id="@+id/locate_icon"
             android:src="@drawable/ic_action_location_searching"

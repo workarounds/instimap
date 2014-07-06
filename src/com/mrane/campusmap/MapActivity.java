@@ -74,8 +74,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_ANIMATE:
-				// call map showing function
-				showReslutOnMap((String)msg.obj);
+				showReslutOnMap((String) msg.obj);
 				break;
 			}
 		}
@@ -197,8 +196,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void backToMap() {
 		noFragments = true;
+		this.hideKeyboard();
 		fragmentManager.popBackStack(firstStackTag,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		this.removeEditTextFocus(null);
 		this.setCorrectIcons();
 		this.displayMap();
 	}
@@ -209,7 +210,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			if (!this.removeMarker()) {
 				super.onBackPressed();
 			} else {
-				editText.setText("");
+				if (editText.length() > 0) {
+					editText.getText().clear();
+				}
 			}
 		} else {
 			backToMap();
@@ -220,34 +223,36 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
 		String selection = adapter.getItem(id);
+		editText.dismissDropDown();
+		this.hideKeyboard();
 		this.removeEditTextFocus(selection);
 		this.backToMap();
-		
+		// this.backToMap();
+
 	}
 
 	public void displayMap() {
-		//get text from auto complete text box
+		// get text from auto complete text box
 		String key = editText.getText().toString();
-		
+
 		// get Marker object if exists
 		Marker marker = data.get(key);
-		
+
 		// display and zoom to marker if exists
-		if(marker != null){
+		if (marker != null) {
 			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
 		}
 	}
-	
-	private void showReslutOnMap(String key){
+
+	private void showReslutOnMap(String key) {
 		Marker marker = data.get(key);
-		campusMapView.setAndShowResultMarker(marker);
 		showCard(marker);
+		campusMapView.setAndShowResultMarker(marker);
 	}
-	
+
 	private void showCard(Marker marker) {
-		
-		
+
 	}
 
 	public void dismissCard() {
@@ -280,7 +285,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void removeEditTextFocus(String text) {
-		if (text.equals(null)) {
+		if (this.editTextFocused) {
+			this.hideKeyboard();
+			editText.clearFocus();
+		}
+
+		if (text == null) {
 
 		} else if (text.equals("")) {
 			this.setOldText();
@@ -288,15 +298,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			editText.setText(text);
 		}
 
-		if (this.editTextFocused) {
-			editText.clearFocus();
-		}
+	}
+
+	public ArrayAdapter<String> getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(ArrayAdapter<String> adapter) {
+		this.adapter = adapter;
 	}
 
 	private void setOldText() {
 		Marker oldMarker = campusMapView.getResultMarker();
 		if (oldMarker == null) {
-			editText.setText("");
+			if (editText.length() > 0) {
+				editText.getText().clear();
+			}
 		} else {
 			editText.setText(oldMarker.name);
 		}
@@ -338,18 +355,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onFocusChange(View v, boolean focus) {
 		this.editTextFocused = focus;
-		if(focus) {
+		if (focus) {
 			this.putFragment(listFragment);
 		}
-		this.handleKeyboard();
 		this.setCorrectIcons();
 	}
 
-	private void handleKeyboard() {
-		if (editTextFocused) {
-
-		} else {
-			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+	private void hideKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		if (imm.isActive()) {
 			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 		}
 
@@ -360,13 +374,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		removeEditTextFocus(null);
 		return false;
 	}
-	
+
 	public void locateClick(View v) {
-		
+
 	}
-	
+
 	public void addMarkerClick(View v) {
-		
+
 	}
-	
+
 }

@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 public class ListFragment extends Fragment {
 	
-	MainActivity mMainActivity;
+	MapActivity mainActivity;
 	ArrayAdapter<String> adapter;
 	HashMap<String, Marker> data;
 	View rootView;
@@ -24,13 +24,13 @@ public class ListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mMainActivity = MainActivity.getmMainActivity();
-		adapter = mMainActivity.getAdapter();
+		mainActivity = MapActivity.getMainActivity();
+		adapter = mainActivity.getAdapter();
 		rootView = inflater.inflate(R.layout.list_fragment, container,
 				false);
 		list = (ListView) rootView.findViewById(R.id.suggestion_list);
 		list.setAdapter(adapter);
-		list.setOnItemClickListener(mMainActivity);
+		list.setOnItemClickListener(mainActivity);
 		
 		return rootView;
 	}

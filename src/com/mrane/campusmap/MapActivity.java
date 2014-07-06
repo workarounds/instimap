@@ -49,6 +49,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton indexIcon;
 	public ImageButton mapIcon;
 	public ImageButton locateIcon;
+	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	private boolean itemSelected = false;
@@ -64,6 +65,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			switch (msg.what) {
 			case MSG_ANIMATE:
 				// call map showing function
+				showReslutOnMap((String)msg.obj);
 				break;
 			}
 		}
@@ -103,6 +105,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 		locateIcon = (ImageButton) findViewById(R.id.locate_icon);
+		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
@@ -177,13 +180,30 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 	
 	public void displayMap() {
+		//get text from auto complete text box
 		String key = editText.getText().toString();
-		// add delay if necessary
-		// get Marker object if exists
-		// display and zoom to marker if exists
 		
+		// get Marker object if exists
+		Marker marker = data.get(key);
+		
+		// display and zoom to marker if exists
+		if(marker != null){
+			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
+			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
+		}
 	}
 	
+	private void showReslutOnMap(String key){
+		Marker marker = data.get(key);
+		campusMapView.setAndShowResultMarker(marker);
+		showCard(marker);
+	}
+	
+	private void showCard(Marker marker) {
+		
+		
+	}
+
 	public void dismissCard() {
 		
 	}
@@ -205,6 +225,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void mapClick(View v) {
+		
+	}
+	
+	public void locateClick(View v) {
+		
+	}
+	
+	public void addMarkerClick(View v) {
 		
 	}
 	

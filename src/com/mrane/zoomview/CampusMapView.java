@@ -14,20 +14,22 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.mrane.campusmap.MainActivity;
+import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.Marker;
 import com.mrane.campusmap.R.drawable;
 
 public class CampusMapView extends SubsamplingScaleImageView {
 	private MainActivity mMainActivity;
+	private MapActivity mainActivity;
 	private HashMap<String, Marker> data;
 	private Collection<Marker> markerList;
 	private ArrayList<Marker> highlightedMarkerList;
+	private Marker resultMarker;
 	private Bitmap bluePin;
 	private Bitmap orangePin;
 	private Bitmap redPin;
@@ -60,6 +62,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         initPaints();
         
         mMainActivity  = MainActivity.getmMainActivity();
+        mainActivity = MapActivity.getMainActivity();
+        
         setGestureDetector();
 	}
 	
@@ -116,6 +120,34 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		anim.withDuration(750).start();
 	}
 	
+	public Marker getResultMarker(){
+		return resultMarker;
+	}
+	
+	public Marker getHighlightedMarker(){
+		return getResultMarker();
+	}
+	
+	public void setResultMarker(Marker marker){
+		resultMarker = marker;
+	}
+	
+	public boolean isResultMarker(Marker marker){
+		return resultMarker == marker;
+	}
+	
+	public void showResultMarker(){
+		if(resultMarker != null){
+			AnimationBuilder anim = animateScaleAndCenter(getMaxScale(), resultMarker.point);
+			anim.withDuration(750).start();
+		}
+	}
+	
+	public void setAndShowResultMarker(Marker marker){
+		setResultMarker(marker);
+		showResultMarker();
+	}
+	
 	public void removeHighlightedMarkers(){
 		highlightedMarkerList.clear();
 	}
@@ -135,11 +167,14 @@ public class CampusMapView extends SubsamplingScaleImageView {
         	if(isInView(marker.point)){
         		Bitmap pin = getPin(marker);
             	Bitmap highlightedPin = getHighlightedPin(marker);
-	        	if(highlightedMarkerList.contains(marker)){
-	        		PointF vPin = sourceToViewCoord(marker.point);
+            	if(isResultMarker(marker)){
+            		PointF vPin = sourceToViewCoord(marker.point);
 		            float vX = vPin.x - (highlightedPin.getWidth()/2);
 		            float vY = vPin.y - highlightedPin.getHeight();
 		            canvas.drawBitmap(highlightedPin, vX, vY, paint);
+            	}
+            	else if(highlightedMarkerList.contains(marker)){
+	        		
 	        	}
 	        	else if(getScale() > SHOW_PINS_AT_SCALE){
 		            PointF vPin = sourceToViewCoord(marker.point);
@@ -251,7 +286,9 @@ public class CampusMapView extends SubsamplingScaleImageView {
                     PointF sCoord = viewToSourceCoord(e.getX(), e.getY());
                     Marker marker = getNearestMarker(sCoord);
                     if(isMarkerInTouchRegion(marker, sCoord)){
-                    	mMainActivity.resultMarker(marker.name);
+                    	//mMainActivity.resultMarker(marker.name);
+                    	mainActivity.editText.setText(marker.name);
+                    	mainActivity.displayMap();
                     }
                 } else {
                     

@@ -1,22 +1,24 @@
 package com.mrane.campusmap;
 
 import java.util.HashMap;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 public class IndexFragment extends Fragment {
 	
 	MainActivity mMainActivity;
-	ArrayAdapter<String> adapter;
+	ExpandableListAdapter adapter;
 	HashMap<String, Marker> data;
 	View rootView;
-	ListView list;
+	ExpandableListView list;
+	List<String> headers;
+	HashMap<String, List<String>> childData;
 	
 	public IndexFragment() {
 	}
@@ -25,14 +27,26 @@ public class IndexFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mMainActivity = MainActivity.getmMainActivity();
-		adapter = mMainActivity.getAdapter();
-		rootView = inflater.inflate(R.layout.list_fragment, container,
+		setHeaders();
+		setChildData();
+		adapter = new ExpandableListAdapter(mMainActivity, headers, childData);
+		rootView = inflater.inflate(R.layout.index_fragment, container,
 				false);
-		list = (ListView) rootView.findViewById(R.id.suggestion_list);
+		list = (ExpandableListView) rootView.findViewById(R.id.index_list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mMainActivity);
 		
 		return rootView;
+	}
+
+	private void setChildData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setHeaders() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

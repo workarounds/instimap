@@ -35,6 +35,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private static final float SHOW_PINS_AT_SCALE = 1f;
 	private Paint paint;
 	private Paint textPaint;
+	private Rect bounds = new Rect();
 
 	public CampusMapView(Context context) {
 		this(context, null);
@@ -58,8 +59,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         paint.setAntiAlias(true);
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
-        textPaint.setColor(Color.rgb(254, 250, 217));
-        //textPaint.setColor(Color.WHITE);
+        //textPaint.setColor(Color.rgb(254, 250, 217));
+        textPaint.setColor(Color.WHITE);
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
         textPaint.setTextSize(16*density);
         textPaint.setTypeface(Typeface.SANS_SERIF);
@@ -108,8 +109,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	            float vX = vPin.x - (bluePin.getWidth()/2);
 	            float vY = vPin.y - (bluePin.getHeight()/2);
 	            canvas.drawBitmap(bluePin, vX, vY, paint);
-//	            canvas.drawBitmap(markerText, vX + bluePin.getWidth(), vY, paint);
-	            Rect bounds = new Rect(); 
+//	            canvas.drawBitmap(markerText, vX + bluePin.getWidth(), vY, paint); 
 	            String name;
 	            if(marker.shortName.isEmpty()) name = marker.name;
 	            else name = marker.shortName;

@@ -92,13 +92,24 @@
         </LinearLayout>
     </LinearLayout>
     
-    <LinearLayout 
-        android:id="@+id/placeCard"
+    <RelativeLayout 
+        android:id="@+id/place_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:visibility="gone"
-        android:orientation="vertical">
-    </LinearLayout>"
+        android:orientation="vertical"
+        android:background="@drawable/searchbar_background">
+        <TextView
+            android:id="@+id/place_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:fontFamily="sans_serif_light">
+        </TextView>
+    </RelativeLayout>"
 
 </FrameLayout>

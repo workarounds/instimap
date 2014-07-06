@@ -20,13 +20,16 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -41,20 +44,22 @@ public class MainActivity extends ActionBarActivity implements
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
-	AutoCompleteTextView textView;
-	HashMap<String, Marker> data;
-	FragmentTransaction transaction;
-	CampusMapView campusMapView;
-	ImageButton searchIcon;
-	ImageButton removeIcon;
-	ImageButton indexIcon;
-	LocationManager locationManager;
-	LocationListener locationListener;
+	public RelativeLayout placeCard;
+	public TextView placeNameTextView;
+	public AutoCompleteTextView textView;
+	public HashMap<String, Marker> data;
+	public FragmentTransaction transaction;
+	public CampusMapView campusMapView;
+	public ImageButton searchIcon;
+	public ImageButton removeIcon;
+	public ImageButton indexIcon;
+	public LocationManager locationManager;
+	public LocationListener locationListener;
 	private boolean itemSelected = false;
 	private boolean isFirstFragment = true;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
-	private final long DELAY_ANIMATE = 50;
+	private final long DELAY_ANIMATE = 75;
 	private boolean inIndexMode = false;
 
 	@SuppressLint("HandlerLeak")
@@ -77,6 +82,9 @@ public class MainActivity extends ActionBarActivity implements
 		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_main);
+		
+		placeCard  = (RelativeLayout) findViewById(R.id.place_card);
+		placeNameTextView = (TextView) findViewById(R.id.place_name);
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;
@@ -176,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		String key = adapter.getItem(arg2);
-		setAutoCompleteText(arg3, arg2, key);
+		setAutoCompleteText(key);
 		fragmentManager.popBackStack();
 		
 		Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
@@ -185,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements
 		inIndexMode = false;
 	}
 
-	private void setAutoCompleteText(long id, int index, String key) {
+	private void setAutoCompleteText(String key) {
 		textView.dismissDropDown();
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
@@ -197,6 +205,12 @@ public class MainActivity extends ActionBarActivity implements
 		Marker marker = mMainActivity.data.get(key);
 		campusMapView.removeHighlightedMarkers();
 		campusMapView.goToMarker(marker);
+		showCard(marker);
+	}
+	
+	public void removeMarker(){
+		dismissCard();
+		campusMapView.removeHighlightedMarkers();
 	}
 
 	public void searchClick(View v) {
@@ -207,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void indexClick(View v) {
 		if (!inIndexMode) {
 			putFragment(indexFragment);
-			setAutoCompleteText(0, 0, null);
+			setAutoCompleteText(null);
 			indexIcon.setImageResource(R.drawable.ic_action_map);
 			inIndexMode = true;
 		} else {
@@ -220,6 +234,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	public void removeClick(View v) {
 		textView.getText().clear();
+		removeMarker();
 	}
 
 	@Override
@@ -252,6 +267,22 @@ public class MainActivity extends ActionBarActivity implements
 			onItemClick(null, v, 0, 0);
 		}
 		return false;
+	}
+	
+	public void showCard(Marker marker){
+		placeNameTextView.setText(marker.name);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		int topMargin = 0;
+		float density = getResources().getDisplayMetrics().density;
+		topMargin = campusMapView.getHeight() - placeNameTextView.getPaddingTop()*2 - (int)(72*density);
+		params.setMargins(0, topMargin, 0, 0);
+		params.height = (int)(96*density);
+		placeCard.setLayoutParams(params);
+		placeCard.setVisibility(View.VISIBLE);
+	}
+	
+	public void dismissCard(){
+		placeCard.setVisibility(View.GONE);
 	}
 
 	

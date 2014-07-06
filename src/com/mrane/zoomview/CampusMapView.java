@@ -38,7 +38,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap highlightedPurplePin;
 	private float pinWidth = 24;
 	private static final float SHOW_PINS_AT_SCALE = 0.8f;
-	private static final float SHOW_TEXT_AT_SCALE = 1.6f;
+	private static final float SHOW_TEXT_AT_SCALE = 1.4f;
 	private Paint paint;
 	private Paint textPaint;
 	private Rect bounds = new Rect();
@@ -114,7 +114,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		highlightedMarkerList.add(marker);
 		AnimationBuilder anim = animateScaleAndCenter(getMaxScale(), marker.point);
 		anim.withDuration(750).start();
-		Log.d("testing", "goToMarkerCalled");
 	}
 	
 	public void removeHighlightedMarkers(){
@@ -275,7 +274,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		PointF point  = sourceToViewCoord(marker.point);
 		PointF origin = sourceToViewCoord(o);
 		float dist = (float) calculateDistance(point, origin);
-		if(dist < pinWidth*density*2 ){ return true;}
+		if(dist < pinWidth*density*2 && isMarkerVisible(marker)) { return true;}
+		return false;
+	}
+
+	private boolean isMarkerVisible(Marker marker) {
+		if(highlightedMarkerList.contains(marker)) return true;
+		if(getScale() > SHOW_PINS_AT_SCALE) return true;
 		return false;
 	}
 

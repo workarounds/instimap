@@ -91,5 +91,14 @@
             android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/placeCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+    </LinearLayout>"
 
 </FrameLayout>

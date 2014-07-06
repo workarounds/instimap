@@ -23,6 +23,18 @@ public class Marker {
 	private static final int OTHERS = 9;
 	private static final int GATES = 10;
 	
+	private static final String DEPARTMENTS_NAME = "Departments";
+	private static final String HOSTELS_NAME = "Hostels";
+	private static final String RESIDENCES_NAME = "Residences";
+	private static final String HALLS_N_AUDITORIUMS_NAME = "Halls and Auditoriums";
+	private static final String FOOD_STALLS_NAME = "Food Stalls";
+	private static final String BANKS_N_ATMS_NAME = "Banks and Atms";
+	private static final String SCHOOLS_NAME = "Schools";
+	private static final String SPORTS_NAME = "Sports";
+	private static final String OTHERS_NAME = "Others";
+	private static final String GATES_NAME = "Gates";
+	
+	
 	public Marker(String name, String shortName, float x, float y, int groupIndex) {
 		this.point = new PointF(x, y);
 		this.groupIndex = groupIndex;
@@ -61,5 +73,36 @@ public class Marker {
 		}
 		
 		return 0;
+	}
+	
+	public String getGroupName(){
+		switch(groupIndex){
+		case DEPARTMENTS:
+			return DEPARTMENTS_NAME;
+		case HOSTELS:
+			return HOSTELS_NAME;
+		case RESIDENCES:
+			return RESIDENCES_NAME;
+		case HALLS_N_AUDITORIUMS:
+			return HALLS_N_AUDITORIUMS_NAME;
+		case FOOD_STALLS:
+			return FOOD_STALLS_NAME;
+		case BANKS_N_ATMS:
+			return BANKS_N_ATMS_NAME;
+		case SCHOOLS:
+			return SCHOOLS_NAME;
+		case SPORTS:
+			return SPORTS_NAME;
+		case OTHERS:
+			return OTHERS_NAME;
+		case GATES :
+			return GATES_NAME;
+		}
+		return "";
+	}
+	
+	public static String[] getGroupNames(){
+		String[] groupNames = {DEPARTMENTS_NAME,HOSTELS_NAME,RESIDENCES_NAME,HALLS_N_AUDITORIUMS_NAME,FOOD_STALLS_NAME,BANKS_N_ATMS_NAME,SCHOOLS_NAME,SPORTS_NAME,OTHERS_NAME,GATES_NAME};
+		return groupNames;
 	}
 }

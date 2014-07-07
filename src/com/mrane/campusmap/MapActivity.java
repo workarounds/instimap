@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.PointF;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -73,6 +72,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_ANIMATE = 1;
 	private final long DELAY_ANIMATE = 75;
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
+	private GPSManager gps;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -117,7 +117,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.png");
 		campusMapView.setData(data);
-		// this.setMapToCenter();
 
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
@@ -130,20 +129,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
 
-		locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		// boolean enabled = locationManager
-		// .isProviderEnabled(LocationManager.GPS_PROVIDER);
-		//
-		// if (!enabled) {
-		// Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		// startActivity(intent);
-		// }
-		// Define a listener that responds to location updates
-		locationListener = new LocationListenerClass();
-		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-		// 0, 0, locationListener);
+		gps = new GPSManager(this);
 
 	}
 
@@ -398,7 +384,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void locateClick(View v) {
-
+		gps.start();
 	}
 
 	public void addMarkerClick(View v) {
@@ -408,7 +394,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		String selection = (String) expAdapter.getChild(groupPosition, childPosition);
+		String selection = (String) expAdapter.getChild(groupPosition,
+				childPosition);
 		editText.dismissDropDown();
 		this.hideKeyboard();
 		this.removeEditTextFocus(selection);

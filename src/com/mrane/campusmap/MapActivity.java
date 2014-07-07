@@ -198,7 +198,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void putFragment(Fragment tempFragment) {
-		locateIcon.setVisibility(View.GONE);
+		locateIcon.setVisibility(View.INVISIBLE);
 		this.dismissCard();
 		transaction = fragmentManager.beginTransaction();
 		fragment = tempFragment;

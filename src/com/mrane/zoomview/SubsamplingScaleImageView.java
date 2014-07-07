@@ -1320,7 +1320,7 @@ public class SubsamplingScaleImageView extends View {
      */
     private float minScale() {
     	float density = getResources().getDisplayMetrics().density;
-    	return Math.max(getWidth() / (float) sWidth(), (getHeight() - 48*density)/ (float) sHeight());
+    	return Math.max(getWidth() / (float) sWidth(), (getHeight() - 16*density)/ (float) sHeight());
     }
 
     /**

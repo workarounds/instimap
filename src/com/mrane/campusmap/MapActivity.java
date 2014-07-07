@@ -27,9 +27,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private IndexFragment indexFragment;
 	private Fragment fragment;
 	public RelativeLayout placeCard;
+	private CardTouchListener cardTouchListener;
 	private LinearLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
@@ -66,7 +69,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
+	private final int MSG_INIT_LAYOUT = 2;
 	private final long DELAY_ANIMATE = 75;
+	private final long DELAY_INIT_LAYOUT = 500;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -75,6 +80,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			switch (msg.what) {
 			case MSG_ANIMATE:
 				showReslutOnMap((String) msg.obj);
+				break;
+			case MSG_INIT_LAYOUT:
+				initLayout();
 				break;
 			}
 		}
@@ -92,6 +100,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
 		placeCard = (RelativeLayout) findViewById(R.id.place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
+		
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;
@@ -119,6 +128,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 		locateIcon = (ImageButton) findViewById(R.id.locate_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
+		
+		cardTouchListener = new CardTouchListener(this);
+		placeCard.setOnTouchListener(cardTouchListener);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
@@ -139,6 +151,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 		// 0, 0, locationListener);
 
+		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
+		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
+	}
+
+	private void initLayout() {
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		int topMargin = 0;
+		//float density = getResources().getDisplayMetrics().density;
+		RelativeLayout.LayoutParams p = (LayoutParams) locateIcon.getLayoutParams();
+		int total = p.height + p.bottomMargin + p.topMargin;
+		topMargin = campusMapView.getHeight() - total;
+		params.setMargins(0, topMargin, 0, 0);
+		bottomLayout.setLayoutParams(params);
+		bottomLayout.setVisibility(View.VISIBLE);
+		
+		cardTouchListener.initTopMargin(topMargin);
 	}
 
 	@Override
@@ -232,6 +260,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
+		locateIcon.setVisibility(View.VISIBLE);
 		// get text from auto complete text box
 		String key = editText.getText().toString();
 
@@ -251,12 +280,47 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setAndShowResultMarker(marker);
 	}
 
-	private void showCard(Marker marker) {
-
+	public void showCard(Marker marker) {
+		placeNameTextView.setText(marker.name);
+//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//		int topMargin = 0;
+//		float density = getResources().getDisplayMetrics().density;
+//		topMargin = campusMapView.getHeight() - locateIcon.getHeight() - (int)(96*density);
+//		params.setMargins(0, topMargin, 0, 0);
+//		bottomLayout.setLayoutParams(params);
+//		
+//		RelativeLayout.LayoutParams p = (LayoutParams) placeCard.getLayoutParams();
+//		p.height = (int)(120*density);
+//		placeCard.setLayoutParams(p);
+//		placeCard.setVisibility(View.VISIBLE);
+		Runnable anim = cardTouchListener.showCardAnimation();
+		anim.run();
+	}
+	
+	public void expandCard() {
+//		float density = getResources().getDisplayMetrics().density;
+//		if(placeCard.getHeight() < 300*density ){
+//			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//			int topMargin = 0;
+//			topMargin = campusMapView.getHeight() - locateIcon.getHeight() - (int)(320*density);
+//			params.setMargins(0, topMargin, 0, 0);
+//			bottomLayout.setLayoutParams(params);
+//			
+//			RelativeLayout.LayoutParams p = (LayoutParams) placeCard.getLayoutParams();
+//			p.height = (int)(320*density);
+//			placeCard.setLayoutParams(p);
+//			placeCard.setVisibility(View.VISIBLE);
+//		}
+//		else{
+//			showCard(campusMapView.getResultMarker());
+//		}
+		Runnable anim = cardTouchListener.expandCardAnimation();
+		anim.run();
 	}
 
 	public void dismissCard() {
-
+		Runnable anim = cardTouchListener.dismissCardAnimation();
+		anim.run();
 	}
 
 	public boolean removeMarker() {
@@ -376,11 +440,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void locateClick(View v) {
-
+		Toast.makeText(this, "located", Toast.LENGTH_LONG).show();
 	}
 
 	public void addMarkerClick(View v) {
-
+		dismissCard();
 	}
+
+	
 
 }

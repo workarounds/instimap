@@ -105,12 +105,12 @@
         </LinearLayout>
     </LinearLayout>
 	
-    <RelativeLayout
+    <com.mrane.campusmap.ExtendedRelativeLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:visibility="gone">
+        android:visibility="invisible"
+        android:background="@android:color/transparent">
         <ImageButton 
             android:id="@+id/locate_icon"
             android:src="@drawable/ic_action_location_searching"
@@ -126,12 +126,13 @@
 	    <RelativeLayout
 	        android:id="@+id/place_card"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="@dimen/card_height"
 	        android:layout_marginTop="0dp"
-	        android:background="@drawable/searchbar_background"
-	        android:layout_below="@id/locate_icon">
+	        android:layout_below="@id/locate_icon"
+	        android:background="@drawable/bottom_card_background">
             <ImageButton
 	            android:id="@+id/add_marker_icon"
+	            android:src="@drawable/ic_action_remove"
 	            android:layout_width="48dp"
 	            android:layout_height="48dp"
 	            android:layout_alignParentTop="true"
@@ -139,6 +140,7 @@
 	            android:layout_margin="8dp"
 	            android:padding="8dp"
 	            android:contentDescription="@string/search"
+	            android:background="@android:color/transparent"
 	            android:onClick="addMarkerClick"/>
 	        <TextView
 	            android:id="@+id/place_name"
@@ -152,6 +154,6 @@
 	            android:textSize="24sp" >
 	        </TextView>
 	    </RelativeLayout>
-    </RelativeLayout>
+    </com.mrane.campusmap.ExtendedRelativeLayout>
 
 </FrameLayout>

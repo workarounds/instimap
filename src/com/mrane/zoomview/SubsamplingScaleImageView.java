@@ -22,6 +22,7 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Style;
+import android.media.DeniedByServerException;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
@@ -1318,7 +1319,8 @@ public class SubsamplingScaleImageView extends View {
      * Returns the minimum allowed scale.
      */
     private float minScale() {
-    	return Math.max(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
+    	float density = getResources().getDisplayMetrics().density;
+    	return Math.max(getWidth() / (float) sWidth(), (getHeight() - 48*density)/ (float) sHeight());
     }
 
     /**

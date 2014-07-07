@@ -37,8 +37,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap highlightedRedPin;
 	private Bitmap highlightedPurplePin;
 	private float pinWidth = 24;
-	private static final float SHOW_PINS_AT_SCALE = 0.8f;
-	private static final float SHOW_TEXT_AT_SCALE = 1.4f;
+	private static final float SHOW_PINS_AT_SCALE = 1.6f;
+	private static final float SHOW_TEXT_AT_SCALE = 2.8f;
 	private Paint paint;
 	private Paint textPaint;
 	private Rect bounds = new Rect();
@@ -185,12 +185,12 @@ public class CampusMapView extends SubsamplingScaleImageView {
             	else if(highlightedMarkerList.contains(marker)){
 	        		
 	        	}
-	        	else if(getScale() > SHOW_PINS_AT_SCALE){
+	        	else if(getScale() > SHOW_PINS_AT_SCALE/density){
 		            PointF vPin = sourceToViewCoord(marker.point);
 		            float vX = vPin.x - (pin.getWidth()/2);
 		            float vY = vPin.y - (pin.getHeight()/2);
 		            canvas.drawBitmap(pin, vX, vY, paint);
-		            if(getScale() > SHOW_TEXT_AT_SCALE){
+		            if(getScale() > SHOW_TEXT_AT_SCALE/density){
 			            String name;
 			            if(marker.shortName.isEmpty()) name = marker.name;
 			            else name = marker.shortName;
@@ -224,7 +224,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			PointF point = marker.point;
 			float dist  = (float) calculateDistance(point, touchPoint);
 			
-			if(dist < minDist){
+			if(dist < minDist && isMarkerVisible(marker)){
 				minDist = dist;
 				resultMarker = marker;
 			}
@@ -317,14 +317,17 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	
 
 	private boolean isMarkerInTouchRegion(Marker marker, PointF o) {
-		PointF point  = sourceToViewCoord(marker.point);
-		PointF origin = sourceToViewCoord(o);
-		float dist = (float) calculateDistance(point, origin);
-		if(dist < pinWidth*density*2 && isMarkerVisible(marker)) { return true;}
+		if(marker != null){
+			PointF point  = sourceToViewCoord(marker.point);
+			PointF origin = sourceToViewCoord(o);
+			float dist = (float) calculateDistance(point, origin);
+			if(dist < pinWidth*density*2 && isMarkerVisible(marker)) { return true;}
+		}
 		return false;
 	}
 
 	private boolean isMarkerVisible(Marker marker) {
+		if(marker == resultMarker) return true;
 		if(highlightedMarkerList.contains(marker)) return true;
 		if(getScale() > SHOW_PINS_AT_SCALE) return true;
 		return false;

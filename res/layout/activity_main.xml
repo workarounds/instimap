@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="com.mrane.campusmap.MainActivity"
     tools:ignore="MergeRootFrame" >
 
@@ -123,6 +124,7 @@
             android:layout_margin="8dp"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/search"
+            android:visibility="invisible"
             android:onClick="locateClick"/>
 	    <RelativeLayout
 	        android:id="@+id/place_card"
@@ -146,7 +148,7 @@
 	        <TextView
 	            android:id="@+id/place_name"
 	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
+	            android:layout_height="72dp"
 	            android:layout_alignParentLeft="true"
 	            android:layout_alignParentTop="true"
 	            android:layout_toLeftOf="@id/add_marker_icon"
@@ -154,6 +156,17 @@
 	            android:padding="8dp"
 	            android:textSize="24sp" >
 	        </TextView>
+	        <ImageView 
+	            android:id="@+id/place_image"
+	            android:layout_height="208dp"
+	            android:layout_width="match_parent"
+	            android:layout_below="@id/place_name"
+	            android:layout_margin="4dp"
+	            android:background="@drawable/image_background"
+	            android:cropToPadding="true"
+	            android:scaleType="centerCrop"
+	            android:src="@drawable/iitb_main_building"
+	            android:contentDescription="@string/app_name"/>"
 	    </RelativeLayout>
     </com.mrane.campusmap.ExtendedRelativeLayout>
 

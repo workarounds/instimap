@@ -41,6 +41,7 @@
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/search"
                 android:imeOptions="actionSearch"
+                android:paddingRight="48dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="48dp"
                 android:paddingTop="8dp"

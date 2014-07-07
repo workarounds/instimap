@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.graphics.PointF;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -27,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -40,10 +42,11 @@ import com.mrane.zoomview.CampusMapView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
-		OnTouchListener {
+		OnTouchListener, OnChildClickListener {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
 	private ArrayAdapter<String> adapter;
+	private ExpandableListAdapter expAdapter;
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
@@ -65,6 +68,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
+	public int expandedGroup = -1;
 	private boolean noFragments = true;
 	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
@@ -72,6 +76,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_INIT_LAYOUT = 2;
 	private final long DELAY_ANIMATE = 75;
 	private final long DELAY_INIT_LAYOUT = 500;
+	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
+	private GPSManager gps;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -108,7 +114,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String[] KEYS = keys.toArray(new String[keys.size()]);
 
 		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
-		fragmentContainer.setOnTouchListener(this);
 
 		adapter = new ArrayAdapter<String>(this, R.layout.row_layout,
 				R.id.label, KEYS);
@@ -136,20 +141,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
 
-		locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		// boolean enabled = locationManager
-		// .isProviderEnabled(LocationManager.GPS_PROVIDER);
-		//
-		// if (!enabled) {
-		// Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		// startActivity(intent);
-		// }
-		// Define a listener that responds to location updates
-		locationListener = new LocationListenerClass();
-		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-		// 0, 0, locationListener);
+		gps = new GPSManager(this);
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -250,7 +242,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
-		String selection = adapter.getItem(id);
+		String selection = editText.getText().toString();
+		if (id < adapter.getCount()) {
+			selection = adapter.getItem(id);
+		}
 		editText.dismissDropDown();
 		this.hideKeyboard();
 		this.removeEditTextFocus(selection);
@@ -271,6 +266,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (marker != null) {
 			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
+		} else {
+			removeMarker();
 		}
 	}
 
@@ -297,7 +294,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public boolean removeMarker() {
-		return false;
+		if (campusMapView.getResultMarker() == null) {
+			return false;
+		} else {
+			campusMapView.setResultMarker(null);
+			this.dismissCard();
+			campusMapView.invalidate();
+			return true;
+		}
 	}
 
 	public void searchClick(View v) {
@@ -394,6 +398,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		this.editTextFocused = focus;
 		if (focus) {
 			this.putFragment(listFragment);
+			fragmentContainer.setOnTouchListener(this);
+		} else {
+			fragmentContainer.setOnTouchListener(null);
 		}
 		this.setCorrectIcons();
 	}
@@ -402,6 +409,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		if (imm.isActive()) {
 			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+			fragmentContainer.setOnTouchListener(null);
 		}
 
 	}
@@ -413,13 +421,32 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void locateClick(View v) {
-		Toast.makeText(this, "located", Toast.LENGTH_LONG).show();
+		gps.start();
 	}
 
 	public void addMarkerClick(View v) {
 		dismissCard();
 	}
 
-	
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		String selection = (String) expAdapter.getChild(groupPosition,
+				childPosition);
+		editText.dismissDropDown();
+		this.hideKeyboard();
+		this.removeEditTextFocus(selection);
+		this.backToMap();
+		return true;
+	}
+
+	public ExpandableListAdapter getExpAdapter() {
+		return expAdapter;
+	}
+
+	public void setExpAdapter(ExpandableListAdapter expAdapter) {
+		this.expAdapter = expAdapter;
+	}
+
 
 }

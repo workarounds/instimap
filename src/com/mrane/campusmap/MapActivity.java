@@ -36,7 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 import com.mrane.zoomview.CampusMapView;
 
@@ -106,7 +105,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
 		placeCard = (RelativeLayout) findViewById(R.id.place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
-		
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;
@@ -133,7 +131,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 		locateIcon = (ImageButton) findViewById(R.id.locate_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
-		
+
 		cardTouchListener = new CardTouchListener(this);
 		placeCard.setOnTouchListener(cardTouchListener);
 
@@ -148,16 +146,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void initLayout() {
-		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		int topMargin = 0;
-		//float density = getResources().getDisplayMetrics().density;
-		RelativeLayout.LayoutParams p = (LayoutParams) locateIcon.getLayoutParams();
+		// float density = getResources().getDisplayMetrics().density;
+		RelativeLayout.LayoutParams p = (LayoutParams) locateIcon
+				.getLayoutParams();
 		int total = p.height + p.bottomMargin + p.topMargin;
 		topMargin = campusMapView.getHeight() - total;
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
 		bottomLayout.setVisibility(View.VISIBLE);
-		
+
 		cardTouchListener.initTopMargin(topMargin);
 	}
 
@@ -184,7 +184,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		switch (actionId) {
 		case EditorInfo.IME_ACTION_SEARCH:
-			onItemClick(null, v, 0, 0);
+			// onItemClick(null, v, 0, 0);
 		}
 		return false;
 	}
@@ -282,7 +282,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
-	
+
 	public void expandCard() {
 		Runnable anim = cardTouchListener.expandCardAnimation();
 		anim.run();
@@ -305,9 +305,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void searchClick(View v) {
-		Toast toast = Toast.makeText(this,
-				"Use the text box and search for a place", Toast.LENGTH_SHORT);
-		toast.show();
+		putFragment(listFragment);
+		editText.requestFocus();
+		editText.setText("");
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 	public void removeClick(View v) {
@@ -447,6 +449,5 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void setExpAdapter(ExpandableListAdapter expAdapter) {
 		this.expAdapter = expAdapter;
 	}
-
 
 }

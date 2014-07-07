@@ -28,6 +28,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,15 +37,15 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
 import com.mrane.zoomview.CampusMapView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
-		OnTouchListener {
+		OnTouchListener, OnChildClickListener {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
 	private ArrayAdapter<String> adapter;
+	private ExpandableListAdapter expAdapter;
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
@@ -64,12 +66,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
+	public int expandedGroup = -1;
 	private boolean noFragments = true;
 	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final long DELAY_ANIMATE = 75;
-	public static final PointF MAP_CENTER = new PointF(3628f, 1640f); 
+	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -400,6 +403,25 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void addMarkerClick(View v) {
 
+	}
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		String selection = (String) expAdapter.getChild(groupPosition, childPosition);
+		editText.dismissDropDown();
+		this.hideKeyboard();
+		this.removeEditTextFocus(selection);
+		this.backToMap();
+		return true;
+	}
+
+	public ExpandableListAdapter getExpAdapter() {
+		return expAdapter;
+	}
+
+	public void setExpAdapter(ExpandableListAdapter expAdapter) {
+		this.expAdapter = expAdapter;
 	}
 
 }

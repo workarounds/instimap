@@ -5,6 +5,7 @@ import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PointF;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
 import com.mrane.zoomview.CampusMapView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
@@ -67,6 +69,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final long DELAY_ANIMATE = 75;
+	public static final PointF MAP_CENTER = new PointF(3628f, 1640f); 
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -99,7 +102,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String[] KEYS = keys.toArray(new String[keys.size()]);
 
 		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
-		fragmentContainer.setOnTouchListener(this);
 
 		adapter = new ArrayAdapter<String>(this, R.layout.row_layout,
 				R.id.label, KEYS);
@@ -112,6 +114,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.png");
 		campusMapView.setData(data);
+		// this.setMapToCenter();
 
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
@@ -222,7 +225,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
-		String selection = adapter.getItem(id);
+		String selection = editText.getText().toString();
+		if (id < adapter.getCount()) {
+			selection = adapter.getItem(id);
+		}
 		editText.dismissDropDown();
 		this.hideKeyboard();
 		this.removeEditTextFocus(selection);
@@ -242,6 +248,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (marker != null) {
 			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
+		} else {
+			removeMarker();
 		}
 	}
 
@@ -260,7 +268,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public boolean removeMarker() {
-		return false;
+		if (campusMapView.getResultMarker() == null) {
+			return false;
+		} else {
+			campusMapView.setResultMarker(null);
+			this.dismissCard();
+			campusMapView.invalidate();
+			return true;
+		}
 	}
 
 	public void searchClick(View v) {
@@ -357,6 +372,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		this.editTextFocused = focus;
 		if (focus) {
 			this.putFragment(listFragment);
+			fragmentContainer.setOnTouchListener(this);
+		} else {
+			fragmentContainer.setOnTouchListener(null);
 		}
 		this.setCorrectIcons();
 	}
@@ -365,6 +383,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		if (imm.isActive()) {
 			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+			fragmentContainer.setOnTouchListener(null);
 		}
 
 	}

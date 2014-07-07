@@ -31,6 +31,7 @@ public class ListFragment extends Fragment {
 		list = (ListView) rootView.findViewById(R.id.suggestion_list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mainActivity);
+		list.setOnTouchListener(mainActivity);
 		
 		return rootView;
 	}

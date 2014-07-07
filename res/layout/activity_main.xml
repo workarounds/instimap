@@ -45,6 +45,8 @@
                 android:paddingBottom="8dp"
                 android:paddingLeft="48dp"
                 android:paddingTop="8dp"
+                android:selectAllOnFocus="true"
+                android:completionThreshold="1"
                 android:singleLine="true" />
 
             <ImageButton

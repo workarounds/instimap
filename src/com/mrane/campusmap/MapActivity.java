@@ -282,38 +282,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void showCard(Marker marker) {
 		placeNameTextView.setText(marker.name);
-//		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-//		int topMargin = 0;
-//		float density = getResources().getDisplayMetrics().density;
-//		topMargin = campusMapView.getHeight() - locateIcon.getHeight() - (int)(96*density);
-//		params.setMargins(0, topMargin, 0, 0);
-//		bottomLayout.setLayoutParams(params);
-//		
-//		RelativeLayout.LayoutParams p = (LayoutParams) placeCard.getLayoutParams();
-//		p.height = (int)(120*density);
-//		placeCard.setLayoutParams(p);
-//		placeCard.setVisibility(View.VISIBLE);
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
 	
 	public void expandCard() {
-//		float density = getResources().getDisplayMetrics().density;
-//		if(placeCard.getHeight() < 300*density ){
-//			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-//			int topMargin = 0;
-//			topMargin = campusMapView.getHeight() - locateIcon.getHeight() - (int)(320*density);
-//			params.setMargins(0, topMargin, 0, 0);
-//			bottomLayout.setLayoutParams(params);
-//			
-//			RelativeLayout.LayoutParams p = (LayoutParams) placeCard.getLayoutParams();
-//			p.height = (int)(320*density);
-//			placeCard.setLayoutParams(p);
-//			placeCard.setVisibility(View.VISIBLE);
-//		}
-//		else{
-//			showCard(campusMapView.getResultMarker());
-//		}
 		Runnable anim = cardTouchListener.expandCardAnimation();
 		anim.run();
 	}

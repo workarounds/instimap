@@ -69,28 +69,40 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		float h = 0;
 		
 		bluePin = BitmapFactory.decodeResource(this.getResources(), drawable.blue_pin);
+		highlightedBluePin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_blue_pin);
         w = pinWidth*density/2;
         h = bluePin.getHeight() * (w/bluePin.getWidth());
         bluePin = Bitmap.createScaledBitmap(bluePin, (int)w, (int)h, true);
-        highlightedBluePin = Bitmap.createScaledBitmap(bluePin, (int)(1.5*w), (int)(1.5*h), true);
+        w = 4*w;
+        h = highlightedBluePin.getHeight() * (w/highlightedBluePin.getWidth());
+        highlightedBluePin = Bitmap.createScaledBitmap(highlightedBluePin, (int)(w), (int)(h), true);
         
         orangePin = BitmapFactory.decodeResource(this.getResources(), drawable.orange_pin);
+        highlightedOrangePin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_orange_pin);
         w = pinWidth*density/2;
         h = orangePin.getHeight() * (w/orangePin.getWidth());
         orangePin = Bitmap.createScaledBitmap(orangePin, (int)w, (int)h, true);
-        highlightedOrangePin = Bitmap.createScaledBitmap(orangePin, (int)(1.5*w), (int)(1.5*h), true);
+        w = 4*w;
+        h = highlightedOrangePin.getHeight() * (w/highlightedOrangePin.getWidth());
+        highlightedOrangePin = Bitmap.createScaledBitmap(highlightedOrangePin, (int)(w), (int)(h), true);
         
         redPin = BitmapFactory.decodeResource(this.getResources(), drawable.red_pin);
+        highlightedRedPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_red_pin);
         w = pinWidth*density/2;
         h = redPin.getHeight() * (w/redPin.getWidth());
         redPin = Bitmap.createScaledBitmap(redPin, (int)w, (int)h, true);
-        highlightedRedPin = Bitmap.createScaledBitmap(redPin, (int)(1.5*w), (int)(1.5*h), true);
+        w = 4*w;
+        h = highlightedRedPin.getHeight() * (w/highlightedRedPin.getWidth());
+        highlightedRedPin = Bitmap.createScaledBitmap(highlightedRedPin, (int)(w), (int)(h), true);
         
         purplePin = BitmapFactory.decodeResource(this.getResources(), drawable.purple_pin);
+        highlightedPurplePin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_purple_pin);
         w = pinWidth*density/2;
         h = purplePin.getHeight() * (w/purplePin.getWidth());
         purplePin = Bitmap.createScaledBitmap(purplePin, (int)w, (int)h, true);
-        highlightedPurplePin = Bitmap.createScaledBitmap(purplePin, (int)(1.5*w), (int)(1.5*h), true);
+        w = 4*w;
+        h = highlightedPurplePin.getHeight() * (w/highlightedPurplePin.getWidth());
+        highlightedPurplePin = Bitmap.createScaledBitmap(highlightedPurplePin, (int)(w), (int)(h), true);
 	}
 	
 	private void initPaints(){

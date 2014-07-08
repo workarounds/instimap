@@ -14,6 +14,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,8 +38,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap highlightedRedPin;
 	private Bitmap highlightedPurplePin;
 	private float pinWidth = 24;
-	private static final float SHOW_PINS_AT_SCALE = 1.6f;
-	private static final float SHOW_TEXT_AT_SCALE = 2.8f;
 	private Paint paint;
 	private Paint textPaint;
 	private Rect bounds = new Rect();
@@ -113,8 +112,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         //textPaint.setColor(Color.rgb(254, 250, 217));
         textPaint.setColor(Color.WHITE);
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
-        textPaint.setTextSize(16*density);
-        textPaint.setTypeface(Typeface.SANS_SERIF);
+        textPaint.setTextSize(14*density);
+        textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 	}
 
 	public void setData(HashMap<String, Marker> markerData){
@@ -181,16 +180,23 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		            float vX = vPin.x - (highlightedPin.getWidth()/2);
 		            float vY = vPin.y - highlightedPin.getHeight();
 		            canvas.drawBitmap(highlightedPin, vX, vY, paint);
+		            String name;
+		            if(marker.shortName.isEmpty()) name = marker.name;
+		            else name = marker.shortName;
+		            textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
+		            float tX = vPin.x - bounds.width()/2;
+		            float tY = vPin.y + bounds.height();
+		            canvas.drawText(name, tX, tY, textPaint);
             	}
             	else if(highlightedMarkerList.contains(marker)){
 	        		
 	        	}
-	        	else if(getScale() > SHOW_PINS_AT_SCALE/density){
+	        	else if(isShowPinScale()){
 		            PointF vPin = sourceToViewCoord(marker.point);
 		            float vX = vPin.x - (pin.getWidth()/2);
 		            float vY = vPin.y - (pin.getHeight()/2);
 		            canvas.drawBitmap(pin, vX, vY, paint);
-		            if(getScale() > SHOW_TEXT_AT_SCALE/density){
+		            if(isShowPinTextScale()){
 			            String name;
 			            if(marker.shortName.isEmpty()) name = marker.name;
 			            else name = marker.shortName;
@@ -329,7 +335,25 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private boolean isMarkerVisible(Marker marker) {
 		if(marker == resultMarker) return true;
 		if(highlightedMarkerList.contains(marker)) return true;
-		if(getScale() > SHOW_PINS_AT_SCALE) return true;
+		if(isShowPinScale()) return true;
+		return false;
+	}
+	
+	private boolean isShowPinScale(){
+		PointF left = viewToSourceCoord(0, 0);
+		PointF right = viewToSourceCoord(getWidth(), 0);
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		float xDpi = metrics.xdpi;
+		if((right.x-left.x)*xDpi/320 < getSWidth()/5) return true;
+		return false;
+	}
+	
+	private boolean isShowPinTextScale(){
+		PointF left = viewToSourceCoord(0, 0);
+		PointF right = viewToSourceCoord(getWidth(), 0);
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		float xDpi = metrics.xdpi;
+		if((right.x-left.x)*xDpi/320 < getSWidth()/8) return true;
 		return false;
 	}
 

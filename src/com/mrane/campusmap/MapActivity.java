@@ -1,5 +1,6 @@
 package com.mrane.campusmap;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -110,6 +111,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		data = mLocations.data;
 		Set<String> keys = data.keySet();
 		String[] KEYS = keys.toArray(new String[keys.size()]);
+		Arrays.sort(KEYS);
 
 		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
 

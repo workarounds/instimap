@@ -1,8 +1,10 @@
 package com.mrane.zoomview;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +16,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +29,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private MapActivity mainActivity;
 	private HashMap<String, Marker> data;
 	private Collection<Marker> markerList;
-	private ArrayList<Marker> highlightedMarkerList;
+	private ArrayList<Marker> addedMarkerList;
 	private Marker resultMarker;
 	private Bitmap bluePin;
 	private Bitmap orangePin;
@@ -37,12 +40,12 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap highlightedRedPin;
 	private Bitmap highlightedPurplePin;
 	private float pinWidth = 24;
-	private static final float SHOW_PINS_AT_SCALE = 1.6f;
-	private static final float SHOW_TEXT_AT_SCALE = 2.8f;
 	private Paint paint;
 	private Paint textPaint;
 	private Rect bounds = new Rect();
-	float density;
+	private static int RATIO_SHOW_PIN = 5;
+	private static int RATIO_SHOW_PIN_TEXT = 8;
+	private float density;
 
 	public CampusMapView(Context context) {
 		this(context, null);
@@ -113,26 +116,41 @@ public class CampusMapView extends SubsamplingScaleImageView {
         //textPaint.setColor(Color.rgb(254, 250, 217));
         textPaint.setColor(Color.WHITE);
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
-        textPaint.setTextSize(16*density);
-        textPaint.setTypeface(Typeface.SANS_SERIF);
+        textPaint.setTextSize(14*density);
+        textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 	}
+	
+	private float getTargetMinScale() {
+    	return Math.max(getWidth() / (float) getSWidth(), (getHeight())/ (float) getSHeight());
+    }
 
 	public void setData(HashMap<String, Marker> markerData){
 		data = markerData;
 		markerList = data.values();
-		highlightedMarkerList = new ArrayList<Marker>();
+		addedMarkerList = new ArrayList<Marker>();
 	}
 	
-	public void goToMarker(Marker marker){
-		highlightedMarkerList.add(marker);
-		AnimationBuilder anim = animateScaleAndCenter(getMaxScale(), marker.point);
-		anim.withDuration(750).start();
+	public static int getShowPinRatio(){
+		return RATIO_SHOW_PIN;
+	}
+	
+	public static void setShowPinRatio(int ratio){
+		RATIO_SHOW_PIN = ratio;
+	}
+	
+	public static int getShowPinTextRatio(){
+		return RATIO_SHOW_PIN_TEXT;
+	}
+	
+	public static void setShowPinTextRatio(int ratio){
+		RATIO_SHOW_PIN_TEXT = ratio;
 	}
 	
 	public Marker getResultMarker(){
 		return resultMarker;
 	}
 	
+	@Deprecated
 	public Marker getHighlightedMarker(){
 		return getResultMarker();
 	}
@@ -157,8 +175,47 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		showResultMarker();
 	}
 	
-	public void removeHighlightedMarkers(){
-		highlightedMarkerList.clear();
+	public void addMarker(Marker m){
+		if(!addedMarkerList.contains(m)){
+			addedMarkerList.add(m);
+		}
+	}
+	
+	public void addMarker(){
+		Marker m = getResultMarker();
+		addMarker(m);
+	}
+	
+	public void addMarkers(Collection<? extends Marker> markers){
+		for(Marker m : markers){
+			addMarker(m);
+		}
+	}
+	
+	public void addMarkers(Marker[] markerArray){
+		List<Marker> markerList = Arrays.asList(markerArray);
+		addMarkers(markerList);
+	}
+	
+	public void removeAddedMarker(Marker m){
+		if(addedMarkerList.contains(m)){
+			addedMarkerList.remove(m);
+		}
+	}
+	
+	public void removeAddedMarkers(Collection<? extends Marker> markers){
+		for(Marker m : markers){
+			removeAddedMarker(m);
+		}
+	}
+	
+	public void removeAddedMarkers(Marker[] markerArray){
+		List<Marker> markerList = Arrays.asList(markerArray);
+		removeAddedMarkers(markerList);
+	}
+	
+	public void removeAddedMarkers(){
+		addedMarkerList.clear();
 	}
 	
 	
@@ -181,16 +238,23 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		            float vX = vPin.x - (highlightedPin.getWidth()/2);
 		            float vY = vPin.y - highlightedPin.getHeight();
 		            canvas.drawBitmap(highlightedPin, vX, vY, paint);
+		            String name;
+		            if(marker.shortName.isEmpty()) name = marker.name;
+		            else name = marker.shortName;
+		            textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
+		            float tX = vPin.x - bounds.width()/2;
+		            float tY = vPin.y + bounds.height();
+		            canvas.drawText(name, tX, tY, textPaint);
             	}
-            	else if(highlightedMarkerList.contains(marker)){
+            	else if(addedMarkerList.contains(marker)){
 	        		
 	        	}
-	        	else if(getScale() > SHOW_PINS_AT_SCALE/density){
+	        	else if(isShowPinScale()){
 		            PointF vPin = sourceToViewCoord(marker.point);
 		            float vX = vPin.x - (pin.getWidth()/2);
 		            float vY = vPin.y - (pin.getHeight()/2);
 		            canvas.drawBitmap(pin, vX, vY, paint);
-		            if(getScale() > SHOW_TEXT_AT_SCALE/density){
+		            if(isShowPinTextScale()){
 			            String name;
 			            if(marker.shortName.isEmpty()) name = marker.name;
 			            else name = marker.shortName;
@@ -309,12 +373,30 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+            	final float targetMinScale = getTargetMinScale();
+            	int action = motionEvent.getAction();
+            	if(targetMinScale > getScale()){
+            		callSuperOnTouch(motionEvent);
+	            	if(action == MotionEvent.ACTION_UP){
+	            		Runnable anim = new Runnable(){
+	            			public void run(){
+	            				AnimationBuilder animation = animateScale(targetMinScale);
+	            				animation.withDuration(200).withEasing(SubsamplingScaleImageView.EASE_OUT_QUAD).start();
+	            			}
+	            		};
+	            		anim.run();
+	            	}
+	            	return true;
+            	}
                 return gestureDetector.onTouchEvent(motionEvent);
             }
 		});
 		
 	}
 	
+	private void callSuperOnTouch(MotionEvent me){
+		super.onTouchEvent(me);
+	}
 
 	private boolean isMarkerInTouchRegion(Marker marker, PointF o) {
 		if(marker != null){
@@ -328,8 +410,26 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private boolean isMarkerVisible(Marker marker) {
 		if(marker == resultMarker) return true;
-		if(highlightedMarkerList.contains(marker)) return true;
-		if(getScale() > SHOW_PINS_AT_SCALE) return true;
+		if(addedMarkerList.contains(marker)) return true;
+		if(isShowPinScale()) return true;
+		return false;
+	}
+	
+	private boolean isShowPinScale(){
+		PointF left = viewToSourceCoord(0, 0);
+		PointF right = viewToSourceCoord(getWidth(), 0);
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		float xDpi = metrics.xdpi;
+		if((right.x-left.x)*xDpi/320 < getSWidth()/RATIO_SHOW_PIN) return true;
+		return false;
+	}
+	
+	private boolean isShowPinTextScale(){
+		PointF left = viewToSourceCoord(0, 0);
+		PointF right = viewToSourceCoord(getWidth(), 0);
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+		float xDpi = metrics.xdpi;
+		if((right.x-left.x)*xDpi/320 < getSWidth()/RATIO_SHOW_PIN_TEXT) return true;
 		return false;
 	}
 

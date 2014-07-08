@@ -77,7 +77,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final long DELAY_ANIMATE = 75;
 	private final long DELAY_INIT_LAYOUT = 500;
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
-	private GPSManager gps;
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -140,8 +139,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-
-		gps = new GPSManager(this);
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -446,7 +443,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void locateClick(View v) {
-		gps.start();
+	
 	}
 
 	public void addMarkerClick(View v) {

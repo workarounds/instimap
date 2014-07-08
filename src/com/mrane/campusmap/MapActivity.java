@@ -160,6 +160,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		cardTouchListener.initTopMargin(topMargin);
 	}
+	
+	private Runnable initMapScaleAndCenter(){
+		return null;
+	}
 
 	@Override
 	public void afterTextChanged(Editable arg0) {
@@ -231,7 +235,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				super.onBackPressed();
 			} else {
 				if (editText.length() > 0) {
-					editText.getText().clear();
 				}
 			}
 		} else {
@@ -276,6 +279,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		showCard(marker);
 		campusMapView.setAndShowResultMarker(marker);
 	}
+	
+	public void showCard(){
+		Marker marker = campusMapView.getResultMarker();
+		showCard(marker);
+	}
 
 	public void showCard(Marker marker) {
 		placeNameTextView.setText(marker.name);
@@ -297,9 +305,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (campusMapView.getResultMarker() == null) {
 			return false;
 		} else {
-			campusMapView.setResultMarker(null);
-			this.dismissCard();
-			campusMapView.invalidate();
+			final int state = cardTouchListener.getCardState();
+			switch (state) {
+			case CardTouchListener.STATE_DISMISSED:
+			case CardTouchListener.STATE_HIDDEN:
+				editText.getText().clear();
+				campusMapView.setResultMarker(null);
+				this.dismissCard();
+				campusMapView.invalidate();
+				break;
+			case CardTouchListener.STATE_EXPANDED:
+			case CardTouchListener.STATE_UNKNOWN:
+				showCard();
+				break;
+			default:
+				break;
+			}
 			return true;
 		}
 	}

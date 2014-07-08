@@ -18,12 +18,18 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 	private int curTopMargin;
 	private int initTopMargin;
 	private float cardHeight;
+	private float hiddenCardHeight;
+	public final static int STATE_EXPANDED = 1;
+	public final static int STATE_HIDDEN = 2;
+	public final static int STATE_DISMISSED = 3;
+	public final static int STATE_UNKNOWN = 4;
 	
 	public CardTouchListener(MapActivity main){
 		mainActivity = main;
 		bottomLayout = main.bottomLayout;
 		translation = 0;
 		cardHeight = mainActivity.getResources().getDimension(R.dimen.card_height);
+		hiddenCardHeight = 0.3f*cardHeight;
 	}
 	
 	public void initTopMargin(int topMargin) {
@@ -41,7 +47,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 			
 		}
 		else if(action == MotionEvent.ACTION_UP){
-			mainActivity.expandCard();
+			toggleExpansion();
 		}
 		return true;
 	}
@@ -51,7 +57,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 		final AnimationListener l = this;
 		Runnable anim = new Runnable(){
 			public void run(){
-				float expectedTopMargin = initTopMargin - 0.3f*cardHeight;
+				float expectedTopMargin = initTopMargin - hiddenCardHeight;
 				translation = -curTopMargin + expectedTopMargin;
 				float yFrom = 0;
 				float yTo =  translation;
@@ -68,7 +74,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 		final AnimationListener l = this;
 		Runnable anim = new Runnable(){
 			public void run(){
-				float expectedTopMargin = initTopMargin - 1.0f*cardHeight;
+				float expectedTopMargin = initTopMargin - cardHeight;
 				translation = - curTopMargin + expectedTopMargin;
 				float yFrom = 0;
 				float yTo =  translation;
@@ -97,6 +103,28 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 			}
 		};
 		return anim;
+	}
+	
+	public void toggleExpansion(){
+		if(getCardState() == STATE_HIDDEN){
+			mainActivity.expandCard();
+		}
+		else{
+			mainActivity.showCard();
+		}
+	}
+	
+	public int getCardState(){
+		if(curTopMargin == initTopMargin){
+			return STATE_DISMISSED;
+		}
+		else if(curTopMargin == initTopMargin - hiddenCardHeight){
+			return STATE_HIDDEN;
+		}
+		else if(curTopMargin == initTopMargin - cardHeight){
+			return STATE_EXPANDED;
+		}
+		return STATE_UNKNOWN;
 	}
 
 	@Override

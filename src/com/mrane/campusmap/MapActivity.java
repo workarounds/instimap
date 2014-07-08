@@ -190,7 +190,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		switch (actionId) {
 		case EditorInfo.IME_ACTION_SEARCH:
-			// onItemClick(null, v, 0, 0);
+			onItemClick(null, v, 0, 0);
 		}
 		return false;
 	}

@@ -449,6 +449,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void addMarkerClick(View v) {
 		dismissCard();
+		
 	}
 
 	@Override

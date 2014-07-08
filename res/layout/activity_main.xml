@@ -130,10 +130,13 @@
 	    <RelativeLayout
 	        android:id="@+id/place_card"
 	        android:layout_width="match_parent"
-	        android:layout_height="@dimen/card_height"
+	        android:layout_height="wrap_content"
+	        android:minHeight="@dimen/card_height"
 	        android:layout_marginTop="0dp"
+	        android:layout_marginLeft="8dp"
+	        android:layout_marginRight="8dp"
 	        android:layout_below="@id/locate_icon"
-	        android:background="@drawable/searchbar_background">
+	        android:background="@drawable/bottom_card_background">
             <ImageButton
 	            android:id="@+id/add_marker_icon"
 	            android:src="@drawable/ic_action_remove"
@@ -149,25 +152,28 @@
 	        <TextView
 	            android:id="@+id/place_name"
 	            android:layout_width="fill_parent"
-	            android:layout_height="72dp"
+	            android:layout_height="56dp"
 	            android:layout_alignParentLeft="true"
 	            android:layout_alignParentTop="true"
 	            android:layout_toLeftOf="@id/add_marker_icon"
 	            android:fontFamily="sans_serif_light"
 	            android:padding="8dp"
+	            android:layout_marginLeft="8dp"
+	            android:layout_marginRight="8dp"
 	            android:textSize="24sp" >
 	        </TextView>
-	        <ImageView 
-	            android:id="@+id/place_image"
-	            android:layout_height="208dp"
-	            android:layout_width="match_parent"
+	        <TextView 
+	            android:id="@+id/place_desc"
+	            android:text="@string/location_search"
+	            android:layout_width="fill_parent"
+	            android:layout_height="48dp"
 	            android:layout_below="@id/place_name"
-	            android:layout_margin="4dp"
-	            android:background="@drawable/image_background"
-	            android:cropToPadding="true"
-	            android:scaleType="centerCrop"
-	            android:src="@drawable/iitb_main_building"
-	            android:contentDescription="@string/app_name"/>"
+	            android:fontFamily="sans_serif_light"
+	            android:layout_marginLeft="8dp"
+	            android:layout_marginRight="8dp"
+	            android:paddingLeft="8dp"
+	            android:paddingRight="8dp"
+	            android:textSize="16sp"/>
 	    </RelativeLayout>
     </com.mrane.campusmap.ExtendedRelativeLayout>
 

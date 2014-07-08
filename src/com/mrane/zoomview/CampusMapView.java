@@ -76,7 +76,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = bluePin.getHeight() * (w/bluePin.getWidth());
         bluePin = Bitmap.createScaledBitmap(bluePin, (int)w, (int)h, true);
-        w = 4*w;
+        w = 2.5f*w;
         h = highlightedBluePin.getHeight() * (w/highlightedBluePin.getWidth());
         highlightedBluePin = Bitmap.createScaledBitmap(highlightedBluePin, (int)(w), (int)(h), true);
         
@@ -85,7 +85,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = orangePin.getHeight() * (w/orangePin.getWidth());
         orangePin = Bitmap.createScaledBitmap(orangePin, (int)w, (int)h, true);
-        w = 4*w;
+        w = 2.5f*w;
         h = highlightedOrangePin.getHeight() * (w/highlightedOrangePin.getWidth());
         highlightedOrangePin = Bitmap.createScaledBitmap(highlightedOrangePin, (int)(w), (int)(h), true);
         
@@ -94,7 +94,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = redPin.getHeight() * (w/redPin.getWidth());
         redPin = Bitmap.createScaledBitmap(redPin, (int)w, (int)h, true);
-        w = 4*w;
+        w = 2.5f*w;
         h = highlightedRedPin.getHeight() * (w/highlightedRedPin.getWidth());
         highlightedRedPin = Bitmap.createScaledBitmap(highlightedRedPin, (int)(w), (int)(h), true);
         
@@ -103,7 +103,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = purplePin.getHeight() * (w/purplePin.getWidth());
         purplePin = Bitmap.createScaledBitmap(purplePin, (int)w, (int)h, true);
-        w = 4*w;
+        w = 2.5f*w;
         h = highlightedPurplePin.getHeight() * (w/highlightedPurplePin.getWidth());
         highlightedPurplePin = Bitmap.createScaledBitmap(highlightedPurplePin, (int)(w), (int)(h), true);
 	}
@@ -420,7 +420,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		PointF right = viewToSourceCoord(getWidth(), 0);
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		float xDpi = metrics.xdpi;
-		if((right.x-left.x)*xDpi/320 < getSWidth()/RATIO_SHOW_PIN) return true;
+		if((right.x-left.x)*2*xDpi/(320*density) < getSWidth()/RATIO_SHOW_PIN) return true;
 		return false;
 	}
 	
@@ -429,7 +429,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		PointF right = viewToSourceCoord(getWidth(), 0);
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		float xDpi = metrics.xdpi;
-		if((right.x-left.x)*xDpi/320 < getSWidth()/RATIO_SHOW_PIN_TEXT) return true;
+		if((right.x-left.x)*2*xDpi/(320*density) < getSWidth()/RATIO_SHOW_PIN_TEXT) return true;
 		return false;
 	}
 

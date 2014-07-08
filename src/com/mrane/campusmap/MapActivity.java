@@ -157,7 +157,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
 		bottomLayout.setVisibility(View.VISIBLE);
-
+		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
 	}
 	
@@ -258,7 +258,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
-		locateIcon.setVisibility(View.VISIBLE);
+		//locateIcon.setVisibility(View.VISIBLE);
 		// get text from auto complete text box
 		String key = editText.getText().toString();
 

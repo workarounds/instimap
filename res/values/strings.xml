@@ -7,5 +7,6 @@
     <string name="search">Search</string>
     <string name="ok">Settings</string>
     <string name="cancel">Cancel</string>
+    <string name="location_search">You are 20m away from IDC</string>
 
 </resources>

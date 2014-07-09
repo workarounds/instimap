@@ -74,6 +74,7 @@ public class Locations {
 		data.put(s34, m34);
 		String s36 = "Main Building";
 		Marker m36 = new Marker(s36, "", 3628f, 1640f, 1);
+		m36.showDefault = true;
 		data.put(s36, m36);
 		String s37 = "Mathematics";
 		Marker m37 = new Marker(s37, "", 3928f, 1496f, 1);
@@ -176,6 +177,7 @@ public class Locations {
 		data.put(s77, m77);
 		String s78 = "Guest House/ Vanvihar";
 		Marker m78 = new Marker(s78, "Vanvihar", 2881f, 2106f, 3);
+		m78.showDefault = true;
 		data.put(s78, m78);
 		String s79 = "Nilgiri";
 		Marker m79 = new Marker(s79, "", 3318f, 2324f, 3);
@@ -284,6 +286,7 @@ public class Locations {
 		data.put(s118, m118);
 		String s119 = "Main Gate";
 		Marker m119 = new Marker(s119, "", 2259f, 3237f, 9);
+		m119.showDefault = true;
 		data.put(s119, m119);
 		String s120 = "Market Gate";
 		Marker m120 = new Marker(s120, "", 3829f, 2972f, 9);

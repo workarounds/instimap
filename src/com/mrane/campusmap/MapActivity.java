@@ -159,6 +159,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
 		bottomLayout.setVisibility(View.VISIBLE);
+		placeCard.setVisibility(View.INVISIBLE);
 		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
 	}
@@ -294,6 +295,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void showCard(Marker marker) {
 		placeNameTextView.setText(marker.name);
 		setAddMarkerIcon(marker);
+		placeCard.setVisibility(View.VISIBLE);
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}

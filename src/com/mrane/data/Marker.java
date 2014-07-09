@@ -11,6 +11,7 @@ public class Marker {
 	public String shortName;
 	public PointF point;
 	public int groupIndex;
+	public boolean showDefault;
 	
 	private static final int DEPARTMENTS = 1;
 	private static final int HOSTELS = 2;
@@ -40,6 +41,7 @@ public class Marker {
 		this.groupIndex = groupIndex;
 		this.name = name;
 		this.shortName = shortName;
+		showDefault = false;
 	}
 	
 	public int getColor(){

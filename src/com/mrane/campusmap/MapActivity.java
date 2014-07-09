@@ -1,8 +1,9 @@
 package com.mrane.campusmap;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.graphics.PointF;
@@ -26,8 +27,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
@@ -38,6 +38,8 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.mrane.data.Locations;
+import com.mrane.data.Marker;
 import com.mrane.zoomview.CampusMapView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
@@ -45,7 +47,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnTouchListener, OnChildClickListener {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
-	private ArrayAdapter<String> adapter;
+	private FuzzySearchAdapter adapter;
 	private ExpandableListAdapter expAdapter;
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
@@ -56,8 +58,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private LinearLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
-	public AutoCompleteTextView editText;
+	public EditText editText;
 	public HashMap<String, Marker> data;
+	private List<Marker> markerlist;
 	public FragmentTransaction transaction;
 	public CampusMapView campusMapView;
 	public ImageButton searchIcon;
@@ -108,16 +111,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;
-		Set<String> keys = data.keySet();
-		String[] KEYS = keys.toArray(new String[keys.size()]);
-		Arrays.sort(KEYS);
+		markerlist = new ArrayList<Marker>(data.values());
 
 		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
 
-		adapter = new ArrayAdapter<String>(this, R.layout.row_layout,
-				R.id.label, KEYS);
-		editText = (AutoCompleteTextView) findViewById(R.id.search);
-		editText.setAdapter(adapter);
+		adapter = new FuzzySearchAdapter(this, markerlist);
+		editText = (EditText) findViewById(R.id.search);
 		editText.addTextChangedListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.setOnFocusChangeListener(this);
@@ -159,14 +158,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
 	}
-	
-	private Runnable initMapScaleAndCenter(){
+
+	private Runnable initMapScaleAndCenter() {
 		return null;
 	}
 
 	@Override
 	public void afterTextChanged(Editable arg0) {
-		// TODO Auto-generated method stub
+		if (editTextFocused) {
+			String text = editText.getText().toString()
+					.toLowerCase(Locale.getDefault());
+			adapter.filter(text);
+		}
 
 	}
 
@@ -204,6 +207,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		locateIcon.setVisibility(View.INVISIBLE);
 		this.dismissCard();
 		transaction = fragmentManager.beginTransaction();
+		// transaction.setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
 			transaction.add(R.id.fragment_container, tempFragment);
@@ -246,9 +250,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
 		String selection = editText.getText().toString();
 		if (id < adapter.getCount()) {
-			selection = adapter.getItem(id);
+			selection = adapter.getItem(id).name;
 		}
-		editText.dismissDropDown();
 		this.hideKeyboard();
 		this.removeEditTextFocus(selection);
 		this.backToMap();
@@ -257,7 +260,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
-		//locateIcon.setVisibility(View.VISIBLE);
+		// locateIcon.setVisibility(View.VISIBLE);
 		// get text from auto complete text box
 		String key = editText.getText().toString();
 
@@ -278,8 +281,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		showCard(marker);
 		campusMapView.setAndShowResultMarker(marker);
 	}
-	
-	public void showCard(){
+
+	public void showCard() {
 		Marker marker = campusMapView.getResultMarker();
 		showCard(marker);
 	}
@@ -363,11 +366,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	}
 
-	public ArrayAdapter<String> getAdapter() {
+	public FuzzySearchAdapter getAdapter() {
 		return adapter;
 	}
 
-	public void setAdapter(ArrayAdapter<String> adapter) {
+	public void setAdapter(FuzzySearchAdapter adapter) {
 		this.adapter = adapter;
 	}
 
@@ -421,6 +424,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (focus) {
 			this.putFragment(listFragment);
 			fragmentContainer.setOnTouchListener(this);
+			String text = editText.getText().toString()
+					.toLowerCase(Locale.getDefault());
+			adapter.filter(text);
 		} else {
 			fragmentContainer.setOnTouchListener(null);
 		}
@@ -443,12 +449,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void locateClick(View v) {
-	
+
 	}
 
 	public void addMarkerClick(View v) {
 		dismissCard();
-		
+
 	}
 
 	@Override
@@ -456,7 +462,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			int groupPosition, int childPosition, long id) {
 		String selection = (String) expAdapter.getChild(groupPosition,
 				childPosition);
-		editText.dismissDropDown();
 		this.hideKeyboard();
 		this.removeEditTextFocus(selection);
 		this.backToMap();

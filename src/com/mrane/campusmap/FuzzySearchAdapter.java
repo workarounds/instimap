@@ -1,43 +1,166 @@
 package com.mrane.campusmap;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
-import android.widget.ArrayAdapter;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class FuzzySearchAdapter<T extends Marker> extends ArrayAdapter<T> {
+import com.mrane.data.Marker;
 
-	public FuzzySearchAdapter(Context context, int resource, T[] objects) {
-		super(context, resource, objects);
-		// TODO Auto-generated constructor stub
+public class FuzzySearchAdapter extends BaseAdapter {
+
+	Context mContext;
+	LayoutInflater inflater;
+	private List<Marker> resultlist = null;
+	private ArrayList<Marker> inputlist;
+	private List<ScoredMarker> map;
+	private Locale l;
+
+	public FuzzySearchAdapter(Context context, List<Marker> inputlist) {
+		mContext = context;
+		l = Locale.getDefault();
+		this.resultlist = inputlist;
+		Collections.sort(resultlist, new MarkerNameComparator());
+		inflater = LayoutInflater.from(mContext);
+		this.inputlist = new ArrayList<Marker>();
+		this.inputlist.addAll(resultlist);
+		map = new ArrayList<ScoredMarker>();
 	}
 
-	public FuzzySearchAdapter(Context context, int resource, List<T> objects) {
-		super(context, resource, objects);
-		// TODO Auto-generated constructor stub
+	public class ViewHolder {
+		TextView label;
+		LinearLayout rowContainer;
 	}
 
-	public FuzzySearchAdapter(Context context, int resource,
-			int textViewResourceId, T[] objects) {
-		super(context, resource, textViewResourceId, objects);
-		// TODO Auto-generated constructor stub
+	public class ScoredMarker {
+		Marker m;
+		int score;
+
+		public ScoredMarker(int score, Marker m) {
+			this.m = m;
+			this.score = score;
+		}
 	}
 
-	public FuzzySearchAdapter(Context context, int resource,
-			int textViewResourceId, List<T> objects) {
-		super(context, resource, textViewResourceId, objects);
-		// TODO Auto-generated constructor stub
+	@Override
+	public int getCount() {
+		return resultlist.size();
 	}
 
-	public FuzzySearchAdapter(Context context, int resource,
-			int textViewResourceId) {
-		super(context, resource, textViewResourceId);
-		// TODO Auto-generated constructor stub
+	@Override
+	public Marker getItem(int position) {
+		return resultlist.get(position);
 	}
 
-	public FuzzySearchAdapter(Context context, int resource) {
-		super(context, resource);
-		// TODO Auto-generated constructor stub
+	@Override
+	public long getItemId(int position) {
+		return position;
 	}
 
+	@Override
+	public View getView(final int position, View view, ViewGroup parent) {
+		final ViewHolder holder;
+		if (view == null) {
+			holder = new ViewHolder();
+			view = inflater.inflate(R.layout.row_layout, null);
+
+			holder.label = (TextView) view.findViewById(R.id.label);
+			holder.rowContainer = (LinearLayout) view
+					.findViewById(R.id.row_container);
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		// Set the results into TextViews
+		
+		if (position == 0) {
+			holder.label.setText(Html.fromHtml("<b>" + resultlist.get(position).name + "</b>"));
+//			holder.rowContainer.setBackgroundColor(Color.GRAY);
+//			holder.rowContainer.getBackground().setAlpha(100);
+		} else {
+			holder.label.setText(resultlist.get(position).name);
+//			holder.rowContainer.setBackgroundColor(Color.TRANSPARENT);
+		}
+
+		return view;
+	}
+
+	public void filter(String charText) {
+		charText = charText.toLowerCase(Locale.getDefault());
+		resultlist.clear();
+		map.clear();
+		if (charText.length() == 0) {
+			resultlist.addAll(inputlist);
+		} else if (charText.length() > 10) {
+			for (Marker m : inputlist) {
+				if (m.name.toLowerCase(Locale.getDefault()).contains(charText)) {
+					resultlist.add(m);
+				}
+			}
+		} else {
+			for (Marker m : inputlist) {
+				int score = checkModifyMarker(m, charText);
+				if (score != 0) {
+					map.add(new ScoredMarker(score, m));
+				}
+			}
+			resultlist = sortByScore(map);
+		}
+		notifyDataSetChanged();
+	}
+
+	private List<Marker> sortByScore(List<ScoredMarker> tempScore) {
+		List<Marker> templist = new ArrayList<Marker>();
+		Collections.sort(tempScore, new MarkerScoreComparator());
+		for (ScoredMarker k : tempScore) {
+			templist.add(k.m);
+		}
+		return templist;
+	}
+
+	private int checkModifyMarker(Marker m, String charText) {
+		int tempScore = 1;
+		String tempCharText = "(.*)";
+		for (int i = 0; i < charText.length(); i++) {
+			tempCharText += charText.charAt(i) + "(.*)";
+		}
+		if (m.name.toLowerCase(l).matches(tempCharText)) {
+			boolean b = false;
+			for (String s : m.name.split(" ")) {
+				b = b || s.toLowerCase(l).startsWith("" + charText.charAt(0));
+				if (!b) {
+					tempScore += 10;
+				}
+			}
+			if (b) {
+				return tempScore;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public class MarkerScoreComparator implements Comparator<ScoredMarker> {
+		public int compare(ScoredMarker m1, ScoredMarker m2) {
+			return m1.score - m2.score;
+		}
+	}
+	
+	public class MarkerNameComparator implements Comparator<Marker> {
+		public int compare (Marker m1, Marker m2) {
+			return m1.name.toLowerCase(l).compareTo(m2.name.toLowerCase(l));
+		}
+	}
 }

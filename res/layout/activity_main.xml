@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <AutoCompleteTextView
+            <EditText
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -47,7 +47,6 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="8dp"
                 android:selectAllOnFocus="true"
-                android:completionThreshold="1"
                 android:singleLine="true" />
 
             <ImageButton

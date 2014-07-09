@@ -1,4 +1,4 @@
-package com.mrane.campusmap;
+package com.mrane.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;

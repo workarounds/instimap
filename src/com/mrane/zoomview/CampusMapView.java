@@ -22,8 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.mrane.campusmap.MapActivity;
-import com.mrane.campusmap.Marker;
 import com.mrane.campusmap.R.drawable;
+import com.mrane.data.Marker;
 
 public class CampusMapView extends SubsamplingScaleImageView {
 	private MapActivity mainActivity;

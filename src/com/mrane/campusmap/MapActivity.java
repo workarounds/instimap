@@ -9,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -84,6 +86,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private String message = "Sorry, no such place in our data.";
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
+	public static final int KEY_SOUND_ADD_MARKER = 1;
+	public SoundPool soundPool;
+	public int soundPoolID;
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@Override
@@ -99,6 +104,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		}
 	};
 
+	@SuppressLint("ShowToast")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,6 +147,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
+		
+		initSoundPool();
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -162,6 +170,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeCard.setVisibility(View.INVISIBLE);
 		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
+	}
+	
+	private void initSoundPool(){
+		soundPool = new SoundPool(2,AudioManager.STREAM_MUSIC, 100);
+		soundPoolID = soundPool.load(this, R.raw.add_marker, 1);
 	}
 
 	@Override
@@ -463,8 +476,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void addMarkerClick(View v) {
 		campusMapView.toggleMarker();
-		campusMapView.invalidate();
 		setAddMarkerIcon();
+		playAddMarkerSound();
+	}
+	
+	public void playAddMarkerSound(){
+		soundPool.play(soundPoolID, 1.0f, 1.0f, 1, 0, 1f);
 	}
 
 	private void setAddMarkerIcon() {

@@ -246,6 +246,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	public void addMarker(Marker m){
 		if(!addedMarkerList.contains(m)){
 			addedMarkerList.add(m);
+			setMarkerAnimation(true);
+			
 		}
 	}
 	
@@ -297,6 +299,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	public void toggleMarker(Marker m){
 		if(isAddedMarker(m)) removeAddedMarker(m);
 		else addMarker(m);
+		invalidate();
 	}
 	
 	public void toggleMarker(){
@@ -401,9 +404,9 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			if(marker == getResultMarker()){
 				pinCenter = currentPlusCenter;
 			}
-			pinCenter = plusCenter;
+			else pinCenter = plusCenter;
 		}
-		pinCenter = currentCenter;
+		else	pinCenter = currentCenter;
 		
 		if(highlightedPinScale != 1.0f && isResultMarker(marker)){
 			float w = pinCenter.getWidth()*highlightedPinScale;

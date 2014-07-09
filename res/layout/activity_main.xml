@@ -145,7 +145,8 @@
 	            android:layout_alignParentTop="true"
 	            android:layout_alignParentRight="true"
 	            android:background="@android:color/transparent"
-	            android:layout_margin="0dp"/>
+	            android:layout_margin="0dp"
+	            android:onClick="removeCardClick"/>
             <ImageButton
 	            android:id="@+id/add_marker_icon"
 	            android:src="@drawable/ic_action_location_found"

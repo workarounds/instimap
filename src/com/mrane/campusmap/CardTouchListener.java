@@ -16,6 +16,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 
 	private MapActivity mainActivity;
 	private RelativeLayout bottomLayout;
+	private RelativeLayout placeCard;
 	private float translation;
 	private int curTopMargin;
 	private int initTopMargin;
@@ -31,6 +32,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 	public CardTouchListener(MapActivity main){
 		mainActivity = main;
 		bottomLayout = main.bottomLayout;
+		placeCard = main.placeCard;
 		translation = 0;
 		cardHeight = mainActivity.getResources().getDimension(R.dimen.card_height);
 		hiddenCardHeight = 0.3f*cardHeight;
@@ -144,6 +146,11 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 		params.topMargin += (int)translation;
 		curTopMargin = params.topMargin;
 		bottomLayout.setLayoutParams(params);
+		setVisibility();
+	}
+
+	private void setVisibility() {
+		if(getCardState() == STATE_DISMISSED) placeCard.setVisibility(View.INVISIBLE);
 	}
 
 	@Override

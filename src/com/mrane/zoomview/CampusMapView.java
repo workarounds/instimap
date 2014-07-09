@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Join;
+import android.graphics.Paint.Style;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -46,6 +48,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private float pinWidth = 24;
 	private Paint paint;
 	private Paint textPaint;
+	private Paint strokePaint;
 	private Rect bounds = new Rect();
 	private static int RATIO_SHOW_PIN = 10;
 	private static int RATIO_SHOW_PIN_TEXT = 16;
@@ -153,6 +156,16 @@ public class CampusMapView extends SubsamplingScaleImageView {
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
         textPaint.setTextSize(14*density);
         textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        
+        strokePaint = new Paint();
+        strokePaint.setAntiAlias(true);
+        strokePaint.setColor(Color.BLACK);
+        strokePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        strokePaint.setTextSize(14*density);
+        strokePaint.setStyle(Style.STROKE);
+        strokePaint.setStrokeJoin(Join.ROUND);
+        strokePaint.setStrokeWidth(0.25f*density);
+        
 	}
 	
 	public float getTargetMinScale() {
@@ -168,9 +181,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 	
 	private void setSpecialMarkers() {
-//		for(Marker m : markerList){
-//			
-//		}
+		for(Marker m : markerList){
+			if(m.showDefault){
+				specialMarkerList.add(m);
+			}
+		}
 	}
 
 	public static int getShowPinRatio(){
@@ -320,6 +335,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         float tX = vPin.x - bounds.width()/2;
         float tY = vPin.y + bounds.height();
         canvas.drawText(name, tX, tY, textPaint);
+        canvas.drawText(name, tX, tY, strokePaint);
 	}
 	
 	private void drawPinCenter(Canvas canvas, Marker marker){
@@ -345,6 +361,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
             float tX = vX + pin.getWidth();
             float tY = vY + pin.getHeight()/2 + 4*density;
             canvas.drawText(name, tX, tY, textPaint);
+            canvas.drawText(name, tX, tY, strokePaint);
         }
 	}
 	

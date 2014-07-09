@@ -78,7 +78,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final int MSG_INIT_LAYOUT = 2;
-	private final long DELAY_ANIMATE = 75;
+	private final long DELAY_ANIMATE = 150;
 	private final long DELAY_INIT_LAYOUT = 500;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";

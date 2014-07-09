@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +26,7 @@ import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 
 import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.R.drawable;
@@ -46,12 +51,15 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap currentPlusCenter;
 	private Bitmap plusCenter;
 	private float pinWidth = 24;
+	private float highlightedPinScale;
 	private Paint paint;
 	private Paint textPaint;
 	private Paint strokePaint;
 	private Rect bounds = new Rect();
 	private static int RATIO_SHOW_PIN = 10;
 	private static int RATIO_SHOW_PIN_TEXT = 16;
+	private static long DURATION_MARKER_ANIMATION = 500;
+	private static long DELAY_MARKER_ANIMATION = 675;
 	private static float MAX_SCALE = 1F;
 	private float density;
 	private boolean isFirstLoad = true;
@@ -67,6 +75,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void initialise(){
 		density = getResources().getDisplayMetrics().density;
+		highlightedPinScale = 1.0f;
         initMarkers();
         
         initPaints();
@@ -104,7 +113,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = lightGreenPin.getHeight() * (w/lightGreenPin.getWidth());
         lightGreenPin = Bitmap.createScaledBitmap(lightGreenPin, (int)w, (int)h, true);
-        w = 3f*w;
+        w = 4f*w;
         h = highlightedLightGreenPin.getHeight() * (w/highlightedLightGreenPin.getWidth());
         highlightedLightGreenPin = Bitmap.createScaledBitmap(highlightedLightGreenPin, (int)(w), (int)(h), true);
         
@@ -113,7 +122,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = yellowPin.getHeight() * (w/yellowPin.getWidth());
         yellowPin = Bitmap.createScaledBitmap(yellowPin, (int)w, (int)h, true);
-        w = 3f*w;
+        w = 4f*w;
         h = highlightedYellowPin.getHeight() * (w/highlightedYellowPin.getWidth());
         highlightedYellowPin = Bitmap.createScaledBitmap(highlightedYellowPin, (int)(w), (int)(h), true);
         
@@ -122,7 +131,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = redPin.getHeight() * (w/redPin.getWidth());
         redPin = Bitmap.createScaledBitmap(redPin, (int)w, (int)h, true);
-        w = 3f*w;
+        w = 4f*w;
         h = highlightedRedPin.getHeight() * (w/highlightedRedPin.getWidth());
         highlightedRedPin = Bitmap.createScaledBitmap(highlightedRedPin, (int)(w), (int)(h), true);
         
@@ -131,7 +140,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         w = pinWidth*density/2;
         h = greenPin.getHeight() * (w/greenPin.getWidth());
         greenPin = Bitmap.createScaledBitmap(greenPin, (int)w, (int)h, true);
-        w = 3f*w;
+        w = 4f*w;
         float scaling = w/highlightedGreenPin.getWidth();
         h = highlightedGreenPin.getHeight()*scaling;
         highlightedGreenPin = Bitmap.createScaledBitmap(highlightedGreenPin, (int)(w), (int)(h), true);
@@ -164,7 +173,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         strokePaint.setTextSize(14*density);
         strokePaint.setStyle(Style.STROKE);
         strokePaint.setStrokeJoin(Join.ROUND);
-        strokePaint.setStrokeWidth(0.25f*density);
+        strokePaint.setStrokeWidth(0.2f*density);
         
 	}
 	
@@ -225,6 +234,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		if(resultMarker != null){
 			AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(), resultMarker.point);
 			anim.withDuration(750).start();
+			setMarkerAnimation(false);
 		}
 	}
 	
@@ -386,13 +396,21 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 	
 	private Bitmap getPinCenter(Marker marker){
+		Bitmap pinCenter = null;
 		if(addedMarkerList.contains(marker)){
 			if(marker == getResultMarker()){
-				return currentPlusCenter;
+				pinCenter = currentPlusCenter;
 			}
-			return plusCenter;
+			pinCenter = plusCenter;
 		}
-		return currentCenter;
+		pinCenter = currentCenter;
+		
+		if(highlightedPinScale != 1.0f && isResultMarker(marker)){
+			float w = pinCenter.getWidth()*highlightedPinScale;
+			float h = pinCenter.getHeight()*highlightedPinScale;
+			pinCenter = Bitmap.createScaledBitmap(pinCenter, (int)w, (int)h, true);
+		}
+		return pinCenter;
 	}
 	
 	private boolean isInView(PointF point){
@@ -461,20 +479,48 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		int red = Color.rgb(254, 51, 51);
 		int purple = Color.rgb(216, 125, 232);
 		
+		Bitmap highlightedPin = null;
+		
 		if(color == blue){
-			return highlightedLightGreenPin;
+			highlightedPin = highlightedLightGreenPin;
 		}
 		else if(color == orange){
-			return highlightedYellowPin;
+			highlightedPin = highlightedYellowPin;
 		}
 		else if(color == red){
-			return highlightedRedPin;
+			highlightedPin = highlightedRedPin;
 		}
 		else if(color == purple){
-			return highlightedGreenPin;
+			highlightedPin = highlightedGreenPin;
 		}
 		
-		return null;
+		if(highlightedPinScale != 1.0f && isResultMarker(marker)){
+			float w = highlightedPin.getWidth()*highlightedPinScale;
+			float h = highlightedPin.getHeight()*highlightedPinScale;
+			highlightedPin = Bitmap.createScaledBitmap(highlightedPin, (int)w, (int)h, true);
+		}
+		
+		return highlightedPin;
+	}
+	
+	@SuppressLint("NewApi")
+	private void setMarkerAnimation(boolean noDelay){
+		highlightedPinScale = 0.1f;
+		ValueAnimator valAnim = new ValueAnimator();
+		valAnim.setFloatValues(0.1f,1.0f);
+		valAnim.setDuration(DURATION_MARKER_ANIMATION);
+		valAnim.addUpdateListener(new AnimatorUpdateListener() {
+			
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				highlightedPinScale = (Float) animation.getAnimatedValue();
+				if(isImageReady()) invalidate();
+			}
+		});
+		TimeInterpolator i = new BounceInterpolator();
+		valAnim.setInterpolator(i);
+		if(!noDelay) valAnim.setStartDelay(DELAY_MARKER_ANIMATION);
+		valAnim.start();
 	}
 	
 	private void setGestureDetector() {
@@ -557,13 +603,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		PointF right = viewToSourceCoord(getWidth(), 0);
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
 		float xDpi = metrics.xdpi;
-		if((right.x-left.x)*xDpi/getWidth() < getSWidth()/RATIO_SHOW_PIN_TEXT) return true;
+		if((right.x-left.x)*xDpi/getWidth() < getSWidth()*density/(RATIO_SHOW_PIN_TEXT*2)) return true;
 		return false;
 	}
 	
 	private float getShowTextScale(){
 		float xDpi = getResources().getDisplayMetrics().xdpi;
-		float scale = (RATIO_SHOW_PIN_TEXT*xDpi + 20)/getSWidth();
+		float scale = (RATIO_SHOW_PIN_TEXT*xDpi*2/density + 20)/getSWidth();
 		return scale;
 	}
 

@@ -734,9 +734,9 @@ public class SubsamplingScaleImageView extends View {
         // Load double resolution - next level will be split into four tiles and at the center all four are required,
         // so don't bother with tiling until the next level 16 tiles are needed.
         
-//        if (fullImageSampleSize > 1) {
-//            fullImageSampleSize /= 2;
-//        }
+        if (fullImageSampleSize > 1) {
+            fullImageSampleSize /= 2;
+        }
         
 
         initialiseTileMap(maxTileDimensions);

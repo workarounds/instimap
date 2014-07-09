@@ -37,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
@@ -79,6 +80,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_INIT_LAYOUT = 2;
 	private final long DELAY_ANIMATE = 75;
 	private final long DELAY_INIT_LAYOUT = 500;
+	private Toast toast;
+	private String message = "Sorry, no such place in our data.";
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	@SuppressLint("HandlerLeak")
@@ -141,6 +144,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
+		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
 
 	private void initLayout() {
@@ -188,7 +192,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		case EditorInfo.IME_ACTION_SEARCH:
 			onItemClick(null, v, 0, 0);
 		}
-		return false;
+		return true;
 	}
 
 	public static MapActivity getMainActivity() {
@@ -203,7 +207,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		locateIcon.setVisibility(View.INVISIBLE);
 		this.dismissCard();
 		transaction = fragmentManager.beginTransaction();
-		// transaction.setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out);
+		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
+		// R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
 			transaction.add(R.id.fragment_container, tempFragment);
@@ -244,15 +249,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
-		String selection = editText.getText().toString();
-		if (id < adapter.getCount()) {
-			selection = adapter.getItem(id).name;
+		if (adapter.getResultSize() == 0) {
+			toast.setText(message);;
+			toast.show();
+		} else {
+			String selection = editText.getText().toString();
+			if (id < adapter.getCount()) {
+				selection = adapter.getItem(id).name;
+			}
+			this.hideKeyboard();
+			this.removeEditTextFocus(selection);
+			this.backToMap();
 		}
-		this.hideKeyboard();
-		this.removeEditTextFocus(selection);
-		this.backToMap();
-		// this.backToMap();
-
 	}
 
 	public void displayMap() {
@@ -441,7 +449,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public boolean onTouch(View arg0, MotionEvent arg1) {
-		removeEditTextFocus(null);
+		if (adapter.getResultSize() != 0) {
+			removeEditTextFocus(null);
+		}
 		return false;
 	}
 
@@ -454,21 +464,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.invalidate();
 		setAddMarkerIcon();
 	}
-	
+
 	private void setAddMarkerIcon() {
 		setAddMarkerIcon(campusMapView.getResultMarker());
 	}
-	
-	private void setAddMarkerIcon(Marker m){
-		if(campusMapView.isAddedMarker(m)){
-			addMarkerIcon.setImageResource(R.drawable.ic_action_location_searching);
-		}
-		else{
+
+	private void setAddMarkerIcon(Marker m) {
+		if (campusMapView.isAddedMarker(m)) {
+			addMarkerIcon
+					.setImageResource(R.drawable.ic_action_location_searching);
+		} else {
 			addMarkerIcon.setImageResource(R.drawable.ic_action_location_found);
 		}
 	}
 
-	public void removeCardClick(View v){
+	public void removeCardClick(View v) {
 		editText.getText().clear();
 		displayMap();
 		dismissCard();

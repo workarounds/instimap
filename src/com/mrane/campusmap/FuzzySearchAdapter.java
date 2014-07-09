@@ -52,8 +52,15 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		}
 	}
 
+	public int getResultSize() {
+		return resultlist.size();
+	}
+
 	@Override
 	public int getCount() {
+		if (this.getResultSize() == 0) {
+			return 1;
+		}
 		return resultlist.size();
 	}
 
@@ -82,16 +89,21 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		}
 		// Set the results into TextViews
-		
-		if (position == 0) {
-			holder.label.setText(Html.fromHtml("<b>" + resultlist.get(position).name + "</b>"));
-//			holder.rowContainer.setBackgroundColor(Color.GRAY);
-//			holder.rowContainer.getBackground().setAlpha(100);
-		} else {
-			holder.label.setText(resultlist.get(position).name);
-//			holder.rowContainer.setBackgroundColor(Color.TRANSPARENT);
-		}
 
+		if (this.getResultSize() == 0) {
+			holder.label.setText("Sorry, no results found.");
+		} else {
+
+			if (position == 0) {
+				holder.label.setText(Html.fromHtml("<b>"
+						+ resultlist.get(position).name + "</b>"));
+				// holder.rowContainer.setBackgroundColor(Color.GRAY);
+				// holder.rowContainer.getBackground().setAlpha(100);
+			} else {
+				holder.label.setText(resultlist.get(position).name);
+				// holder.rowContainer.setBackgroundColor(Color.TRANSPARENT);
+			}
+		}
 		return view;
 	}
 
@@ -136,7 +148,7 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		}
 		if (m.name.toLowerCase(l).matches(tempCharText)) {
 			boolean b = false;
-			if(m.name.toLowerCase(l).startsWith(charText)) {
+			if (m.name.toLowerCase(l).startsWith(charText)) {
 				return 1;
 			}
 			for (String s : m.name.split(" ")) {
@@ -163,9 +175,9 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			return m1.score - m2.score;
 		}
 	}
-	
+
 	public class MarkerNameComparator implements Comparator<Marker> {
-		public int compare (Marker m1, Marker m2) {
+		public int compare(Marker m1, Marker m2) {
 			return m1.name.toLowerCase(l).compareTo(m2.name.toLowerCase(l));
 		}
 	}

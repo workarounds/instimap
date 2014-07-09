@@ -129,17 +129,23 @@ public class FuzzySearchAdapter extends BaseAdapter {
 	}
 
 	private int checkModifyMarker(Marker m, String charText) {
-		int tempScore = 1;
+		int tempScore = 5;
 		String tempCharText = "(.*)";
 		for (int i = 0; i < charText.length(); i++) {
 			tempCharText += charText.charAt(i) + "(.*)";
 		}
 		if (m.name.toLowerCase(l).matches(tempCharText)) {
 			boolean b = false;
+			if(m.name.toLowerCase(l).startsWith(charText)) {
+				return 1;
+			}
 			for (String s : m.name.split(" ")) {
 				b = b || s.toLowerCase(l).startsWith("" + charText.charAt(0));
 				if (!b) {
 					tempScore += 10;
+				}
+				if (s.startsWith(charText)) {
+					return 3;
 				}
 			}
 			if (b) {

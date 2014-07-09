@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -23,6 +25,8 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 	public final static int STATE_HIDDEN = 2;
 	public final static int STATE_DISMISSED = 3;
 	public final static int STATE_UNKNOWN = 4;
+	private final static long DURATION_ANIMATION_DEFAULT = 500;
+	private final static float INTERPOLATOR_FACTOR = 2.5f;
 	
 	public CardTouchListener(MapActivity main){
 		mainActivity = main;
@@ -62,7 +66,9 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 				float yFrom = 0;
 				float yTo =  translation;
 				TranslateAnimation animation = new TranslateAnimation(0,0,yFrom,yTo);
-				animation.setDuration(500);
+				animation.setDuration(DURATION_ANIMATION_DEFAULT);
+				Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
+				animation.setInterpolator(i);
 				animation.setFillEnabled(false);
 				animation.setAnimationListener(l);
 				bottomLayout.startAnimation(animation);
@@ -79,8 +85,10 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 				float yFrom = 0;
 				float yTo =  translation;
 				TranslateAnimation animation = new TranslateAnimation(0,0,yFrom,yTo);
-				animation.setDuration(500);
+				animation.setDuration(DURATION_ANIMATION_DEFAULT);
 				animation.setFillEnabled(false);
+				Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
+				animation.setInterpolator(i);
 				animation.setAnimationListener(l);
 				bottomLayout.startAnimation(animation);
 			}
@@ -96,7 +104,9 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 				float yFrom = 0;
 				float yTo =  translation;
 				TranslateAnimation animation = new TranslateAnimation(0,0,yFrom,yTo);
-				animation.setDuration(500);
+				animation.setDuration(DURATION_ANIMATION_DEFAULT);
+				Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
+				animation.setInterpolator(i);
 				animation.setFillEnabled(false);
 				animation.setAnimationListener(l);
 				bottomLayout.startAnimation(animation);

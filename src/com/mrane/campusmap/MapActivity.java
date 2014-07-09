@@ -77,6 +77,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final long DELAY_ANIMATE = 75;
 	private final long DELAY_INIT_LAYOUT = 500;
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
+	public static final long DURATION_INIT_MAP_ANIM = 500;
 	private GPSManager gps;
 
 	@SuppressLint("HandlerLeak")
@@ -161,10 +162,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		bottomLayout.setVisibility(View.VISIBLE);
 		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
-	}
-	
-	private Runnable initMapScaleAndCenter(){
-		return null;
 	}
 
 	@Override
@@ -289,6 +286,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void showCard(Marker marker) {
 		placeNameTextView.setText(marker.name);
+		setAddMarkerIcon(marker);
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
@@ -450,8 +448,27 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void addMarkerClick(View v) {
-		dismissCard();
-		
+		campusMapView.toggleMarker();
+		campusMapView.invalidate();
+		setAddMarkerIcon();
+	}
+	
+	private void setAddMarkerIcon() {
+		setAddMarkerIcon(campusMapView.getResultMarker());
+	}
+	
+	private void setAddMarkerIcon(Marker m){
+		if(campusMapView.isAddedMarker(m)){
+			addMarkerIcon.setImageResource(R.drawable.ic_action_location_searching);
+		}
+		else{
+			addMarkerIcon.setImageResource(R.drawable.ic_action_location_found);
+		}
+	}
+
+	public void removeCardClick(View v){
+		editText.getText().clear();
+		displayMap();
 	}
 
 	@Override

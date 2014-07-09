@@ -138,29 +138,42 @@
 	        android:layout_below="@id/locate_icon"
 	        android:background="@drawable/bottom_card_background">
             <ImageButton
-	            android:id="@+id/add_marker_icon"
+	            android:id="@+id/remove_card_icon"
 	            android:src="@drawable/ic_action_remove"
 	            android:layout_width="48dp"
 	            android:layout_height="48dp"
 	            android:layout_alignParentTop="true"
 	            android:layout_alignParentRight="true"
-	            android:layout_margin="8dp"
 	            android:padding="8dp"
+	            android:cropToPadding="true"
+	            android:contentDescription="@string/search"
+	            android:background="@android:color/transparent"
+	            android:onClick="removeCardClick"/>
+            <ImageButton
+	            android:id="@+id/add_marker_icon"
+	            android:src="@drawable/ic_action_location_found"
+	            android:layout_width="48dp"
+	            android:layout_height="48dp"
+	            android:layout_alignParentTop="true"
+	            android:layout_toLeftOf="@id/remove_card_icon"
+	            android:padding="8dp"
+	            android:cropToPadding="true"
 	            android:contentDescription="@string/search"
 	            android:background="@android:color/transparent"
 	            android:onClick="addMarkerClick"/>
+            
 	        <TextView
 	            android:id="@+id/place_name"
 	            android:layout_width="fill_parent"
 	            android:layout_height="56dp"
-	            android:layout_alignParentLeft="true"
 	            android:layout_alignParentTop="true"
+	            android:layout_alignParentLeft="true"
 	            android:layout_toLeftOf="@id/add_marker_icon"
-	            android:fontFamily="sans_serif_light"
+	            android:fontFamily="sans_serif"
 	            android:padding="8dp"
 	            android:layout_marginLeft="8dp"
 	            android:layout_marginRight="8dp"
-	            android:textSize="24sp" >
+	            android:textSize="18sp" >
 	        </TextView>
 	        <TextView 
 	            android:id="@+id/place_desc"
@@ -173,7 +186,8 @@
 	            android:layout_marginRight="8dp"
 	            android:paddingLeft="8dp"
 	            android:paddingRight="8dp"
-	            android:textSize="16sp"/>
+	            android:textSize="16sp"
+	            android:textColor="@android:color/darker_gray"/>
 	    </RelativeLayout>
     </com.mrane.campusmap.ExtendedRelativeLayout>
 

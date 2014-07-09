@@ -218,7 +218,7 @@ public class SubsamplingScaleImageView extends View {
                 if (zoomEnabled && readySent && vTranslate != null) {
                     float doubleTapZoomScale = Math.min(maxScale, SubsamplingScaleImageView.this.doubleTapZoomScale);
                     boolean zoomIn = scale <= doubleTapZoomScale * 0.9;
-                    float targetScale = zoomIn ? doubleTapZoomScale : Math.min(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
+                    float targetScale = zoomIn ? doubleTapZoomScale : Math.max(getWidth() / (float) sWidth(), getHeight() / (float) sHeight());
                     PointF targetSCenter = viewToSourceCoord(new PointF(e.getX(), e.getY()));
                     if (doubleTapZoomStyle == ZOOM_FOCUS_CENTER_IMMEDIATE) {
                         setScaleAndCenter(targetScale, targetSCenter);

@@ -32,7 +32,7 @@
         android:layout_marginRight="10dp"
         android:layout_toRightOf="@+id/counter"
         android:contentDescription="list item"
-        android:src="@drawable/ic_action_location_searching"
+        android:src="@drawable/ic_action_expand"
         android:visibility="visible" />
 
     <ImageView
@@ -44,7 +44,7 @@
         android:layout_marginRight="10dp"
         android:layout_toRightOf="@+id/counter"
         android:contentDescription="list item"
-        android:src="@drawable/ic_action_location_found"
+        android:src="@drawable/ic_action_collapse"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.mrane.campusmap;
+package com.mrane.data;
 
 import java.util.HashMap;
 
@@ -6,6 +6,12 @@ public class Locations {
 	public HashMap<String, Marker> data = new HashMap<String, Marker>();
 
 	public Locations() {
+		String a1 = "Test Room";
+		Room r1 = new Room(a1, "TR", 4153f, 2270f, 1, "Test Parent");
+		data.put(a1,  r1);
+		String a2 = "Test Parent";
+		Building b2 = new Building(a1, "TR", 4153f, 2270f, 1, new String[] {"Test Room"});
+		data.put(a2,  b2);
 		String s0 = "Aerospace Engineering Department";
 		Marker m0 = new Marker(s0, "Aerospace Engg", 4153f, 2249f, 1);
 		data.put(s0, m0);
@@ -123,16 +129,16 @@ public class Locations {
 		String s62 = "Hostel 9";
 		Marker m62 = new Marker(s62, "H9", 2676f, 844f, 2);
 		data.put(s62, m62);
-		String s63 = "Hostel 10 Girls’ Hostel New";
+		String s63 = "Hostel 10 Girls Hostel New";
 		Marker m63 = new Marker(s63, "H10 (New)", 3005f, 2342f, 2);
 		data.put(s63, m63);
-		String s64 = "Hostel 10 Girls’ Annex";
+		String s64 = "Hostel 10 Girls Annex";
 		Marker m64 = new Marker(s64, "H10 (Annex)", 2886f, 2452f, 2);
 		data.put(s64, m64);
-		String s65 = "Hostel 10A Girls’ (P. Staff)";
+		String s65 = "Hostel 10A Girls (P. Staff)";
 		Marker m65 = new Marker(s65, "H10A", 4716f, 1448f, 2);
 		data.put(s65, m65);
-		String s66 = "Hostel 11 Girls’ Hostel";
+		String s66 = "Hostel 11 Girls Hostel";
 		Marker m66 = new Marker(s66, "H11", 2987f, 1368f, 2);
 		data.put(s66, m66);
 		String s67 = "Hostel 12";

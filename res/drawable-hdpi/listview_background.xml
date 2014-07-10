@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
      <!-- Drop Shadow Stack -->
-     <item>
+     <!-- <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
             <solid android:color="#00999999" />
@@ -36,13 +36,13 @@
             <solid android:color="#20999999" />
             <corners android:radius="2dp" />
         </shape>
-    </item>
+    </item>-->
 
     <!-- Background -->
     <item>
 	<shape>
-            <solid android:color="#D0FFFFFF" />
-	    <corners android:radius="2dp" />
+            <solid android:color="#F8FFFFFF" />
+	    <!-- <corners android:radius="2dp" />-->
 	</shape>
     </item>
 </layer-list>

@@ -13,6 +13,11 @@ public class Marker {
 	public int groupIndex;
 	public boolean showDefault;
 	
+	public static final int COLOR_BLUE = Color.rgb(0,121,244);
+	public static final int COLOR_YELLOW = Color.rgb(255, 186, 0);
+	public static final int COLOR_RED = Color.rgb(255, 79, 79);
+	public static final int COLOR_PURPLE = Color.rgb(216, 125, 232);
+	
 	private static final int DEPARTMENTS = 1;
 	private static final int HOSTELS = 2;
 	private static final int RESIDENCES = 3;
@@ -44,8 +49,7 @@ public class Marker {
 		showDefault = false;
 	}
 	
-	public int getColor(){
-		int group = this.groupIndex;
+	public static int getColor(int group){
 		Integer[] blueGroup = new Integer[] {HOSTELS};
 		Integer[] orangeGroup = new Integer[] {DEPARTMENTS, HALLS_N_AUDITORIUMS};
 		Integer[] redGroup = new Integer[] {RESIDENCES};
@@ -56,25 +60,25 @@ public class Marker {
 		ArrayList<Integer> redList = new ArrayList<Integer>(Arrays.asList(redGroup));
 		ArrayList<Integer> purpleList = new ArrayList<Integer>(Arrays.asList(purpleGroup));
 		
-		int blue = Color.rgb(68,136,237);
-		int orange = Color.rgb(254, 131, 51);
-		int red = Color.rgb(254, 51, 51);
-		int purple = Color.rgb(216, 125, 232);
-		
 		if(blueList.contains(group)){
-			return blue;
+			return COLOR_BLUE;
 		}
 		else if(orangeList.contains(group)){
-			return orange;
+			return COLOR_YELLOW;
 		}
 		else if(redList.contains(group)){
-			return red;
+			return COLOR_RED;
 		}
 		else if(purpleList.contains(group)){
-			return purple;
+			return COLOR_PURPLE;
 		}
 		
 		return 0;
+	}
+	
+	public int getColor(){
+		int group = this.groupIndex;
+		return getColor(group);
 	}
 	
 	public String getGroupName(){
@@ -104,7 +108,23 @@ public class Marker {
 	}
 	
 	public static String[] getGroupNames(){
-		String[] groupNames = {DEPARTMENTS_NAME,HOSTELS_NAME,RESIDENCES_NAME,HALLS_N_AUDITORIUMS_NAME,FOOD_STALLS_NAME,BANKS_N_ATMS_NAME,SCHOOLS_NAME,SPORTS_NAME,OTHERS_NAME,GATES_NAME};
+		String[] groupNames = {DEPARTMENTS_NAME,HALLS_N_AUDITORIUMS_NAME,HOSTELS_NAME,RESIDENCES_NAME,FOOD_STALLS_NAME,BANKS_N_ATMS_NAME,SCHOOLS_NAME,SPORTS_NAME,OTHERS_NAME,GATES_NAME};
 		return groupNames;
+	}
+	
+	public static int getGroupId(String groupName){
+		int result = 0;
+		if(groupName.equals(DEPARTMENTS_NAME)) result = DEPARTMENTS;
+		if(groupName.equals(HOSTELS_NAME)) result = HOSTELS;
+		if(groupName.equals(RESIDENCES_NAME)) result = RESIDENCES;
+		if(groupName.equals(HALLS_N_AUDITORIUMS_NAME)) result = HALLS_N_AUDITORIUMS;
+		if(groupName.equals(FOOD_STALLS_NAME)) result = FOOD_STALLS;
+		if(groupName.equals(BANKS_N_ATMS_NAME)) result = BANKS_N_ATMS;
+		if(groupName.equals(SCHOOLS_NAME)) result = SCHOOLS;
+		if(groupName.equals(SPORTS_NAME)) result = SPORTS;
+		if(groupName.equals(OTHERS_NAME)) result = OTHERS;
+		if(groupName.equals(GATES_NAME)) result = GATES ;
+		
+		return result;
 	}
 }

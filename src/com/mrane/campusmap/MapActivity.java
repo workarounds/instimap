@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -34,6 +37,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -57,10 +61,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private IndexFragment indexFragment;
 	private Fragment fragment;
 	public RelativeLayout placeCard;
+	public ImageView placeColor;
 	private CardTouchListener cardTouchListener;
+	private RelativeLayout headerContainer;
 	private LinearLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
+	public TextView placeSubHeadTextView;
 	public EditText editText;
 	public HashMap<String, Marker> data;
 	private List<Marker> markerlist;
@@ -70,7 +77,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton removeIcon;
 	public ImageButton indexIcon;
 	public ImageButton mapIcon;
-	public ImageButton locateIcon;
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
@@ -117,11 +123,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
 		placeCard = (RelativeLayout) findViewById(R.id.place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
+		placeColor = (ImageView) findViewById(R.id.place_color);
+		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
 
 		Locations mLocations = new Locations();
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 
+		headerContainer = (RelativeLayout) findViewById(R.id.header_container);
 		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
 
 		adapter = new FuzzySearchAdapter(this, markerlist);
@@ -138,7 +147,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
-		locateIcon = (ImageButton) findViewById(R.id.locate_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 
 		cardTouchListener = new CardTouchListener(this);
@@ -149,26 +157,30 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexFragment = new IndexFragment();
 		
 		initSoundPool();
+		setFonts();
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
+	
+	private void setFonts(){
+		Typeface regular = Typeface.createFromAsset(getAssets(), "roboto_regular.ttf");
+		Typeface boldCn = Typeface.createFromAsset(getAssets(), "roboto_condensed_bold.ttf");
+		
+		placeNameTextView.setTypeface(boldCn);
+		placeSubHeadTextView.setTypeface(regular);
+	}
 
 	private void initLayout() {
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		int topMargin = 0;
+		int topMargin = campusMapView.getHeight();;
 		// float density = getResources().getDisplayMetrics().density;
-		RelativeLayout.LayoutParams p = (LayoutParams) locateIcon
-				.getLayoutParams();
-		int total = p.height + p.bottomMargin + p.topMargin;
-		topMargin = campusMapView.getHeight() - total;
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
 		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.INVISIBLE);
-		locateIcon.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
 	}
 	
@@ -218,8 +230,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void putFragment(Fragment tempFragment) {
-		locateIcon.setVisibility(View.INVISIBLE);
 		this.dismissCard();
+		headerContainer.setBackgroundColor(Color.rgb(224, 224, 224));
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -278,6 +290,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
+		//set header container background to transparent
+		headerContainer.setBackgroundColor(Color.TRANSPARENT);
 		// locateIcon.setVisibility(View.VISIBLE);
 		// get text from auto complete text box
 		String key = editText.getText().toString();
@@ -309,6 +323,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeNameTextView.setText(marker.name);
 		setAddMarkerIcon(marker);
 		placeCard.setVisibility(View.VISIBLE);
+		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));;
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
@@ -470,9 +485,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		return false;
 	}
 
-	public void locateClick(View v) {
-
-	}
+//	public void locateClick(View v) {
+//
+//	}
 
 	public void addMarkerClick(View v) {
 		campusMapView.toggleMarker();
@@ -491,9 +506,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void setAddMarkerIcon(Marker m) {
 		if (campusMapView.isAddedMarker(m)) {
 			addMarkerIcon
-					.setImageResource(R.drawable.ic_action_location_searching);
+					.setImageResource(R.drawable.remove_marker);
 		} else {
-			addMarkerIcon.setImageResource(R.drawable.ic_action_location_found);
+			addMarkerIcon.setImageResource(R.drawable.add_marker);
 		}
 	}
 

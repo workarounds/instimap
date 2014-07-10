@@ -35,7 +35,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 		placeCard = main.placeCard;
 		translation = 0;
 		cardHeight = mainActivity.getResources().getDimension(R.dimen.card_height);
-		hiddenCardHeight = 0.3f*cardHeight;
+		hiddenCardHeight = mainActivity.getResources().getDimension(R.dimen.hidden_card_height);
 	}
 	
 	public void initTopMargin(int topMargin) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +83,8 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			view = inflater.inflate(R.layout.row_layout, null);
 
 			holder.label = (TextView) view.findViewById(R.id.label);
+			Typeface light = Typeface.createFromAsset(mContext.getAssets(), "roboto_light.ttf");
+			holder.label.setTypeface(light);
 			holder.rowContainer = (LinearLayout) view
 					.findViewById(R.id.row_container);
 			view.setTag(holder);

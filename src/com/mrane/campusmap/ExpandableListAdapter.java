@@ -5,12 +5,15 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.mrane.data.Marker;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -51,6 +54,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		TextView txtListChild = (TextView) convertView
 				.findViewById(R.id.lblListItem);
+//		ImageView itemGroupColor = (ImageView) convertView.findViewById(R.id.item_group_color);
+//		itemGroupColor.setBackgroundColor(Marker.getColor(groupPosition));
 
 		txtListChild.setText(childText);
 		return convertView;
@@ -90,24 +95,25 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		TextView lblListHeader = (TextView) convertView
 				.findViewById(R.id.lblListHeader);
-		lblListHeader.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
+		Typeface regular = Typeface.createFromAsset(_context.getAssets(), "roboto_condensed_bold.ttf");
+		lblListHeader.setTypeface(regular);
 		lblListHeader.setText(headerTitle);
 		ImageView iconExpand = (ImageView) convertView
 				.findViewById(R.id.icon_expand);
-		ImageView iconCollapse = (ImageView) convertView
-				.findViewById(R.id.icon_collapse);
+		
+		ImageView groupColor = (ImageView) convertView.findViewById(R.id.group_color);
+		int color = Marker.getColor(Marker.getGroupId(headerTitle));
+		groupColor.setImageDrawable(new ColorDrawable(color));
 
 		if (isExpanded) {
-			iconExpand.setVisibility(View.GONE);
-			iconCollapse.setVisibility(View.VISIBLE);
+			iconExpand.setImageResource(R.drawable.ic_action_expand);
 		} else {
-			iconExpand.setVisibility(View.VISIBLE);
-			iconCollapse.setVisibility(View.GONE);
+			iconExpand.setImageResource(R.drawable.ic_action_next_item);
 		}
 
 		if (getChildrenCount(groupPosition) == 0) {
-			iconExpand.setVisibility(View.GONE);
-			iconCollapse.setVisibility(View.GONE);
+			//iconExpand.setVisibility(View.GONE);
+			convertView.setVisibility(View.GONE);
 		}
 		return convertView;
 	}

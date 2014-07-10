@@ -21,8 +21,8 @@ public class Locations {
 		String s5 = "Central Library";
 		Marker m5 = new Marker(s5, "Library", 3820f, 1455f, 1);
 		data.put(s5, m5);
-		String s7 = "CESE";
-		Marker m7 = new Marker(s7, "", 4340f, 1985f, 1);
+		String s7 = "CESE - Center for Environmental Science & Engineering";
+		Marker m7 = new Marker(s7, "CESE", 4340f, 1985f, 1);
 		data.put(s7, m7);
 		String s8 = "Chemical/Chemistry Department";
 		Marker m8 = new Marker(s8, "Chemical Engg", 3788f, 2350f, 1);
@@ -282,14 +282,14 @@ public class Locations {
 		Marker m117 = new Marker(s117, "", 2971f, 1744f, 9);
 		data.put(s117, m117);
 		String s118 = "Lake Side Gate";
-		Marker m118 = new Marker(s118, "", 792f, 2777f, 9);
+		Marker m118 = new Marker(s118, "", 792f, 2777f, 10);
 		data.put(s118, m118);
 		String s119 = "Main Gate";
-		Marker m119 = new Marker(s119, "", 2259f, 3237f, 9);
+		Marker m119 = new Marker(s119, "", 2259f, 3237f, 10);
 		m119.showDefault = true;
 		data.put(s119, m119);
 		String s120 = "Market Gate";
-		Marker m120 = new Marker(s120, "", 3829f, 2972f, 9);
+		Marker m120 = new Marker(s120, "", 3829f, 2972f, 10);
 		data.put(s120, m120);
 		String s121 = "Medical Store";
 		Marker m121 = new Marker(s121, "", 4000f, 2808f, 9);

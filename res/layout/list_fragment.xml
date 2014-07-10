@@ -8,11 +8,8 @@
         android:id="@+id/suggestion_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="8dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:background="@drawable/listview_background" >
     </ListView>
 

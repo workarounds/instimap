@@ -4,4 +4,5 @@
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
 	<dimen name="card_height">320dp</dimen>
+	<dimen name="hidden_card_height">80dp</dimen>
 </resources>

@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -107,9 +108,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void initMarkers(){
 		float w = 0;
 		float h = 0;
+		Options options = new BitmapFactory.Options();
+	    options.inScaled = false;
 		
-		lightGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.blue_pin);
-		highlightedLightGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_light_green_pin);
+		lightGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.blue_pin, options);
+		highlightedLightGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_light_green_pin, options);
         w = pinWidth*density/2;
         h = lightGreenPin.getHeight() * (w/lightGreenPin.getWidth());
         lightGreenPin = Bitmap.createScaledBitmap(lightGreenPin, (int)w, (int)h, true);
@@ -117,8 +120,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         h = highlightedLightGreenPin.getHeight() * (w/highlightedLightGreenPin.getWidth());
         highlightedLightGreenPin = Bitmap.createScaledBitmap(highlightedLightGreenPin, (int)(w), (int)(h), true);
         
-        yellowPin = BitmapFactory.decodeResource(this.getResources(), drawable.orange_pin);
-        highlightedYellowPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_yellow_pin);
+        yellowPin = BitmapFactory.decodeResource(this.getResources(), drawable.orange_pin, options);
+        highlightedYellowPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_yellow_pin, options);
         w = pinWidth*density/2;
         h = yellowPin.getHeight() * (w/yellowPin.getWidth());
         yellowPin = Bitmap.createScaledBitmap(yellowPin, (int)w, (int)h, true);
@@ -126,8 +129,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         h = highlightedYellowPin.getHeight() * (w/highlightedYellowPin.getWidth());
         highlightedYellowPin = Bitmap.createScaledBitmap(highlightedYellowPin, (int)(w), (int)(h), true);
         
-        redPin = BitmapFactory.decodeResource(this.getResources(), drawable.red_pin);
-        highlightedRedPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_red_pin);
+        redPin = BitmapFactory.decodeResource(this.getResources(), drawable.red_pin, options);
+        highlightedRedPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_red_pin, options);
         w = pinWidth*density/2;
         h = redPin.getHeight() * (w/redPin.getWidth());
         redPin = Bitmap.createScaledBitmap(redPin, (int)w, (int)h, true);
@@ -135,8 +138,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         h = highlightedRedPin.getHeight() * (w/highlightedRedPin.getWidth());
         highlightedRedPin = Bitmap.createScaledBitmap(highlightedRedPin, (int)(w), (int)(h), true);
         
-        greenPin = BitmapFactory.decodeResource(this.getResources(), drawable.purple_pin);
-        highlightedGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_green_pin);
+        greenPin = BitmapFactory.decodeResource(this.getResources(), drawable.purple_pin, options);
+        highlightedGreenPin = BitmapFactory.decodeResource(this.getResources(), drawable.highlighted_green_pin, options);
         w = pinWidth*density/2;
         h = greenPin.getHeight() * (w/greenPin.getWidth());
         greenPin = Bitmap.createScaledBitmap(greenPin, (int)w, (int)h, true);
@@ -145,13 +148,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
         h = highlightedGreenPin.getHeight()*scaling;
         highlightedGreenPin = Bitmap.createScaledBitmap(highlightedGreenPin, (int)(w), (int)(h), true);
         
-        currentCenter = BitmapFactory.decodeResource(getResources(), drawable.current_center);
+        currentCenter = BitmapFactory.decodeResource(getResources(), drawable.current_center, options);
         w = currentCenter.getWidth()*scaling*0.5f;
         h = currentCenter.getHeight()*w/currentCenter.getWidth();
         currentCenter = Bitmap.createScaledBitmap(currentCenter, (int)w, (int)h, true);
-        currentPlusCenter = BitmapFactory.decodeResource(getResources(), drawable.current_plus_center);
+        currentPlusCenter = BitmapFactory.decodeResource(getResources(), drawable.current_plus_center, options);
         currentPlusCenter = Bitmap.createScaledBitmap(currentPlusCenter, (int)w, (int)h, true);
-        plusCenter = BitmapFactory.decodeResource(getResources(), drawable.plus_center);
+        plusCenter = BitmapFactory.decodeResource(getResources(), drawable.plus_center, options);
         plusCenter = Bitmap.createScaledBitmap(plusCenter, (int)w, (int)h, true);
 	}
 	
@@ -164,7 +167,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
         textPaint.setColor(Color.WHITE);
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
         textPaint.setTextSize(14*density);
-        textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        Typeface boldCn = Typeface.createFromAsset(getContext().getAssets(), "roboto_condensed_bold.ttf");
+        textPaint.setTypeface(boldCn);
         
         strokePaint = new Paint();
         strokePaint.setAntiAlias(true);
@@ -232,9 +236,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	
 	public void showResultMarker(){
 		if(resultMarker != null){
+			boolean noDelay = false;
+			if(isInView(getResultMarker().point)) noDelay = true;
 			AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(), resultMarker.point);
 			anim.withDuration(750).start();
-			setMarkerAnimation(false);
+			setMarkerAnimation(noDelay);
 		}
 	}
 	
@@ -318,13 +324,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
         for(Marker marker : markerList){
         	if(isInView(marker.point)){
-            	if(isResultMarker(marker) || addedMarkerList.contains(marker)){
-            		drawHighlightedPin(canvas, marker);
+            	if(isShowPinScale(marker) && !(isResultMarker(marker) || addedMarkerList.contains(marker))){
+            		drawPinAndText(canvas, marker);
+            	}
+	        	else if((isResultMarker(marker) || addedMarkerList.contains(marker))){
+		            drawHighlightedPin(canvas, marker);
 		            drawHighlightedMarkerText(canvas, marker);
 		            drawPinCenter(canvas, marker);
-            	}
-	        	else if(isShowPinScale(marker)){
-		            drawPinAndText(canvas, marker);
 	        	}
         	}
         }
@@ -349,7 +355,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         float tX = vPin.x - bounds.width()/2;
         float tY = vPin.y + bounds.height();
         canvas.drawText(names[0], tX, tY, textPaint);
-        canvas.drawText(names[0], tX, tY, strokePaint);
+        //canvas.drawText(names[0], tX, tY, strokePaint);
         
         int size = names.length;
         if(size >1){
@@ -359,7 +365,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	        	tX = vPin.x - bounds.width()/2;
 	        	tY += displacement;
 	        	canvas.drawText(names[i], tX, tY, textPaint);
-	            canvas.drawText(names[i], tX, tY, strokePaint);
+	            //canvas.drawText(names[i], tX, tY, strokePaint);
 	        }
         }
 	}
@@ -391,7 +397,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
             int size = names.length;
             for(int i = 0; i<size; i++){
             	canvas.drawText(names[i], tX, tY, textPaint);
-                canvas.drawText(names[i], tX, tY, strokePaint);
+                //canvas.drawText(names[i], tX, tY, strokePaint);
             	float displacement = textPaint.getFontSpacing();
             	tY += displacement;
             }
@@ -453,53 +459,49 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap getPin(Marker marker){
 		int color = marker.getColor();
 		
-		int blue = Color.rgb(68,136,237);
-		int orange = Color.rgb(254, 131, 51);
-		int red = Color.rgb(254, 51, 51);
-		int purple = Color.rgb(216, 125, 232);
-		
-		if(color == blue){
+		if(color == Marker.COLOR_BLUE){
 			return lightGreenPin;
 		}
-		else if(color == orange){
+		else if(color == Marker.COLOR_YELLOW){
 			return yellowPin;
 		}
-		else if(color == red){
+		else if(color == Marker.COLOR_RED){
 			return redPin;
 		}
-		else if(color == purple){
+		else if(color == Marker.COLOR_PURPLE){
 			return greenPin;
 		}
 		
-		return null;
+		return lightGreenPin;
 	}
 	
 	private Bitmap getHighlightedPin(Marker marker){
 		int color = marker.getColor();
 		
-		int blue = Color.rgb(68,136,237);
-		int orange = Color.rgb(254, 131, 51);
-		int red = Color.rgb(254, 51, 51);
-		int purple = Color.rgb(216, 125, 232);
-		
 		Bitmap highlightedPin = null;
 		
-		if(color == blue){
+		if(color == Marker.COLOR_BLUE){
 			highlightedPin = highlightedLightGreenPin;
 		}
-		else if(color == orange){
+		else if(color == Marker.COLOR_YELLOW){
 			highlightedPin = highlightedYellowPin;
 		}
-		else if(color == red){
+		else if(color == Marker.COLOR_RED){
 			highlightedPin = highlightedRedPin;
 		}
-		else if(color == purple){
+		else if(color == Marker.COLOR_PURPLE){
 			highlightedPin = highlightedGreenPin;
 		}
 		
 		if(highlightedPinScale != 1.0f && isResultMarker(marker)){
 			float w = highlightedPin.getWidth()*highlightedPinScale;
 			float h = highlightedPin.getHeight()*highlightedPinScale;
+			highlightedPin = Bitmap.createScaledBitmap(highlightedPin, (int)w, (int)h, true);
+		}
+		
+		if(isResultMarker(marker)) {
+			float w = highlightedPin.getWidth()*1.2f;
+			float h = highlightedPin.getHeight()*1.2f;
 			highlightedPin = Bitmap.createScaledBitmap(highlightedPin, (int)w, (int)h, true);
 		}
 		

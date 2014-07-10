@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="48dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="48dp"
+    android:paddingRight="48dp"
     android:orientation="vertical" >
- 
+	<!-- <ImageView 
+        android:id="@+id/item_group_color"
+        android:layout_width="8dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="0dp"
+        android:layout_marginLeft="0dp"
+        android:cropToPadding="true"/> -->
     <TextView
         android:id="@+id/lblListItem"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:padding="8dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/index_item_text_size"
         android:fontFamily="sans-serif-light"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+        android:paddingLeft="48dp" />
  
-</LinearLayout>
+</RelativeLayout>

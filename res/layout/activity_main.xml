@@ -28,7 +28,8 @@
         <RelativeLayout
             android:id="@+id/header_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:padding="8dp" >
 
             <EditText
                 android:id="@+id/search"
@@ -36,7 +37,6 @@
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_margin="8dp"
                 android:background="@drawable/searchbar_background"
                 android:dropDownHeight="0dp"
                 android:fontFamily="sans-serif-light"
@@ -44,7 +44,7 @@
                 android:imeOptions="actionSearch"
                 android:paddingRight="48dp"
                 android:paddingBottom="8dp"
-                android:paddingLeft="20dp"
+                android:paddingLeft="16dp"
                 android:paddingTop="8dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true" />
@@ -55,7 +55,6 @@
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_margin="8dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/search"
                 android:onClick="searchClick"
@@ -67,7 +66,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentRight="true"
-                android:layout_margin="8dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="remove"
                 android:onClick="removeClick"
@@ -80,7 +78,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentRight="true"
-                android:layout_margin="8dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="index"
                 android:onClick="indexClick"
@@ -92,7 +89,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentRight="true"
-                android:layout_margin="8dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="map"
                 android:onClick="mapClick"
@@ -114,78 +110,80 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:background="@android:color/transparent">
-        <ImageButton 
-            android:id="@+id/locate_icon"
-            android:src="@drawable/ic_action_location_searching"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="8dp"
-            android:background="@drawable/searchbar_background"
-            android:layout_alignParentRight="true"
-            android:layout_margin="8dp"
-            android:layout_alignParentTop="true"
-            android:contentDescription="@string/search"
-            android:onClick="locateClick"/>
+        android:background="@android:color/darker_gray">
 	    <RelativeLayout
 	        android:id="@+id/place_card"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
 	        android:minHeight="@dimen/card_height"
-	        android:layout_marginTop="0dp"
-	        android:layout_marginLeft="8dp"
-	        android:layout_marginRight="8dp"
-	        android:layout_below="@id/locate_icon"
 	        android:background="@drawable/bottom_card_background">
-            <ImageButton
-	            android:id="@+id/remove_card_icon"
-	            android:src="@drawable/ic_action_remove"
-	            android:layout_width="48dp"
-	            android:layout_height="48dp"
-	            android:layout_alignParentTop="true"
-	            android:layout_alignParentRight="true"
-	            android:background="@android:color/transparent"
-	            android:layout_margin="0dp"
-	            android:onClick="removeCardClick"/>
-            <ImageButton
-	            android:id="@+id/add_marker_icon"
-	            android:src="@drawable/ic_action_location_found"
-	            android:layout_width="48dp"
-	            android:layout_height="48dp"
-	            android:layout_alignParentTop="true"
-	            android:layout_toLeftOf="@id/remove_card_icon"
-	            android:padding="8dp"
-	            android:cropToPadding="true"
-	            android:contentDescription="@string/search"
-	            android:background="@android:color/transparent"
-	            android:onClick="addMarkerClick"/>
-            
-	        <TextView
-	            android:id="@+id/place_name"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentTop="true"
-	            android:layout_alignParentLeft="true"
-	            android:layout_toLeftOf="@id/add_marker_icon"
-	            android:fontFamily="sans_serif"
-	            android:padding="8dp"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginRight="8dp"
-	            android:textSize="20sp" >
-	        </TextView>
-	        <TextView 
-	            android:id="@+id/place_desc"
-	            android:text="@string/location_search"
-	            android:layout_width="fill_parent"
-	            android:layout_height="48dp"
-	            android:layout_below="@id/place_name"
-	            android:fontFamily="sans_serif_light"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginRight="8dp"
-	            android:paddingLeft="8dp"
-	            android:paddingRight="8dp"
-	            android:textSize="16sp"
-	            android:textColor="@android:color/darker_gray"/>
+            <RelativeLayout
+                android:id="@+id/small_card"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hidden_card_height"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/small_card_bg">
+	            <ImageView 
+	                android:id="@+id/place_color"
+	                android:layout_width="16dp"
+	                android:layout_height="@dimen/hidden_card_height"
+	                android:layout_alignParentLeft="true"
+	                android:layout_alignParentTop="true"
+	                android:paddingTop="4dp"
+	                android:paddingBottom="4dp"
+	                android:paddingLeft="4dp"
+	                />
+	            <!-- <ImageButton
+		            android:id="@+id/remove_card_icon"
+		            android:src="@drawable/ic_action_remove"
+		            android:layout_width="48dp"
+		            android:layout_height="48dp"
+		            android:layout_alignParentTop="true"
+		            android:layout_alignParentRight="true"
+		            android:background="@android:color/transparent"
+		            android:layout_margin="0dp"
+		            android:onClick="removeCardClick"/>-->
+	            <ImageButton
+		            android:id="@+id/add_marker_icon"
+		            android:src="@drawable/add_marker"
+		            android:layout_width="48dp"
+		            android:layout_height="48dp"
+		            android:layout_alignParentTop="true"
+		            android:layout_alignParentRight="true"
+		            android:padding="8dp"
+		            android:scaleType="fitXY"
+		            android:cropToPadding="true"
+		            android:contentDescription="@string/search"
+		            android:background="@android:color/transparent"
+		            android:onClick="addMarkerClick"/>
+	            
+		        <TextView
+		            android:id="@+id/place_name"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_alignParentTop="true"
+		            android:layout_toLeftOf="@id/add_marker_icon"
+		            android:layout_toRightOf="@id/place_color"
+		            android:fontFamily="sans_serif"
+		            android:paddingTop="4dp"
+		            android:paddingLeft="8dp"
+		            android:paddingRight="8dp"
+		            android:textSize="@dimen/place_name_text_size" >
+		        </TextView>
+		        <TextView 
+		            android:id="@+id/place_sub_head"
+		            android:text="@string/location_search"
+		            android:layout_width="fill_parent"
+		            android:layout_height="48dp"
+		            android:layout_below="@id/place_name"
+		            android:layout_toRightOf="@id/place_color"
+		            android:fontFamily="sans_serif_light"
+		            android:paddingLeft="8dp"
+		            android:paddingRight="8dp"
+		            android:textSize="@dimen/place_sub_head_text_size"
+		            android:textColor="@android:color/darker_gray"/>
+		    </RelativeLayout>
 	    </RelativeLayout>
     </com.mrane.campusmap.ExtendedRelativeLayout>
 

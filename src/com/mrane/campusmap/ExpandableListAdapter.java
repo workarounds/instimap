@@ -56,7 +56,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 				.findViewById(R.id.lblListItem);
 //		ImageView itemGroupColor = (ImageView) convertView.findViewById(R.id.item_group_color);
 //		itemGroupColor.setBackgroundColor(Marker.getColor(groupPosition));
-
+		Typeface regular = Typeface.createFromAsset(_context.getAssets(), MapActivity.FONT_REGULAR);
+		txtListChild.setTypeface(regular);
 		txtListChild.setText(childText);
 		return convertView;
 	}
@@ -95,8 +96,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		TextView lblListHeader = (TextView) convertView
 				.findViewById(R.id.lblListHeader);
-		Typeface regular = Typeface.createFromAsset(_context.getAssets(), "roboto_condensed_bold.ttf");
-		lblListHeader.setTypeface(regular);
+		Typeface semibold = Typeface.createFromAsset(_context.getAssets(), MapActivity.FONT_SEMIBOLD);
+		lblListHeader.setTypeface(semibold, Typeface.BOLD);
 		lblListHeader.setText(headerTitle);
 		ImageView iconExpand = (ImageView) convertView
 				.findViewById(R.id.icon_expand);

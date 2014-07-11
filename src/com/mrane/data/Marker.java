@@ -13,9 +13,9 @@ public class Marker {
 	public int groupIndex;
 	public boolean showDefault;
 	
-	public static final int COLOR_BLUE = Color.rgb(0,121,244);
+	public static final int COLOR_BLUE = Color.rgb(75,186,238);
 	public static final int COLOR_YELLOW = Color.rgb(255, 186, 0);
-	public static final int COLOR_RED = Color.rgb(255, 79, 79);
+	public static final int COLOR_GREEN = Color.rgb(162, 208, 104);
 	public static final int COLOR_PURPLE = Color.rgb(216, 125, 232);
 	
 	private static final int DEPARTMENTS = 1;
@@ -50,24 +50,24 @@ public class Marker {
 	}
 	
 	public static int getColor(int group){
-		Integer[] blueGroup = new Integer[] {HOSTELS};
-		Integer[] orangeGroup = new Integer[] {DEPARTMENTS, HALLS_N_AUDITORIUMS};
-		Integer[] redGroup = new Integer[] {RESIDENCES};
+		Integer[] yellowGroup = new Integer[] {HOSTELS};
+		Integer[] blueGroup = new Integer[] {DEPARTMENTS, HALLS_N_AUDITORIUMS};
+		Integer[] greenGroup = new Integer[] {RESIDENCES};
 		Integer[] purpleGroup = new Integer[] {FOOD_STALLS, BANKS_N_ATMS, SCHOOLS, SPORTS, OTHERS, GATES};
 		
+		ArrayList<Integer> yellowList = new ArrayList<Integer>(Arrays.asList(yellowGroup));
 		ArrayList<Integer> blueList = new ArrayList<Integer>(Arrays.asList(blueGroup));
-		ArrayList<Integer> orangeList = new ArrayList<Integer>(Arrays.asList(orangeGroup));
-		ArrayList<Integer> redList = new ArrayList<Integer>(Arrays.asList(redGroup));
+		ArrayList<Integer> greenList = new ArrayList<Integer>(Arrays.asList(greenGroup));
 		ArrayList<Integer> purpleList = new ArrayList<Integer>(Arrays.asList(purpleGroup));
 		
-		if(blueList.contains(group)){
-			return COLOR_BLUE;
-		}
-		else if(orangeList.contains(group)){
+		if(yellowList.contains(group)){
 			return COLOR_YELLOW;
 		}
-		else if(redList.contains(group)){
-			return COLOR_RED;
+		else if(blueList.contains(group)){
+			return COLOR_BLUE;
+		}
+		else if(greenList.contains(group)){
+			return COLOR_GREEN;
 		}
 		else if(purpleList.contains(group)){
 			return COLOR_PURPLE;

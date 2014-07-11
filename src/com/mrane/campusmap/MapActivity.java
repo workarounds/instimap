@@ -86,15 +86,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final int MSG_INIT_LAYOUT = 2;
+	private final int MSG_PLAY_SOUND = 3;
 	private final long DELAY_ANIMATE = 150;
-	private final long DELAY_INIT_LAYOUT = 500;
+	private final long DELAY_INIT_LAYOUT = 1000;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
+	public static final String FONT_BOLD = "roboto_condensed_bold.ttf";
+	public static final String FONT_SEMIBOLD = "myriadpro_regular.otf";
+	public static final String FONT_REGULAR = "myriadpro_regular.otf";
+	public static final int SOUND_ID_RESULT = 0;
+	public static final int SOUND_ID_ADD = 1;
+	public static final int SOUND_ID_REMOVE = 2;
 	public SoundPool soundPool;
-	public int soundPoolID;
+	public int[] soundPoolIds;
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@Override
@@ -106,6 +113,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			case MSG_INIT_LAYOUT:
 				initLayout();
 				break;
+			case MSG_PLAY_SOUND:
+				playAnimSound(msg.arg1);
 			}
 		}
 	};
@@ -165,10 +174,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 	
 	private void setFonts(){
-		Typeface regular = Typeface.createFromAsset(getAssets(), "roboto_regular.ttf");
-		Typeface boldCn = Typeface.createFromAsset(getAssets(), "roboto_condensed_bold.ttf");
+		Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+		//Typeface semibold = Typeface.createFromAsset(getAssets(), FONT_SEMIBOLD);
 		
-		placeNameTextView.setTypeface(boldCn);
+		placeNameTextView.setTypeface(regular, Typeface.BOLD);;
 		placeSubHeadTextView.setTypeface(regular);
 	}
 
@@ -179,14 +188,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// float density = getResources().getDisplayMetrics().density;
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
-		bottomLayout.setVisibility(View.VISIBLE);
+		bottomLayout.setVisibility(View.INVISIBLE);
 		placeCard.setVisibility(View.INVISIBLE);
 		cardTouchListener.initTopMargin(topMargin);
 	}
 	
 	private void initSoundPool(){
 		soundPool = new SoundPool(2,AudioManager.STREAM_MUSIC, 100);
-		soundPoolID = soundPool.load(this, R.raw.add_marker, 1);
+		soundPoolIds = new int[3];
+		soundPoolIds[SOUND_ID_RESULT] = soundPool.load(this, R.raw.result_marker, 1);
+		soundPoolIds[SOUND_ID_ADD] = soundPool.load(this, R.raw.add_marker, 2);
+		soundPoolIds[SOUND_ID_REMOVE] = soundPool.load(this, R.raw.remove_marker, 3);
 	}
 
 	@Override
@@ -320,8 +332,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void showCard(Marker marker) {
-		placeNameTextView.setText(marker.name);
+		String name = marker.name;
+		if(!marker.shortName.equals("")) name = marker.shortName;
+		placeNameTextView.setText(name);
 		setAddMarkerIcon(marker);
+		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));;
 		Runnable anim = cardTouchListener.showCardAnimation();
@@ -492,11 +507,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void addMarkerClick(View v) {
 		campusMapView.toggleMarker();
 		setAddMarkerIcon();
-		playAddMarkerSound();
 	}
 	
-	public void playAddMarkerSound(){
-		soundPool.play(soundPoolID, 1.0f, 1.0f, 1, 0, 1f);
+	public void playAnimSound(int sound_index){
+		if(sound_index >= 0 && sound_index < soundPoolIds.length){
+		soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
+		}
+	}
+	
+	public void playAnimSoundDelayed(int sound_index,long delay ){
+		Message msg = mHandler.obtainMessage(MSG_PLAY_SOUND, sound_index, 0);
+		mHandler.sendMessageDelayed(msg, delay);
 	}
 
 	private void setAddMarkerIcon() {

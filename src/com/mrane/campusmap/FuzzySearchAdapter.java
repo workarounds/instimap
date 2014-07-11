@@ -83,8 +83,8 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			view = inflater.inflate(R.layout.row_layout, null);
 
 			holder.label = (TextView) view.findViewById(R.id.label);
-			Typeface light = Typeface.createFromAsset(mContext.getAssets(), "roboto_light.ttf");
-			holder.label.setTypeface(light);
+			Typeface regular = Typeface.createFromAsset(mContext.getAssets(), MapActivity.FONT_REGULAR);
+			holder.label.setTypeface(regular);
 			holder.rowContainer = (LinearLayout) view
 					.findViewById(R.id.row_container);
 			view.setTag(holder);

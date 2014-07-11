@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#F0FFFFFF" >
     <ImageView 
         android:id="@+id/group_color"
         android:layout_width="8dp"
@@ -13,11 +14,12 @@
         android:cropToPadding="true"/>
     <ImageView
         android:id="@+id/icon_expand"
-        android:layout_width="48dp"
+        android:layout_width="32dp"
         android:layout_height="48dp"
         android:layout_toRightOf="@id/group_color"
-        android:padding="8dp"
         android:cropToPadding="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:contentDescription="list item"
         android:src="@drawable/ic_action_next_item"
         android:visibility="visible" />

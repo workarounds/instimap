@@ -41,7 +41,7 @@
     <!-- Background -->
     <item>
 	<shape>
-            <solid android:color="#F8FFFFFF" />
+            <solid android:color="#F0FFFFFF" />
 	    <!-- <corners android:radius="2dp" />-->
 	</shape>
     </item>

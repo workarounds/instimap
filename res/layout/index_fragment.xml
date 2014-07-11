@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:paddingLeft="0dp"
-        android:paddingRight="16dp"
+        android:paddingRight="0dp"
         android:groupIndicator="@null"
         android:background="@drawable/listview_background" />
 

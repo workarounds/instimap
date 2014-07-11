@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="gray" type="color">#FF6c6c6c</item>
+    <item name="list_item_gray_even" type="color">#ffe6e6e6</item>
+    <item name="list_item_gray_odd" type="color">#ffececec</item>
+</resources>

@@ -8,6 +8,7 @@
         android:id="@+id/index_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
+        android:divider="@null"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:groupIndicator="@null"

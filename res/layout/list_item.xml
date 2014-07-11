@@ -4,26 +4,27 @@
     android:layout_height="48dp"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
-    android:paddingLeft="48dp"
+    android:paddingLeft="0dp"
     android:paddingRight="48dp"
     android:background="#D0E5E5E5"
     android:orientation="vertical" >
-	<!-- <ImageView 
+	<ImageView 
         android:id="@+id/item_group_color"
-        android:layout_width="8dp"
+        android:layout_width="12dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:paddingLeft="0dp"
         android:layout_marginLeft="0dp"
-        android:cropToPadding="true"/> -->
+        android:cropToPadding="true"/>
     <TextView
         android:id="@+id/lblListItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/item_group_color"
         android:padding="8dp"
         android:textSize="@dimen/index_item_text_size"
         android:fontFamily="sans-serif-light"
-        android:paddingLeft="64dp" />
+        android:layout_marginLeft="64dp" />
  
 </RelativeLayout>

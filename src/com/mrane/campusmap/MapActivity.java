@@ -64,7 +64,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageView placeColor;
 	private CardTouchListener cardTouchListener;
 	private RelativeLayout headerContainer;
-	private LinearLayout fragmentContainer;
+	private RelativeLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
@@ -88,7 +88,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_INIT_LAYOUT = 2;
 	private final int MSG_PLAY_SOUND = 3;
 	private final long DELAY_ANIMATE = 150;
-	private final long DELAY_INIT_LAYOUT = 1000;
+	private final long DELAY_INIT_LAYOUT = 500;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
 	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
@@ -140,7 +140,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		markerlist = new ArrayList<Marker>(data.values());
 
 		headerContainer = (RelativeLayout) findViewById(R.id.header_container);
-		fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
+		fragmentContainer = (RelativeLayout) findViewById(R.id.fragment_container);
 
 		adapter = new FuzzySearchAdapter(this, markerlist);
 		editText = (EditText) findViewById(R.id.search);
@@ -182,6 +182,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void initLayout() {
+		if(campusMapView.getHeight() == 0){
+			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
+			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
+		}
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		int topMargin = campusMapView.getHeight();;
@@ -243,7 +247,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void putFragment(Fragment tempFragment) {
 		this.dismissCard();
-		headerContainer.setBackgroundColor(Color.rgb(224, 224, 224));
+		headerContainer.setBackgroundColor(Color.WHITE);
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -527,9 +531,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void setAddMarkerIcon(Marker m) {
 		if (campusMapView.isAddedMarker(m)) {
 			addMarkerIcon
-					.setImageResource(R.drawable.remove_marker);
+					.setImageResource(R.drawable.lock_gray_on);
 		} else {
-			addMarkerIcon.setImageResource(R.drawable.add_marker);
+			addMarkerIcon.setImageResource(R.drawable.lock_all_off);
 		}
 	}
 

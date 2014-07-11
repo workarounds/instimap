@@ -6,7 +6,7 @@
     android:background="#F0FFFFFF" >
     <ImageView 
         android:id="@+id/group_color"
-        android:layout_width="8dp"
+        android:layout_width="12dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:paddingLeft="0dp"

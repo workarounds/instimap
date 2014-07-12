@@ -331,7 +331,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void showCard(Marker marker) {
 		String name = marker.name;
-		if(!marker.shortName.equals("")) name = marker.shortName;
+		if(!marker.shortName.equals("0")) name = marker.shortName;
 		placeNameTextView.setText(name);
 		setAddMarkerIcon(marker);
 		bottomLayout.setVisibility(View.VISIBLE);
@@ -438,23 +438,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			this.setVisibleButton(indexIcon);
 		} else {
 			if (fragment instanceof ListFragment) {
-				this.handleRemoveIcon();
+				
 			} else {
 				setVisibleButton(mapIcon);
 			}
 		}
+		this.handleRemoveIcon();
 	}
 
 	private void handleRemoveIcon() {
-		if (editTextFocused) {
 			String text = editText.getText().toString();
 			if (text.isEmpty() || text.equals(null)) {
 				removeIcon.setVisibility(View.GONE);
 			} else {
 				removeIcon.setVisibility(View.VISIBLE);
 			}
-		} else {
-		}
 	}
 
 	private void setVisibleButton(ImageButton icon) {

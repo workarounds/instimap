@@ -360,7 +360,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawHighlightedMarkerText(Canvas canvas, Marker marker){
 		String name;
 		PointF vPin = sourceToViewCoord(marker.point);
-        if(marker.shortName.isEmpty()) name = marker.name;
+		if(marker.shortName.equals("0")) name = marker.name;
         else name = marker.shortName;
         String[] names = name.split(" ");
         textPaint.getTextBounds(names[0], 0, names[0].length() - 1, bounds);
@@ -399,7 +399,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         canvas.drawBitmap(pin, vX, vY, paint);
         if(isShowPinTextScale(marker)){
             String name;
-            if(marker.shortName.isEmpty()) name = marker.name;
+            if(marker.shortName.equals("0")) name = marker.name;
             else name = marker.shortName;
             String[] names = name.split(" ");
             textPaint.getTextBounds(name, 0, name.length() - 1, bounds);

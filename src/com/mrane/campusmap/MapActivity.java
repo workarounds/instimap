@@ -183,15 +183,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		}
-		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		int topMargin = campusMapView.getHeight();
-		// float density = getResources().getDisplayMetrics().density;
-		params.setMargins(0, topMargin, 0, 0);
-		bottomLayout.setLayoutParams(params);
-		bottomLayout.setVisibility(View.INVISIBLE);
-		placeCard.setVisibility(View.INVISIBLE);
-		cardTouchListener.initTopMargin(topMargin);
+		else{
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			int topMargin = campusMapView.getHeight();
+			// float density = getResources().getDisplayMetrics().density;
+			params.setMargins(0, topMargin, 0, 0);
+			bottomLayout.setLayoutParams(params);
+			bottomLayout.setVisibility(View.INVISIBLE);
+			placeCard.setVisibility(View.INVISIBLE);
+			cardTouchListener.initTopMargin(topMargin);
+		}
 	}
 	
 	private void initSoundPool(){
@@ -385,6 +387,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void removeClick(View v) {
 		this.editText.setText("");
+		displayMap();
 	}
 
 	public void indexClick(View v) {

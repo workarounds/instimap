@@ -122,11 +122,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		} else {
 			iconExpand.setImageResource(R.drawable.ic_action_next_item);
 		}
-
-		if (getChildrenCount(groupPosition) == 0) {
-			//iconExpand.setVisibility(View.GONE);
-			convertView.setVisibility(View.GONE);
-		}
 		return convertView;
 	}
 

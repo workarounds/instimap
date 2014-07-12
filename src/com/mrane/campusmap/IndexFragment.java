@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mrane.data.Marker;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 
-public class IndexFragment extends Fragment implements OnGroupExpandListener {
+import com.mrane.data.Marker;
+
+public class IndexFragment extends Fragment {
 
 	MapActivity mainActivity;
 	ExpandableListAdapter adapter;
@@ -46,14 +45,6 @@ public class IndexFragment extends Fragment implements OnGroupExpandListener {
 		mainActivity.setExpAdapter(adapter);
 		list.setAdapter(adapter);
 		list.setOnChildClickListener(mainActivity);
-		list.setOnGroupExpandListener(this);
-
-		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			list.setIndicatorBounds(list.getRight() - 40, list.getWidth());
-		} else {
-			list.setIndicatorBoundsRelative(list.getRight() - 40,
-					list.getWidth());
-		}
 
 		return rootView;
 	}
@@ -64,6 +55,15 @@ public class IndexFragment extends Fragment implements OnGroupExpandListener {
 			List<String> child = childData.get(key.getGroupName());
 			child.add(key.name);
 		}
+		sortChildData();
+	}
+
+	private void sortChildData() {
+		for(String header: headers) {
+			List<String> child = childData.get(header);
+			Collections.sort(child);
+		}
+		
 	}
 
 	private void setHeaderAndChildData() {
@@ -73,19 +73,6 @@ public class IndexFragment extends Fragment implements OnGroupExpandListener {
 			childData.put(header, new ArrayList<String>());
 		}
 		setChildData();
-	}
-
-	@Override
-	public void onGroupExpand(int groupPosition) {
-		/*
-		 * pos = groupPosition; int len = headers.size(); for (int i = 0; i <
-		 * len; i++) { if (i != groupPosition) { list.collapseGroup(i); }
-		 * list.post(new Runnable() {
-		 * 
-		 * @Override public void run() { list.smoothScrollToPosition(pos); } });
-		 * }
-		 */
-
 	}
 
 }

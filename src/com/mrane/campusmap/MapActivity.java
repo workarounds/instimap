@@ -38,7 +38,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -135,7 +134,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
 
-		Locations mLocations = new Locations();
+		Locations mLocations = new Locations(this);
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 

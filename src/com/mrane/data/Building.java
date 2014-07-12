@@ -9,8 +9,8 @@ public class Building extends Marker {
 	}
 	
 	public Building(String name, String shortName, float x, float y,
-			int groupIndex, String[] children) {
-		super(name, shortName, x, y, groupIndex);
+			int groupIndex, String[] children, String description) {
+		super(name, shortName, x, y, groupIndex, description);
 		this.children = children;
 	}
 

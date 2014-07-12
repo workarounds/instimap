@@ -3,4 +3,7 @@
     <item name="gray" type="color">#FF6c6c6c</item>
     <item name="list_item_gray_even" type="color">#ffe6e6e6</item>
     <item name="list_item_gray_odd" type="color">#ffececec</item>
+    <item name="transparent_black" type="color">#20000000</item>
+    <item name="list_item_seperator_black" type="color">#20000000</item>
+    <item name="list_item_seperator_white" type="color">#20FFFFFF</item>
 </resources>

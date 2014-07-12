@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -38,7 +37,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -63,7 +61,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public RelativeLayout placeCard;
 	public ImageView placeColor;
 	private CardTouchListener cardTouchListener;
-	private RelativeLayout headerContainer;
 	private RelativeLayout fragmentContainer;
 	public RelativeLayout bottomLayout;
 	public TextView placeNameTextView;
@@ -139,7 +136,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 
-		headerContainer = (RelativeLayout) findViewById(R.id.header_container);
 		fragmentContainer = (RelativeLayout) findViewById(R.id.fragment_container);
 
 		adapter = new FuzzySearchAdapter(this, markerlist);
@@ -179,6 +175,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		
 		placeNameTextView.setTypeface(regular, Typeface.BOLD);;
 		placeSubHeadTextView.setTypeface(regular);
+		editText.setTypeface(regular);
 	}
 
 	private void initLayout() {
@@ -188,7 +185,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		}
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		int topMargin = campusMapView.getHeight();;
+		int topMargin = campusMapView.getHeight();
 		// float density = getResources().getDisplayMetrics().density;
 		params.setMargins(0, topMargin, 0, 0);
 		bottomLayout.setLayoutParams(params);
@@ -247,7 +244,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void putFragment(Fragment tempFragment) {
 		this.dismissCard();
-		headerContainer.setBackgroundColor(Color.WHITE);
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -306,8 +302,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
-		//set header container background to transparent
-		headerContainer.setBackgroundColor(Color.TRANSPARENT);
 		// locateIcon.setVisibility(View.VISIBLE);
 		// get text from auto complete text box
 		String key = editText.getText().toString();
@@ -444,30 +438,28 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			this.setVisibleButton(indexIcon);
 		} else {
 			if (fragment instanceof ListFragment) {
-				this.indexOrRemove();
+				this.handleRemoveIcon();
 			} else {
 				setVisibleButton(mapIcon);
 			}
 		}
 	}
 
-	private void indexOrRemove() {
+	private void handleRemoveIcon() {
 		if (editTextFocused) {
 			String text = editText.getText().toString();
 			if (text.isEmpty() || text.equals(null)) {
-				this.setVisibleButton(indexIcon);
+				removeIcon.setVisibility(View.GONE);
 			} else {
-				this.setVisibleButton(removeIcon);
+				removeIcon.setVisibility(View.VISIBLE);
 			}
 		} else {
-			this.setVisibleButton(indexIcon);
 		}
 	}
 
 	private void setVisibleButton(ImageButton icon) {
 		indexIcon.setVisibility(View.GONE);
 		mapIcon.setVisibility(View.GONE);
-		removeIcon.setVisibility(View.GONE);
 
 		icon.setVisibility(View.VISIBLE);
 	}

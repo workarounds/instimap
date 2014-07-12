@@ -43,7 +43,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-
+		String headerTitle = (String) getGroup(groupPosition);
 		final String childText = (String) getChild(groupPosition, childPosition);
 		
 		if (convertView == null) {
@@ -52,20 +52,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = infalInflater.inflate(R.layout.list_item, null);
 		}
 		
-		boolean even = childPosition%2 == 0;
-		int bgColor = 0;
-		if(even){
-			bgColor = R.color.list_item_gray_even;
-		}
-		else{
-			bgColor = R.color.list_item_gray_odd;
-		}
-		convertView.setBackgroundColor(_context.getResources().getColor(bgColor));
+//		boolean even = childPosition%2 == 0;
+//		int bgColor = 0;
+//		if(even){
+//			bgColor = R.color.list_item_gray_even;
+//		}
+//		else{
+//			bgColor = R.color.list_item_gray_odd;
+//		}
+//		convertView.setBackgroundColor(_context.getResources().getColor(bgColor));
 
 		TextView txtListChild = (TextView) convertView
 				.findViewById(R.id.lblListItem);
-		ImageView itemGroupColor = (ImageView) convertView.findViewById(R.id.item_group_color);
-		itemGroupColor.setBackgroundColor(Marker.getColor(Marker.getGroupId((String)getGroup(groupPosition))));
+		View itemGroupColor = (View) convertView.findViewById(R.id.item_group_color);
+		int color = Marker.getColor(Marker.getGroupId(headerTitle));
+		itemGroupColor.setBackgroundColor(color);
 		Typeface regular = Typeface.createFromAsset(_context.getAssets(), MapActivity.FONT_REGULAR);
 		txtListChild.setTypeface(regular);
 		txtListChild.setText(childText);
@@ -106,8 +107,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		TextView lblListHeader = (TextView) convertView
 				.findViewById(R.id.lblListHeader);
-		Typeface semibold = Typeface.createFromAsset(_context.getAssets(), MapActivity.FONT_SEMIBOLD);
-		lblListHeader.setTypeface(semibold, Typeface.BOLD);
+		Typeface regular = Typeface.createFromAsset(_context.getAssets(), MapActivity.FONT_REGULAR);
+		lblListHeader.setTypeface(regular);
 		lblListHeader.setText(headerTitle);
 		ImageView iconExpand = (ImageView) convertView
 				.findViewById(R.id.icon_expand);

@@ -520,10 +520,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		return highlightedPin;
 	}
 	
-	@SuppressLint("NewApi")
 	private void setMarkerAnimation(boolean noDelay, int _sound_index){
-		highlightedPinScale = 0.1f;
 		final int sound_index = _sound_index;
+		long delay = 0;
+		if(!noDelay){
+			delay = DELAY_MARKER_ANIMATION;
+		}
+		
+		if(android.os.Build.VERSION.SDK_INT>=11){
+			playAnim(delay);
+		}
+		mainActivity.playAnimSoundDelayed(sound_index, delay);
+	}
+	
+	@SuppressLint("NewApi")
+	private void playAnim(long delay){
+		highlightedPinScale = 0.1f;
 		ValueAnimator valAnim = new ValueAnimator();
 		valAnim.setFloatValues(0.1f,1.0f);
 		valAnim.setDuration(DURATION_MARKER_ANIMATION);
@@ -537,13 +549,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		});
 		TimeInterpolator i = new BounceInterpolator();
 		valAnim.setInterpolator(i);
-		long delay = 0;
-		if(!noDelay){
-			delay = DELAY_MARKER_ANIMATION;
-			valAnim.setStartDelay(DELAY_MARKER_ANIMATION);
-		}
+		valAnim.setStartDelay(delay);
 		valAnim.start();
-		mainActivity.playAnimSoundDelayed(sound_index, delay);
 	}
 	
 	private void setGestureDetector() {

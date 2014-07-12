@@ -12,6 +12,6 @@
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:groupIndicator="@null"
-        android:background="@drawable/listview_background" />
+        android:background="@android:color/transparent" />
 
 </LinearLayout>

@@ -155,7 +155,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         textPaint.setColor(Color.WHITE);
         textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
         textPaint.setTextSize(16*density);
-        Typeface boldCn = Typeface.createFromAsset(getContext().getAssets(), MapActivity.FONT_BOLD);
+        Typeface boldCn = Typeface.createFromAsset(getContext().getAssets(), MapActivity.FONT_SEMIBOLD);
         textPaint.setTypeface(boldCn);
         
         strokePaint = new Paint();

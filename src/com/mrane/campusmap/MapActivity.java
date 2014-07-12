@@ -89,11 +89,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final long DELAY_INIT_LAYOUT = 500;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
-	public static final PointF MAP_CENTER = new PointF(3628f, 1640f);
+	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
 	public static final String FONT_BOLD = "myriadpro_bold_cn.otf";
-	public static final String FONT_SEMIBOLD = "myriadpro_regular.otf";
+	public static final String FONT_SEMIBOLD = "myriadpro_semibold.otf";
 	public static final String FONT_REGULAR = "myriadpro_regular.otf";
 	public static final int SOUND_ID_RESULT = 0;
 	public static final int SOUND_ID_ADD = 1;

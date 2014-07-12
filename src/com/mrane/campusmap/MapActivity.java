@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -342,6 +343,19 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
+	
+	private Drawable getLockIcon(Marker marker){
+		int color = marker.getColor();
+		int drawableId = R.drawable.lock_all_off;
+		if(campusMapView.isAddedMarker(marker)){
+			if(color == Marker.COLOR_BLUE) drawableId = R.drawable.lock_blue_on;
+			else if(color == Marker.COLOR_YELLOW) drawableId = R.drawable.lock_on_yellow;
+			else if(color == Marker.COLOR_GREEN) drawableId = R.drawable.lock_green_on;
+			else if(color == Marker.COLOR_GRAY) drawableId = R.drawable.lock_gray_on;
+		}
+		Drawable lock = getResources().getDrawable(drawableId);
+		return lock;
+	}
 
 	public void expandCard() {
 		Runnable anim = cardTouchListener.expandCardAnimation();
@@ -522,12 +536,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void setAddMarkerIcon(Marker m) {
-		if (campusMapView.isAddedMarker(m)) {
-			addMarkerIcon
-					.setImageResource(R.drawable.lock_gray_on);
-		} else {
-			addMarkerIcon.setImageResource(R.drawable.lock_all_off);
-		}
+		addMarkerIcon.setImageDrawable(getLockIcon(m));
 	}
 
 	public void removeCardClick(View v) {

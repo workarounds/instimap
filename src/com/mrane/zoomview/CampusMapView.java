@@ -430,7 +430,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		else if(color == Marker.COLOR_GREEN){
 			return greenPointer;
 		}
-		else if(color == Marker.COLOR_PURPLE){
+		else if(color == Marker.COLOR_GRAY){
 			return grayPointer;
 		}
 		
@@ -454,7 +454,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			markerBitmap = greenMarker;
 			if(isAddedMarker(marker)) markerBitmap = greenLockedMarker;
 		}
-		else if(color == Marker.COLOR_PURPLE){
+		else if(color == Marker.COLOR_GRAY){
 			markerBitmap = grayMarker;
 			if(isAddedMarker(marker)) markerBitmap = grayLockedMarker;
 		}

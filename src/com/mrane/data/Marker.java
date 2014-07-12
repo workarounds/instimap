@@ -18,7 +18,7 @@ public class Marker {
 	public static final int COLOR_BLUE = Color.rgb(75,186,238);
 	public static final int COLOR_YELLOW = Color.rgb(255, 186, 0);
 	public static final int COLOR_GREEN = Color.rgb(162, 208, 104);
-	public static final int COLOR_PURPLE = Color.rgb(216, 125, 232);
+	public static final int COLOR_GRAY = Color.rgb(156, 156, 156);
 	
 	private static final int DEPARTMENTS = 1;
 	private static final int HOSTELS = 2;
@@ -82,7 +82,7 @@ public class Marker {
 			return COLOR_GREEN;
 		}
 		else if(purpleList.contains(group)){
-			return COLOR_PURPLE;
+			return COLOR_GRAY;
 		}
 		
 		return 0;

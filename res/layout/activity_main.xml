@@ -17,7 +17,8 @@
     <com.mrane.zoomview.CampusMapView
         android:id="@+id/campusMapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp" />
 
     <RelativeLayout
         android:id="@+id/main_container"

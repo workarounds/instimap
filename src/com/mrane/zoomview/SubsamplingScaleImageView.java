@@ -93,9 +93,9 @@ public class SubsamplingScaleImageView extends View {
     /** Allows the image to be panned until it is just off screen, but no further. The edge of the image will stop when it is flush with the screen edge. */
     public static final int PAN_LIMIT_OUTSIDE = 2;
     /** Allows the image to be panned until a corner reaches the center of the screen but no further. Useful when you want to pan any spot on the image to the exact center of the screen. */
-    public static final int PAN_LIMIT_CENTER = 3;
+    public static final int PAN_LIMIT_CUSTOM = 3;
 
-    private static final List<Integer> VALID_PAN_LIMITS = Arrays.asList(PAN_LIMIT_INSIDE, PAN_LIMIT_OUTSIDE, PAN_LIMIT_CENTER);
+    private static final List<Integer> VALID_PAN_LIMITS = Arrays.asList(PAN_LIMIT_INSIDE, PAN_LIMIT_OUTSIDE, PAN_LIMIT_CUSTOM);
 
     // Overlay tile boundaries and other info
     private boolean debug = false;
@@ -850,9 +850,9 @@ public class SubsamplingScaleImageView extends View {
         float scaleWidth = scale * sWidth();
         float scaleHeight = scale * sHeight();
 
-        if (panLimit == PAN_LIMIT_CENTER && isImageReady()) {
-            vTranslate.x = Math.max(vTranslate.x, getWidth()/2 - scaleWidth);
-            vTranslate.y = Math.max(vTranslate.y, getHeight()/2 - scaleHeight);
+        if (panLimit == PAN_LIMIT_CUSTOM && isImageReady()) {
+            vTranslate.x = Math.max(vTranslate.x, getWidth() - scaleWidth);
+            vTranslate.y = Math.max(vTranslate.y, 9*getHeight()/10 - scaleHeight);
         } else if (center) {
             vTranslate.x = Math.max(vTranslate.x, getWidth() - scaleWidth);
             vTranslate.y = Math.max(vTranslate.y, getHeight() - scaleHeight);
@@ -863,9 +863,9 @@ public class SubsamplingScaleImageView extends View {
 
         float maxTx;
         float maxTy;
-        if (panLimit == PAN_LIMIT_CENTER && isImageReady()) {
-            maxTx = Math.max(0, getWidth()/2);
-            maxTy = Math.max(0, getHeight()/2);
+        if (panLimit == PAN_LIMIT_CUSTOM && isImageReady()) {
+            maxTx = Math.max(0, 0);
+            maxTy = Math.max(0, getHeight()/10);
         } else if (center) {
             maxTx = Math.max(0, (getWidth() - scaleWidth) / 2);
             maxTy = Math.max(0, (getHeight() - scaleHeight) / 2);

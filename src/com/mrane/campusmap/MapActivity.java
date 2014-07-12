@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,9 +45,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.mrane.data.Building;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
+import com.mrane.data.Room;
 import com.mrane.zoomview.CampusMapView;
+import com.mrane.zoomview.SubsamplingScaleImageView;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
@@ -86,7 +90,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_INIT_LAYOUT = 2;
 	private final int MSG_PLAY_SOUND = 3;
 	private final long DELAY_ANIMATE = 150;
-	private final long DELAY_INIT_LAYOUT = 500;
+	private final long DELAY_INIT_LAYOUT = 250;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
@@ -180,20 +184,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void initLayout() {
-		if(campusMapView.getHeight() == 0){
+		if(!campusMapView.isImageReady()){
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		}
 		else{
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			int topMargin = campusMapView.getHeight();
+			FrameLayout.LayoutParams p = (FrameLayout.LayoutParams)campusMapView.getLayoutParams();
+			int topMargin = campusMapView.getHeight() + p.topMargin;
 			// float density = getResources().getDisplayMetrics().density;
 			params.setMargins(0, topMargin, 0, 0);
 			bottomLayout.setLayoutParams(params);
 			bottomLayout.setVisibility(View.INVISIBLE);
 			placeCard.setVisibility(View.INVISIBLE);
 			cardTouchListener.initTopMargin(topMargin);
+			if(cardTouchListener.getCardState() != CardTouchListener.STATE_DISMISSED) displayMap();
 		}
 	}
 	
@@ -336,6 +342,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String name = marker.name;
 		if(!marker.shortName.equals("0")) name = marker.shortName;
 		placeNameTextView.setText(name);
+		placeSubHeadTextView.setText(getSubHeading(marker));
+		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
 		setAddMarkerIcon(marker);
 		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.VISIBLE);
@@ -346,6 +354,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	
 	private String getSubHeading(Marker marker){
 		String result = "";
+		result += marker.name;
+		if(marker instanceof Room){
+			Room room = (Room) marker;
+			String tag = room.tag;
+			if(!tag.equals("in")) tag += ",";
+			Building parent = (Building)data.get(room.parentKey);
+			String parentName = parent.name;
+			if(!parent.shortName.equals("0")) parentName = parent.shortName;
+			result += " - " + tag + " " + parentName;
+		}
 		
 		return result;
 	}
@@ -369,6 +387,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void dismissCard() {
+		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE);
 		Runnable anim = cardTouchListener.dismissCardAnimation();
 		anim.run();
 	}

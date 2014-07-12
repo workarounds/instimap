@@ -47,7 +47,8 @@
                 android:paddingLeft="64dp"
                 android:paddingTop="8dp"
                 android:selectAllOnFocus="true"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="textNoSuggestions" />
 
             <ImageButton
                 android:id="@+id/search_icon"

@@ -22,10 +22,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.StyleSpan;
+import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
@@ -38,6 +44,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -352,9 +359,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String name = marker.name;
 		if(!marker.shortName.equals("0")) name = marker.shortName;
 		placeNameTextView.setText(name);
-		placeSubHeadTextView.setText(getSubHeading(marker));
+		setSubHeading(marker);
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
 		setAddMarkerIcon(marker);
+		addDescriptionView(marker);
 		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));;
@@ -362,20 +370,84 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		anim.run();
 	}
 	
-	private String getSubHeading(Marker marker){
-		String result = "";
-		result += marker.name;
+	private void addDescriptionView(Marker marker){
+		LinearLayout parent = (LinearLayout)placeCard.findViewById(R.id.other_details);
+		parent.removeAllViews();
+		if(!marker.description.isEmpty()){
+			View desc = getLayoutInflater().inflate(R.layout.place_description, parent);
+			
+			TextView descHeader = (TextView)desc.findViewById(R.id.desc_header);
+			Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+			descHeader.setTypeface(regular, Typeface.BOLD);
+			
+			TextView descContent = (TextView) desc.findViewById(R.id.desc_content);
+			descContent.setTypeface(regular);
+			descContent.setText(getDescriptionText(marker));
+			Linkify.addLinks(descContent, Linkify.ALL);
+		}
+		if(marker instanceof Building){
+			setChildrenView(parent, (Building) marker);
+		}
+	}
+	
+	private void setChildrenView(LinearLayout parent, Building building) {
+		
+		
+	}
+
+	private SpannableStringBuilder getDescriptionText(Marker marker){
+		SpannableStringBuilder desc = new SpannableStringBuilder(marker.description);
+		String[] toBoldParts = {"Email", "Phone No.", "Fax No."};
+		for(String part : toBoldParts){
+			setBold(desc, part);
+		}
+		return desc;
+	}
+	
+	private void setBold(SpannableStringBuilder text, String part){
+		int start = text.toString().indexOf(part);
+		int end = start + part.length();
+		final StyleSpan bold = new StyleSpan(Typeface.BOLD);
+		if (start >= 0)	text.setSpan(bold, start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+	}
+	
+	private void setSubHeading(Marker marker){
+		SpannableStringBuilder result = new SpannableStringBuilder("");
+		result.append(marker.name);
 		if(marker instanceof Room){
 			Room room = (Room) marker;
 			String tag = room.tag;
 			if(!tag.equals("in")) tag += ",";
 			Building parent = (Building)data.get(room.parentKey);
+			final String parentKey = parent.name;
 			String parentName = parent.name;
 			if(!parent.shortName.equals("0")) parentName = parent.shortName;
-			result += " - " + tag + " " + parentName;
+			result.append(" - " + tag + " ");
+			int start = result.length();
+			result.append(parentName);
+			int end = result.length();
+			ClickableSpan parentSpan = new ClickableSpan() {
+				
+				@Override
+				public void onClick(View widget) {
+					editText.setText(parentKey);
+					displayMap();					
+				}
+			};
+			result.setSpan(parentSpan, start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+			placeSubHeadTextView.setMovementMethod(LinkMovementMethod.getInstance());
+			placeSubHeadTextView.setOnClickListener(null);
 		}
-		
-		return result;
+		else{
+			placeSubHeadTextView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					cardTouchListener.toggleExpansion();				
+				}
+			});
+		}
+		placeSubHeadTextView.setText(result);
 	}
 	
 	private Drawable getLockIcon(Marker marker){

@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,6 +88,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final int MSG_ANIMATE = 1;
 	private final int MSG_INIT_LAYOUT = 2;
 	private final int MSG_PLAY_SOUND = 3;
+	private final int MSG_DISPLAY_MAP = 4;
 	private final long DELAY_ANIMATE = 150;
 	private final long DELAY_INIT_LAYOUT = 250;
 	private Toast toast;
@@ -117,6 +117,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				break;
 			case MSG_PLAY_SOUND:
 				playAnimSound(msg.arg1);
+				break;
+			case MSG_DISPLAY_MAP:
+				displayMap();
+				break;
 			}
 		}
 	};
@@ -199,7 +203,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			bottomLayout.setVisibility(View.INVISIBLE);
 			placeCard.setVisibility(View.INVISIBLE);
 			cardTouchListener.initTopMargin(topMargin);
-			if(cardTouchListener.getCardState() != CardTouchListener.STATE_DISMISSED) displayMap();
 		}
 	}
 	
@@ -311,19 +314,26 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
-		// locateIcon.setVisibility(View.VISIBLE);
-		// get text from auto complete text box
-		String key = editText.getText().toString();
-
-		// get Marker object if exists
-		Marker marker = data.get(key);
-
-		// display and zoom to marker if exists
-		if (marker != null) {
-			Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
-			mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
-		} else {
-			removeMarker();
+		//check if is Image ready
+		if(!campusMapView.isImageReady()){
+			Message msg = mHandler.obtainMessage(MSG_DISPLAY_MAP);
+			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
+		}
+		else{
+			// locateIcon.setVisibility(View.VISIBLE);
+			// get text from auto complete text box
+			String key = editText.getText().toString();
+	
+			// get Marker object if exists
+			Marker marker = data.get(key);
+	
+			// display and zoom to marker if exists
+			if (marker != null) {
+				Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
+				mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
+			} else {
+				removeMarker();
+			}
 		}
 	}
 
@@ -587,6 +597,34 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void setExpAdapter(ExpandableListAdapter expAdapter) {
 		this.expAdapter = expAdapter;
+	}
+	
+	private static final String INSTANCE_CARD_STATE = "instanceCardState";
+	private static final String INSTANCE_VISIBILITY_INDEX = "instanceVisibilityIndex";
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(INSTANCE_CARD_STATE, cardTouchListener.getCardState());
+		outState.putBoolean(INSTANCE_VISIBILITY_INDEX, indexIcon.isShown());
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		int cardState = savedInstanceState.getInt(INSTANCE_CARD_STATE);
+		boolean isIndexIconVisible = savedInstanceState.getBoolean(INSTANCE_VISIBILITY_INDEX);
+		if(isIndexIconVisible){
+			indexIcon.setVisibility(View.VISIBLE);
+			mapIcon.setVisibility(View.GONE);
+		}
+		else{
+			indexIcon.setVisibility(View.GONE);
+			mapIcon.setVisibility(View.VISIBLE);
+		}
+		if(cardState != CardTouchListener.STATE_DISMISSED){ 
+			displayMap();
+		}
 	}
 
 }

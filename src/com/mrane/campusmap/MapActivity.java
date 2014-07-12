@@ -146,7 +146,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		editText.setOnFocusChangeListener(this);
 
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
-		campusMapView.setImageAsset("map.png");
+		campusMapView.setImageAsset("map.jpg");
 		campusMapView.setData(data);
 
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
@@ -342,6 +342,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));;
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
+	}
+	
+	private String getSubHeading(Marker marker){
+		String result = "";
+		
+		return result;
 	}
 	
 	private Drawable getLockIcon(Marker marker){

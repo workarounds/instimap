@@ -31,7 +31,9 @@ import android.view.animation.BounceInterpolator;
 
 import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.R.drawable;
+import com.mrane.data.Building;
 import com.mrane.data.Marker;
+import com.mrane.data.Room;
 
 public class CampusMapView extends SubsamplingScaleImageView {
 	private MapActivity mainActivity;
@@ -325,7 +327,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
         for(Marker marker : markerList){
         	if(isInView(marker.point)){
             	if(isShowPinScale(marker) && !(isResultMarker(marker) || addedMarkerList.contains(marker))){
-            		drawPionterAndText(canvas, marker);
+            		if(showShowUp(marker)) drawPionterAndText(canvas, marker);
             	}
         	}
         }
@@ -347,6 +349,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
     }
 	
+	private boolean showShowUp(Marker marker) {
+		boolean result = true;
+		if(marker instanceof Building){
+			String[] childKeys = ((Building) marker).children;
+			for(String childKey : childKeys){
+				Marker child = data.get(childKey);
+				if(isAddedMarker(child) || isResultMarker(child)){
+					result = false;
+					break;
+				}
+			}
+		}
+		if(marker instanceof Room) result = false;
+		return result;
+	}
+
 	private void drawMarkerBitmap(Canvas canvas, Marker marker){
 		Bitmap highlightedPin = getMarkerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);

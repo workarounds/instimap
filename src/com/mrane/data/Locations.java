@@ -8,7 +8,7 @@ public class Locations {
 	public HashMap<String, Marker> data = new HashMap<String, Marker>();
 
 	public Locations(Context context) {
-		Marker m0 = new Room("ACRE Advanced Centre for Research in Electronics", "ACRE", 4081, 1344, 1, "CRNTS NanoTech. & Science Research Centre", "Inside", "");
+		Marker m0 = new Room("ACRE Advanced Centre for Research in Electronics", "ACRE", 4081, 1344, 1, "CRNTS NanoTech. & Science Research Centre", "in", "");
 data.put(m0.name, m0);
 Marker m1 = new Marker("Aerospace Engineering Department", "Aero engg", 4153, 2249, 1, "http://www.aero.iitb.ac.in/Phone No.: (+91-22) 2576 7101 / (+91-22) 2576 7102Fax No.: (+91-22) 2572 2602.Email: office@aero.iitb.ac.in The department offers academic programs for B. Tech, M. Tech, Ph. D. Specialization are offered: Aerodynamics, Control and Guidance, Propulsion, Structures, and Systems Engineering");
 data.put(m1.name, m1);
@@ -28,7 +28,7 @@ Marker m8 = new Marker("Bio-diesel Lab", "0", 4220, 1556, 1, "www.che.iitb.ac.in
 data.put(m8.name, m8);
 Marker m10 = new Marker("Boat House", "0", 1960, 1757, 9, "Timings: 6 am to 6 pm");
 data.put(m10.name, m10);
-Marker m11 = new Room("Brewberrys Cafe", "Brewberrys", 2967, 1271, 5, "Hostel 08", "Inside", "Ph no: 022 65641001, Hostel 8, IIT Bombay, Powai, Mumbai");
+Marker m11 = new Room("Brewberrys Cafe", "Brewberrys", 2967, 1271, 5, "Hostel 08", "in", "Ph no: 022 65641001, Hostel 8, IIT Bombay, Powai, Mumbai");
 data.put(m11.name, m11);
 Marker m12 = new Marker("Campus School", "0", 3331, 2865, 7, "Principal: MS.BHAGWAT A.S022 2576 8992Campus School began as a primary school on 29 June 1976. V to X standard was added by 1986 with 100% results in X std in 1986, 1987 and 1988. The junior college classes FYJC or XI Std and SYJC or XII Std were started in science stream under Principal Chandra Rao in 1989. The Primary to JC complex has about 400 students on its roll, 35 teachers and 20 non-teaching staff. Admission to all classes is restricted to children of IIT employees with some seats made available to the children of NITIE and SAMEER employees.");
 data.put(m12.name, m12);

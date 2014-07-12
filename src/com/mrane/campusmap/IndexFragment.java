@@ -64,6 +64,15 @@ public class IndexFragment extends Fragment implements OnGroupExpandListener {
 			List<String> child = childData.get(key.getGroupName());
 			child.add(key.name);
 		}
+		sortChildData();
+	}
+
+	private void sortChildData() {
+		for(String header: headers) {
+			List<String> child = childData.get(header);
+			Collections.sort(child);
+		}
+		
 	}
 
 	private void setHeaderAndChildData() {

@@ -518,12 +518,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void onFocusChange(View v, boolean focus) {
 		this.editTextFocused = focus;
 		if (focus) {
+			searchIcon.setVisibility(View.GONE);
 			this.putFragment(listFragment);
 			fragmentContainer.setOnTouchListener(this);
 			String text = editText.getText().toString()
 					.toLowerCase(Locale.getDefault());
 			adapter.filter(text);
 		} else {
+			searchIcon.setVisibility(View.VISIBLE);
 			fragmentContainer.setOnTouchListener(null);
 		}
 		this.setCorrectIcons();

@@ -31,50 +31,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/small_card_bg" >
-
-            <EditText
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+            
+            <View 
+                android:id="@+id/seperator"
+                android:layout_width="1dp"
+                android:layout_height="32dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:background="@null"
-                android:dropDownHeight="0dp"
-                android:fontFamily="sans-serif-light"
-                android:hint="@string/search"
-                android:imeOptions="actionSearch"
-                android:paddingRight="48dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="64dp"
-                android:paddingTop="8dp"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:textSize="@dimen/searchbar_text_size"
-                android:inputType="textNoSuggestions" />
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/list_item_seperator_black"/>
 
             <ImageButton
                 android:id="@+id/search_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/seperator"
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/search"
-                android:onClick="searchClick"
-                android:src="@drawable/ic_action_search"
-                android:visibility="gone" />
-
-            <ImageButton
-                android:id="@+id/remove_icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"
-                android:contentDescription="remove"
-                android:onClick="removeClick"
                 android:padding="8dp"
-                android:src="@drawable/ic_action_remove"
-                android:visibility="gone" />
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                android:onClick="searchClick"
+                android:src="@drawable/ic_action_search" />
 
             <ImageButton
                 android:id="@+id/index_icon"
@@ -101,6 +83,35 @@
                 android:scaleType="fitXY"
                 android:cropToPadding="true"
                 android:src="@drawable/dept_menu_off"
+                android:visibility="gone" />
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@id/search_icon"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                android:dropDownHeight="0dp"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/search"
+                android:imeOptions="actionSearch"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textSize="@dimen/searchbar_text_size"
+                android:inputType="textNoSuggestions" />
+            
+            <ImageButton
+                android:id="@+id/remove_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="remove"
+                android:onClick="removeClick"
+                android:padding="8dp"
+                android:src="@drawable/ic_action_remove"
                 android:visibility="gone" />
         </RelativeLayout>
 
@@ -214,6 +225,14 @@
 		                android:layout_alignParentTop="true"
 		                android:adjustViewBounds="true"
 		                android:src="@drawable/mainbuilding"/>
+		            <LinearLayout
+		                android:id="@+id/other_details"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_below="@id/place_image"
+		                android:orientation="vertical">
+		                
+		            </LinearLayout>
 		        </RelativeLayout>
 		    </ScrollView>
 		    <View 

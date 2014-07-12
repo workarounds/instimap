@@ -132,7 +132,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
 
-		Locations mLocations = new Locations();
+		Locations mLocations = new Locations(this);
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 

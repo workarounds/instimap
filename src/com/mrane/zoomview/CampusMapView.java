@@ -531,6 +531,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			playAnim(delay);
 		}
 		mainActivity.playAnimSoundDelayed(sound_index, delay);
+		if(isImageReady()) invalidate();
 	}
 	
 	@SuppressLint("NewApi")

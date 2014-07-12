@@ -12,6 +12,8 @@ public class Marker {
 	public PointF point;
 	public int groupIndex;
 	public boolean showDefault;
+	public String description;
+	public String tag;
 	
 	public static final int COLOR_BLUE = Color.rgb(75,186,238);
 	public static final int COLOR_YELLOW = Color.rgb(255, 186, 0);
@@ -46,7 +48,17 @@ public class Marker {
 		this.groupIndex = groupIndex;
 		this.name = name;
 		this.shortName = shortName;
-		showDefault = false;
+		this.showDefault = false;
+		this.description = "";
+	}
+	
+	public Marker(String name, String shortName, float x, float y, int groupIndex, String description) {
+		this.point = new PointF(x, y);
+		this.groupIndex = groupIndex;
+		this.name = name;
+		this.shortName = shortName;
+		this.showDefault = false;
+		this.description = description;
 	}
 	
 	public static int getColor(int group){

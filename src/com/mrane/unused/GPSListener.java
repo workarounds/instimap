@@ -1,4 +1,4 @@
-package com.mrane.campusmap;
+package com.mrane.unused;
 
 import android.app.Activity;
 import android.location.Location;

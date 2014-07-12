@@ -48,7 +48,8 @@
                 android:paddingTop="8dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textSize="@dimen/searchbar_text_size" />
+                android:textSize="@dimen/searchbar_text_size"
+                android:inputType="textNoSuggestions" />
 
             <ImageButton
                 android:id="@+id/search_icon"

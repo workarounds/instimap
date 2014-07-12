@@ -10,7 +10,7 @@ public class Locations {
 	public Locations(Context context) {
 		Marker m0 = new Room("ACRE Advanced Centre for Research in Electronics", "ACRE", 4081, 1344, 1, "CRNTS NanoTech. & Science Research Centre", "in", "");
 data.put(m0.name, m0);
-Marker m1 = new Marker("Aerospace Engineering Department", "Aero engg", 4153, 2249, 1, "http://www.aero.iitb.ac.in/Phone No.: (+91-22) 2576 7101 / (+91-22) 2576 7102Fax No.: (+91-22) 2572 2602.Email: office@aero.iitb.ac.in The department offers academic programs for B. Tech, M. Tech, Ph. D. Specialization are offered: Aerodynamics, Control and Guidance, Propulsion, Structures, and Systems Engineering");
+Marker m1 = new Marker("Aerospace Engineering Department", "Aero engg", 4153, 2249, 1, "http://www.aero.iitb.ac.in/\nPhone No.: (+91-22) 2576 7101 / (+91-22) 2576 7102Fax No.: (+91-22) 2572 2602.Email: office@aero.iitb.ac.in The department offers academic programs for B. Tech, M. Tech, Ph. D. Specialization are offered: Aerodynamics, Control and Guidance, Propulsion, Structures, and Systems Engineering");
 data.put(m1.name, m1);
 Marker m2 = new Marker("Ananta", "0", 4695, 925, 3, "");
 data.put(m2.name, m2);

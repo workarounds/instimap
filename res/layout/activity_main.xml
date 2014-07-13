@@ -57,7 +57,8 @@
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_action_search" />
+                android:src="@drawable/ic_action_search"
+                android:visibility="gone" />"
 
             <ImageButton
                 android:id="@+id/index_icon"
@@ -99,7 +100,7 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
                 android:paddingBottom="8dp"
-                android:paddingRight="48dp"
+                android:paddingRight="56dp"
                 android:paddingTop="8dp"
                 android:paddingLeft="8dp"
                 android:selectAllOnFocus="true"

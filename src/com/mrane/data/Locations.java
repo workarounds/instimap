@@ -95,6 +95,7 @@ public class Locations {
 		Marker m16 = new Marker("Convocation Hall", "0", 3255, 1711, 4,
 				"022 2576  2781");
 		m16.imageUri = "convo_hall";
+		m16.showDefault = true;
 		data.put(m16.name, m16);
 		Marker m17 = new Building(
 				"CRNTS NanoTech. & Science Research Centre",
@@ -225,6 +226,7 @@ public class Locations {
 				2,
 				new String[] { "H13 Night Canteen" },
 				"Hostel security: 022-2576 2613\nHall Manager: 022-2576 2713\nG.Sec: Raj Kumar Yadav 9769484219");
+		m36.showDefault = true;
 		data.put(m36.name, m36);
 		Marker m37 = new Marker(
 				"Hostel 14",
@@ -237,6 +239,7 @@ public class Locations {
 		data.put(m37.name, m37);
 		Marker m38 = new Marker("Hostel 15", "H15", 4196, 870, 2,
 				"Hostel security: 022-2576 2715\nHall Manager: 022-2576\nG.Sec:");
+		m38.showDefault = true;
 		data.put(m38.name, m38);
 		Marker m39 = new Marker("Hostel 16", "H16", 3972, 849, 2,
 				"Hostel security: 022-2576 2716\nHall Manager: 022-2576\nG.Sec:");
@@ -355,10 +358,10 @@ public class Locations {
 		Marker m55 = new Marker("Lake Side Gate", "0", 792, 2777, 10,
 				"022 2576 1124");
 		data.put(m55.name, m55);
-		Marker m56 = new Marker("Lecture Hall Complex-1", "Lec Hall 1", 3570,
+		Marker m56 = new Marker("Lecture Hall Complex-1&2", "Lec Hall 1,2", 3570,
 				2152, 4, "");
 		data.put(m56.name, m56);
-		Marker m57 = new Marker("Lecture Hall Complex-2", "Lec Hall 2", 3779,
+		Marker m57 = new Marker("Lecture Hall Complex-3", "Lec Hall 3", 3779,
 				2220, 4, "");
 		data.put(m57.name, m57);
 		Marker m58 = new Building("Main Building", "0", 3628, 1640, 1,
@@ -373,9 +376,11 @@ public class Locations {
 				new String[] { "SBI State Bank of India, IIT Powai branch",
 						"ATM - State Bank main gate" },
 				"02576 8978/1123. Tum Tum coupons available at Main Gate");
+		m59.showDefault = true;
 		data.put(m59.name, m59);
 		Marker m60 = new Marker("Market Gate, Y point Gate", "0", 3829, 2972,
 				10, "2584      ");
+		m60.showDefault = true;
 		data.put(m60.name, m60);
 		Marker m61 = new Marker(
 				"Mathematics Department",
@@ -410,7 +415,7 @@ public class Locations {
 		Marker m66 = new Marker("NCC Office", "0", 3387, 1421, 9,
 				"022 2576 8917");
 		data.put(m66.name, m66);
-		Marker m67 = new Marker("Nestle Cafe (Coffee Shack)", " Coffee Shack",
+		Marker m67 = new Marker("Nestle Cafe (Coffee Shack)", "Coffee Shack",
 				3492, 1784, 5, "");
 		m67.imageUri = "nescafestall";
 		data.put(m67.name, m67);
@@ -538,6 +543,7 @@ public class Locations {
 		Marker m99 = new Building("Canara Bank", "0", 2989, 2154, 6,
 				new String[] { "ATM - Canara Bank near Gulmohar",
 						"Gulmohar Restaurant" }, "02576 2797");
+		m99.showDefault = true;
 		data.put(m99.name, m99);
 		Marker m100 = new Room("HCU Hostel Coordinating Unit", "HCU", 3628,
 				1640, 1, "Main Building", "Inside",

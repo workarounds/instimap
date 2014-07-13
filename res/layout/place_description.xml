@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        android:paddingBottom="0dp"
         android:textSize="20sp"
         android:text="@string/desc_header"/>
     <TextView
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/desc_header"
+        android:lineSpacingExtra="3dp"
         android:padding="8dp"
         android:textSize="18sp"
         android:paddingTop="0dp"

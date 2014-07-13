@@ -542,8 +542,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private SpannableStringBuilder getDescriptionText(Marker marker) {
+		String text = marker.description;
 		SpannableStringBuilder desc = new SpannableStringBuilder(
-				marker.description);
+				text);
 		String[] toBoldParts = { "Email", "Phone No.", "Fax No." };
 		for (String part : toBoldParts) {
 			setBold(desc, part);

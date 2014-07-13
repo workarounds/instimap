@@ -190,12 +190,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/search"
                     android:cropToPadding="true"
                     android:onClick="addMarkerClick"
                     android:padding="8dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/lock_all_off" />
 
@@ -216,7 +218,7 @@
                 <TextView
                     android:id="@+id/place_sub_head"
                     android:layout_width="fill_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/place_name"
                     android:layout_toLeftOf="@id/add_marker_icon"
                     android:layout_toRightOf="@id/place_color"
@@ -267,7 +269,8 @@
 	                            android:layout_alignParentLeft="true"
 	                            android:layout_alignParentTop="true"
 	                            android:layout_marginLeft="0dp"
-	                            android:paddingLeft="0dp" />
+	                            android:paddingLeft="0dp"
+	                            android:alpha="0.5" />
 	
 	                        <View
 	                            android:layout_width="12dp"
@@ -277,7 +280,8 @@
 	                            android:layout_alignParentTop="true"
 	                            android:layout_marginLeft="0dp"
 	                            android:background="@color/transparent_black"
-	                            android:paddingLeft="0dp" />
+	                            android:paddingLeft="0dp"
+	                            android:alpha="0.5" />
 	                    </RelativeLayout>
                     </RelativeLayout>
                 </LinearLayout>

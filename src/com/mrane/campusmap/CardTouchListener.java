@@ -1,5 +1,6 @@
 package com.mrane.campusmap;
 
+import in.designlabs.instimap.R;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;

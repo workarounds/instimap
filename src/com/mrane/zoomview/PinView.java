@@ -16,11 +16,12 @@ limitations under the License.
 
 package com.mrane.zoomview;
 
+import in.designlabs.instimap.R.drawable;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
+
 import com.mrane.zoomview.SubsamplingScaleImageView;
-import com.mrane.campusmap.R.drawable;
 
 
 public class PinView extends SubsamplingScaleImageView {

@@ -1,5 +1,7 @@
 package com.mrane.campusmap;
 
+import in.designlabs.instimap.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +31,12 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
@@ -49,6 +53,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -196,7 +201,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// FONT_SEMIBOLD);
 
 		placeNameTextView.setTypeface(regular, Typeface.BOLD);
-		;
 		placeSubHeadTextView.setTypeface(regular);
 		editText.setTypeface(regular);
 	}
@@ -376,15 +380,25 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));
-		;
+		placeCard.findViewById(R.id.place_group_color).setBackgroundColor(marker.getColor());
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
+	}
+
+	private void setImage(LinearLayout parent, Marker marker) {
+		View v = getLayoutInflater().inflate(R.layout.card_image, parent);
+		ImageView iv = (ImageView)v.findViewById(R.id.place_image);
+		int imageId = getResources().getIdentifier(marker.imageUri, "drawable", getPackageName());
+		iv.setImageResource(imageId);
 	}
 
 	private void addDescriptionView(Marker marker) {
 		LinearLayout parent = (LinearLayout) placeCard
 				.findViewById(R.id.other_details);
 		parent.removeAllViews();
+		if(!marker.imageUri.isEmpty()){
+			setImage(parent, marker);
+		}
 		if (marker instanceof Building) {
 			setChildrenView(parent, (Building) marker);
 		}
@@ -405,13 +419,35 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			Linkify.addLinks(descContent, Linkify.ALL);
 		}
 	}
+	
+	public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 
 	private void setChildrenView(LinearLayout parent, Building building) {
         View childrenView = getLayoutInflater().inflate(R.layout.children_view, parent);
         
         View headerLayout = childrenView.findViewById(R.id.header_layout);
         TextView headerName = (TextView) childrenView.findViewById(R.id.list_header);
-        String headerText = "in ";
+        String headerText = "inside ";
         if(building.shortName.equals("0")) headerText += building.name;
         else headerText += building.shortName;
         Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
@@ -421,6 +457,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
         final ImageView icon = (ImageView)childrenView.findViewById(R.id.arrow_icon);
         final ListView childrenListView = (ListView) childrenView.findViewById(R.id.child_list);
         childrenListView.setVisibility(View.GONE);
+        childrenListView.setOnTouchListener(new OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+            // Disallow the touch request for parent scroll on touch of child view
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            return false;
+            }
+        });
         
         ArrayList<String> childNames = new ArrayList<String>();
         for(String name: building.children){
@@ -441,6 +486,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
             
         });
         
+        
         headerLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -449,6 +495,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
                     icon.setImageResource(R.drawable.ic_action_next_item);
                 }
                 else{
+                	setListViewHeightBasedOnChildren(childrenListView);
                     childrenListView.setVisibility(View.VISIBLE);
                     icon.setImageResource(R.drawable.ic_action_expand);
                 }
@@ -481,7 +528,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
             }
 
             TextView text = (TextView) mView.findViewById(R.id.child_name);
-
+            Log.d("testing", "position = " + position);
             if(items.get(position) != null )
             {
                 Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
@@ -519,8 +566,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (marker instanceof Room) {
 			Room room = (Room) marker;
 			String tag = room.tag;
-			if (!tag.equals("in"))
+			if (!tag.equals("Inside")){
 				tag += ",";
+			}
+			else {
+				tag = "in";
+			}
 			Building parent = (Building) data.get(room.parentKey);
 			final String parentKey = parent.name;
 			String parentName = parent.name;

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_gray_even" >
+    android:paddingLeft="12dp" >
     <TextView
         android:id="@+id/desc_header"
         android:layout_width="match_parent"
@@ -26,13 +26,13 @@
     
     <View 
 	    android:layout_width="fill_parent"
-	    android:layout_height="1dp"
+	    android:layout_height="0dp"
 	    android:layout_alignParentBottom="true"
 	    android:layout_alignParentLeft="true"
 	    android:background="@color/list_item_seperator_black"/>
 	<View 
 	    android:layout_width="fill_parent"
-	    android:layout_height="1dp"
+	    android:layout_height="0dp"
 	    android:layout_alignParentTop="true"
 	    android:layout_alignParentLeft="true"
 	    android:background="@color/list_item_seperator_white"/>

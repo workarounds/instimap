@@ -18,8 +18,10 @@
         android:layout_height="56dp"
         android:layout_toRightOf="@id/group_color"
         android:cropToPadding="true"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:contentDescription="list item"
         android:src="@drawable/ic_action_next_item"
         android:visibility="visible" />

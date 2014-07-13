@@ -35,11 +35,11 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import in.designlabs.instimap.R.styleable;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-import com.mrane.campusmap.R.styleable;;
 /**
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,
  * a set of image tiles subsampled at higher resolution are loaded and displayed over the base layer. During pinch and

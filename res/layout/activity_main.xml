@@ -53,13 +53,13 @@
                 android:contentDescription="@string/search"
                 android:cropToPadding="true"
                 android:onClick="searchClick"
-                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
+                android:paddingTop="8dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_action_search"
-                android:visibility="gone" />"
-
+                android:visibility="gone" />
+            
             <ImageButton
                 android:id="@+id/index_icon"
                 android:layout_width="48dp"
@@ -100,9 +100,9 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
                 android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
                 android:paddingRight="56dp"
                 android:paddingTop="8dp"
-                android:paddingLeft="8dp"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:textSize="@dimen/searchbar_text_size" />
@@ -183,8 +183,7 @@
 		            android:layout_alignParentRight="true"
 		            android:background="@android:color/transparent"
 		            android:layout_margin="0dp"
-		            android:onClick="removeCardClick"/>
-                -->
+		            android:onClick="removeCardClick"/>-->
 
                 <ImageButton
                     android:id="@+id/add_marker_icon"
@@ -232,31 +231,56 @@
             <ScrollView
                 android:id="@+id/expanded_place_card_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_below="@id/small_card" >
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/expanded_place_card"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:id="@+id/place_image"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:background="#e5e5e5" >
+                    <RelativeLayout 
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_alignParentTop="true"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/mainbuilding" />
+                        android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:id="@+id/other_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/place_image"
-                        android:orientation="vertical" >
-                    </LinearLayout>
-                </RelativeLayout>
+	                    <LinearLayout
+	                        android:id="@+id/other_details"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="wrap_content"
+	                        android:layout_alignParentLeft="true"
+	                        android:layout_alignParentTop="true"
+	                        android:orientation="vertical" >
+	                    </LinearLayout>
+	                    <RelativeLayout
+	                        android:id="@+id/color_strip"
+	                        android:layout_width="12dp"
+	                        android:layout_height="fill_parent"
+	                        android:layout_alignParentLeft="true"
+	                        android:layout_alignParentTop="true" >
+	
+	                        <View
+	                            android:id="@+id/place_group_color"
+	                            android:layout_width="12dp"
+	                            android:layout_height="fill_parent"
+	                            android:layout_alignParentBottom="true"
+	                            android:layout_alignParentLeft="true"
+	                            android:layout_alignParentTop="true"
+	                            android:layout_marginLeft="0dp"
+	                            android:paddingLeft="0dp" />
+	
+	                        <View
+	                            android:layout_width="12dp"
+	                            android:layout_height="fill_parent"
+	                            android:layout_alignParentBottom="true"
+	                            android:layout_alignParentLeft="true"
+	                            android:layout_alignParentTop="true"
+	                            android:layout_marginLeft="0dp"
+	                            android:background="@color/transparent_black"
+	                            android:paddingLeft="0dp" />
+	                    </RelativeLayout>
+                    </RelativeLayout>
+                </LinearLayout>
             </ScrollView>
 
             <View

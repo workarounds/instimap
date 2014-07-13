@@ -1,5 +1,7 @@
 package com.mrane.campusmap;
 
+import in.designlabs.instimap.R;
+
 import java.util.HashMap;
 import java.util.List;
 

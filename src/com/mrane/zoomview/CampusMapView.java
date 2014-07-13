@@ -1,5 +1,7 @@
 package com.mrane.zoomview;
 
+import in.designlabs.instimap.R.drawable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +32,6 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 
 import com.mrane.campusmap.MapActivity;
-import com.mrane.campusmap.R.drawable;
 import com.mrane.data.Building;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -221,6 +222,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 	
 	public boolean isResultMarker(Marker marker){
+		if(resultMarker == null) return false;
 		return resultMarker == marker;
 	}
 	

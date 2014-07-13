@@ -30,6 +30,7 @@ public class Marker {
 	private static final int SPORTS = 8;
 	private static final int OTHERS = 9;
 	private static final int GATES = 10;
+	private static final int PRINT = 11;
 	
 	private static final String DEPARTMENTS_NAME = "Departments";
 	private static final String HOSTELS_NAME = "Hostels";
@@ -41,6 +42,7 @@ public class Marker {
 	private static final String SPORTS_NAME = "Sports";
 	private static final String OTHERS_NAME = "Others";
 	private static final String GATES_NAME = "Gates";
+	private static final String PRINT_NAME = "Printer facility";
 	
 	
 	public Marker(String name, String shortName, float x, float y, int groupIndex) {
@@ -65,7 +67,7 @@ public class Marker {
 		Integer[] yellowGroup = new Integer[] {HOSTELS};
 		Integer[] blueGroup = new Integer[] {DEPARTMENTS, HALLS_N_AUDITORIUMS};
 		Integer[] greenGroup = new Integer[] {RESIDENCES};
-		Integer[] purpleGroup = new Integer[] {FOOD_STALLS, BANKS_N_ATMS, SCHOOLS, SPORTS, OTHERS, GATES};
+		Integer[] purpleGroup = new Integer[] {FOOD_STALLS, BANKS_N_ATMS, SCHOOLS, SPORTS, OTHERS, GATES, PRINT};
 		
 		ArrayList<Integer> yellowList = new ArrayList<Integer>(Arrays.asList(yellowGroup));
 		ArrayList<Integer> blueList = new ArrayList<Integer>(Arrays.asList(blueGroup));
@@ -115,6 +117,8 @@ public class Marker {
 			return OTHERS_NAME;
 		case GATES :
 			return GATES_NAME;
+		case PRINT :
+			return PRINT_NAME;
 		}
 		return "";
 	}

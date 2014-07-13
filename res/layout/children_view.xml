@@ -15,16 +15,20 @@
             android:layout_height="48dp"
             android:padding="8dp"
             android:cropToPadding="true"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_action_next_item"/>
         <TextView 
             android:id="@+id/list_header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"/>
+            android:layout_gravity="left|center_vertical"
+            android:textSize="@dimen/index_header_text_size"/>
     </LinearLayout>
 	<ListView 
 	    android:id="@+id/child_list"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/header_layout"></ListView>
+	    android:layout_below="@id/header_layout"
+	    android:paddingLeft="48dp"
+	    android:background="#e5e5e5"></ListView>
 </RelativeLayout>

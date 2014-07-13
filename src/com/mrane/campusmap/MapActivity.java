@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -29,15 +31,18 @@ import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -45,6 +50,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -373,6 +379,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void addDescriptionView(Marker marker){
 		LinearLayout parent = (LinearLayout)placeCard.findViewById(R.id.other_details);
 		parent.removeAllViews();
+		if(marker instanceof Building){
+			setChildrenView(parent, (Building) marker);
+		}
 		if(!marker.description.isEmpty()){
 			View desc = getLayoutInflater().inflate(R.layout.place_description, parent);
 			
@@ -385,14 +394,93 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			descContent.setText(getDescriptionText(marker));
 			Linkify.addLinks(descContent, Linkify.ALL);
 		}
-		if(marker instanceof Building){
-			setChildrenView(parent, (Building) marker);
-		}
 	}
 	
 	private void setChildrenView(LinearLayout parent, Building building) {
+		View childrenView = getLayoutInflater().inflate(R.layout.children_view, parent);
 		
+		View headerLayout = childrenView.findViewById(R.id.header_layout);
+		TextView headerName = (TextView) childrenView.findViewById(R.id.list_header);
+		String headerText = "in ";
+		if(building.shortName.equals("0")) headerText += building.name;
+		else headerText += building.shortName;
+		Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+		headerName.setTypeface(bold, Typeface.BOLD);
+		headerName.setText(headerText);
 		
+		final ImageView icon = (ImageView)childrenView.findViewById(R.id.arrow_icon);
+		final ListView childrenListView = (ListView) childrenView.findViewById(R.id.child_list);
+		childrenListView.setVisibility(View.GONE);
+		
+		ArrayList<String> childNames = new ArrayList<String>();
+		for(String name: building.children){
+			childNames.add(name);
+		}
+		
+		final CustomListAdapter adapter = new CustomListAdapter(this, R.layout.child, childNames);
+		childrenListView.setAdapter(adapter);
+		
+		childrenListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				String key = adapter.getItem(position);
+				removeEditTextFocus(key);
+				backToMap();
+			}
+			
+		});
+		
+		headerLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if(childrenListView.getVisibility() == View.VISIBLE){
+					childrenListView.setVisibility(View.GONE);
+					icon.setImageResource(R.drawable.ic_action_next_item);
+				}
+				else{
+					childrenListView.setVisibility(View.VISIBLE);
+					icon.setImageResource(R.drawable.ic_action_expand);
+				}
+			}
+		});
+		
+	}
+	
+	private class CustomListAdapter extends ArrayAdapter<String> {
+
+	    private Context mContext;
+	    private int id;
+	    private List <String>items ;
+
+	    public CustomListAdapter(Context context, int textViewResourceId , List<String> list ) 
+	    {
+	        super(context, textViewResourceId, list);           
+	        mContext = context;
+	        id = textViewResourceId;
+	        items = list ;
+	    }
+
+	    @Override
+	    public View getView(int position, View v, ViewGroup parent)
+	    {
+	        View mView = v ;
+	        if(mView == null){
+	            LayoutInflater vi = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            mView = vi.inflate(id, null);
+	        }
+
+	        TextView text = (TextView) mView.findViewById(R.id.child_name);
+
+	        if(items.get(position) != null )
+	        {
+	        	Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+	            text.setText(items.get(position));
+	            text.setTypeface(regular);
+	        }
+
+	        return mView;
+	    }
 	}
 
 	private SpannableStringBuilder getDescriptionText(Marker marker){
@@ -430,8 +518,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				
 				@Override
 				public void onClick(View widget) {
-					editText.setText(parentKey);
-					displayMap();					
+					removeEditTextFocus(parentKey);;
+					backToMap();					
 				}
 			};
 			result.setSpan(parentSpan, start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);

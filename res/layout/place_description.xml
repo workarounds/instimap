@@ -17,7 +17,12 @@
         android:layout_below="@id/desc_header"
         android:padding="8dp"
         android:textSize="18sp"
-        android:paddingTop="0dp"/>
+        android:paddingTop="0dp"
+        android:textIsSelectable="true"/>
+    <View
+        android:layout_below="@id/desc_content"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"/>
     
     <View 
 	    android:layout_width="fill_parent"

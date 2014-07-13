@@ -586,7 +586,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private boolean isMarkerVisible(Marker marker) {
 		if(marker == resultMarker) return true;
 		if(addedMarkerList.contains(marker)) return true;
-		if(isShowPinScale(marker)) return true;
+		if(isShowPinScale(marker) && showShowUp(marker)) return true;
 		return false;
 	}
 	

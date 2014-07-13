@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -31,18 +29,15 @@ import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -50,7 +45,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -182,7 +176,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-		
+
 		initSoundPool();
 		setFonts();
 
@@ -190,25 +184,27 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
-	
-	private void setFonts(){
+
+	private void setFonts() {
 		Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-		//Typeface semibold = Typeface.createFromAsset(getAssets(), FONT_SEMIBOLD);
-		
-		placeNameTextView.setTypeface(regular, Typeface.BOLD);;
+		// Typeface semibold = Typeface.createFromAsset(getAssets(),
+		// FONT_SEMIBOLD);
+
+		placeNameTextView.setTypeface(regular, Typeface.BOLD);
+		;
 		placeSubHeadTextView.setTypeface(regular);
 		editText.setTypeface(regular);
 	}
 
 	private void initLayout() {
-		if(!campusMapView.isImageReady()){
+		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
-		}
-		else{
+		} else {
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			FrameLayout.LayoutParams p = (FrameLayout.LayoutParams)campusMapView.getLayoutParams();
+			FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) campusMapView
+					.getLayoutParams();
 			int topMargin = campusMapView.getHeight() + p.topMargin;
 			// float density = getResources().getDisplayMetrics().density;
 			params.setMargins(0, topMargin, 0, 0);
@@ -218,13 +214,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			cardTouchListener.initTopMargin(topMargin);
 		}
 	}
-	
-	private void initSoundPool(){
-		soundPool = new SoundPool(2,AudioManager.STREAM_MUSIC, 100);
+
+	private void initSoundPool() {
+		soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 100);
 		soundPoolIds = new int[3];
-		soundPoolIds[SOUND_ID_RESULT] = soundPool.load(this, R.raw.result_marker, 1);
+		soundPoolIds[SOUND_ID_RESULT] = soundPool.load(this,
+				R.raw.result_marker, 1);
 		soundPoolIds[SOUND_ID_ADD] = soundPool.load(this, R.raw.add_marker, 2);
-		soundPoolIds[SOUND_ID_REMOVE] = soundPool.load(this, R.raw.remove_marker, 3);
+		soundPoolIds[SOUND_ID_REMOVE] = soundPool.load(this,
+				R.raw.remove_marker, 3);
 	}
 
 	@Override
@@ -252,8 +250,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		switch (actionId) {
-		case EditorInfo.IME_ACTION_SEARCH:
+		if ((actionId == EditorInfo.IME_ACTION_SEARCH)
+				|| (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
 			onItemClick(null, v, 0, 0);
 		}
 		return true;
@@ -313,7 +311,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
 		if (adapter.getResultSize() == 0) {
-			toast.setText(message);;
+			toast.setText(message);
+			;
 			toast.show();
 		} else {
 			String selection = editText.getText().toString();
@@ -327,19 +326,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void displayMap() {
-		//check if is Image ready
-		if(!campusMapView.isImageReady()){
+		// check if is Image ready
+		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_DISPLAY_MAP);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
-		}
-		else{
+		} else {
 			// locateIcon.setVisibility(View.VISIBLE);
 			// get text from auto complete text box
 			String key = editText.getText().toString();
-	
+
 			// get Marker object if exists
 			Marker marker = data.get(key);
-	
+
 			// display and zoom to marker if exists
 			if (marker != null) {
 				Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
@@ -363,7 +361,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void showCard(Marker marker) {
 		String name = marker.name;
-		if(!marker.shortName.equals("0")) name = marker.shortName;
+		if (!marker.shortName.equals("0"))
+			name = marker.shortName;
 		placeNameTextView.setText(name);
 		setSubHeading(marker);
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
@@ -371,181 +370,114 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		addDescriptionView(marker);
 		bottomLayout.setVisibility(View.VISIBLE);
 		placeCard.setVisibility(View.VISIBLE);
-		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));;
+		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));
+		;
 		Runnable anim = cardTouchListener.showCardAnimation();
 		anim.run();
 	}
-	
-	private void addDescriptionView(Marker marker){
-		LinearLayout parent = (LinearLayout)placeCard.findViewById(R.id.other_details);
+
+	private void addDescriptionView(Marker marker) {
+		LinearLayout parent = (LinearLayout) placeCard
+				.findViewById(R.id.other_details);
 		parent.removeAllViews();
-		if(marker instanceof Building){
-			setChildrenView(parent, (Building) marker);
-		}
-		if(!marker.description.isEmpty()){
-			View desc = getLayoutInflater().inflate(R.layout.place_description, parent);
-			
-			TextView descHeader = (TextView)desc.findViewById(R.id.desc_header);
-			Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+		if (!marker.description.isEmpty()) {
+			View desc = getLayoutInflater().inflate(R.layout.place_description,
+					parent);
+
+			TextView descHeader = (TextView) desc
+					.findViewById(R.id.desc_header);
+			Typeface regular = Typeface.createFromAsset(getAssets(),
+					FONT_REGULAR);
 			descHeader.setTypeface(regular, Typeface.BOLD);
-			
-			TextView descContent = (TextView) desc.findViewById(R.id.desc_content);
+
+			TextView descContent = (TextView) desc
+					.findViewById(R.id.desc_content);
 			descContent.setTypeface(regular);
 			descContent.setText(getDescriptionText(marker));
 			Linkify.addLinks(descContent, Linkify.ALL);
 		}
-	}
-	
-	private void setChildrenView(LinearLayout parent, Building building) {
-		View childrenView = getLayoutInflater().inflate(R.layout.children_view, parent);
-		
-		View headerLayout = childrenView.findViewById(R.id.header_layout);
-		TextView headerName = (TextView) childrenView.findViewById(R.id.list_header);
-		String headerText = "in ";
-		if(building.shortName.equals("0")) headerText += building.name;
-		else headerText += building.shortName;
-		Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-		headerName.setTypeface(bold, Typeface.BOLD);
-		headerName.setText(headerText);
-		
-		final ImageView icon = (ImageView)childrenView.findViewById(R.id.arrow_icon);
-		final ListView childrenListView = (ListView) childrenView.findViewById(R.id.child_list);
-		childrenListView.setVisibility(View.GONE);
-		
-		ArrayList<String> childNames = new ArrayList<String>();
-		for(String name: building.children){
-			childNames.add(name);
+		if (marker instanceof Building) {
+			setChildrenView(parent, (Building) marker);
 		}
-		
-		final CustomListAdapter adapter = new CustomListAdapter(this, R.layout.child, childNames);
-		childrenListView.setAdapter(adapter);
-		
-		childrenListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				String key = adapter.getItem(position);
-				removeEditTextFocus(key);
-				backToMap();
-			}
-			
-		});
-		
-		headerLayout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if(childrenListView.getVisibility() == View.VISIBLE){
-					childrenListView.setVisibility(View.GONE);
-					icon.setImageResource(R.drawable.ic_action_next_item);
-				}
-				else{
-					childrenListView.setVisibility(View.VISIBLE);
-					icon.setImageResource(R.drawable.ic_action_expand);
-				}
-			}
-		});
-		
-	}
-	
-	private class CustomListAdapter extends ArrayAdapter<String> {
-
-	    private Context mContext;
-	    private int id;
-	    private List <String>items ;
-
-	    public CustomListAdapter(Context context, int textViewResourceId , List<String> list ) 
-	    {
-	        super(context, textViewResourceId, list);           
-	        mContext = context;
-	        id = textViewResourceId;
-	        items = list ;
-	    }
-
-	    @Override
-	    public View getView(int position, View v, ViewGroup parent)
-	    {
-	        View mView = v ;
-	        if(mView == null){
-	            LayoutInflater vi = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	            mView = vi.inflate(id, null);
-	        }
-
-	        TextView text = (TextView) mView.findViewById(R.id.child_name);
-
-	        if(items.get(position) != null )
-	        {
-	        	Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-	            text.setText(items.get(position));
-	            text.setTypeface(regular);
-	        }
-
-	        return mView;
-	    }
 	}
 
-	private SpannableStringBuilder getDescriptionText(Marker marker){
-		SpannableStringBuilder desc = new SpannableStringBuilder(marker.description);
-		String[] toBoldParts = {"Email", "Phone No.", "Fax No."};
-		for(String part : toBoldParts){
+	private void setChildrenView(LinearLayout parent, Building building) {
+
+	}
+
+	private SpannableStringBuilder getDescriptionText(Marker marker) {
+		SpannableStringBuilder desc = new SpannableStringBuilder(
+				marker.description);
+		String[] toBoldParts = { "Email", "Phone No.", "Fax No." };
+		for (String part : toBoldParts) {
 			setBold(desc, part);
 		}
 		return desc;
 	}
-	
-	private void setBold(SpannableStringBuilder text, String part){
+
+	private void setBold(SpannableStringBuilder text, String part) {
 		int start = text.toString().indexOf(part);
 		int end = start + part.length();
 		final StyleSpan bold = new StyleSpan(Typeface.BOLD);
-		if (start >= 0)	text.setSpan(bold, start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+		if (start >= 0)
+			text.setSpan(bold, start, end,
+					SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
-	
-	private void setSubHeading(Marker marker){
+
+	private void setSubHeading(Marker marker) {
 		SpannableStringBuilder result = new SpannableStringBuilder("");
 		result.append(marker.name);
-		if(marker instanceof Room){
+		if (marker instanceof Room) {
 			Room room = (Room) marker;
 			String tag = room.tag;
-			if(!tag.equals("in")) tag += ",";
-			Building parent = (Building)data.get(room.parentKey);
+			if (!tag.equals("in"))
+				tag += ",";
+			Building parent = (Building) data.get(room.parentKey);
 			final String parentKey = parent.name;
 			String parentName = parent.name;
-			if(!parent.shortName.equals("0")) parentName = parent.shortName;
+			if (!parent.shortName.equals("0"))
+				parentName = parent.shortName;
 			result.append(" - " + tag + " ");
 			int start = result.length();
 			result.append(parentName);
 			int end = result.length();
 			ClickableSpan parentSpan = new ClickableSpan() {
-				
+
 				@Override
 				public void onClick(View widget) {
-					removeEditTextFocus(parentKey);;
-					backToMap();					
+					editText.setText(parentKey);
+					displayMap();
 				}
 			};
-			result.setSpan(parentSpan, start, end, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
-			placeSubHeadTextView.setMovementMethod(LinkMovementMethod.getInstance());
+			result.setSpan(parentSpan, start, end,
+					SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+			placeSubHeadTextView.setMovementMethod(LinkMovementMethod
+					.getInstance());
 			placeSubHeadTextView.setOnClickListener(null);
-		}
-		else{
+		} else {
 			placeSubHeadTextView.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					cardTouchListener.toggleExpansion();				
+					cardTouchListener.toggleExpansion();
 				}
 			});
 		}
 		placeSubHeadTextView.setText(result);
 	}
-	
-	private Drawable getLockIcon(Marker marker){
+
+	private Drawable getLockIcon(Marker marker) {
 		int color = marker.getColor();
 		int drawableId = R.drawable.lock_all_off;
-		if(campusMapView.isAddedMarker(marker)){
-			if(color == Marker.COLOR_BLUE) drawableId = R.drawable.lock_blue_on;
-			else if(color == Marker.COLOR_YELLOW) drawableId = R.drawable.lock_on_yellow;
-			else if(color == Marker.COLOR_GREEN) drawableId = R.drawable.lock_green_on;
-			else if(color == Marker.COLOR_GRAY) drawableId = R.drawable.lock_gray_on;
+		if (campusMapView.isAddedMarker(marker)) {
+			if (color == Marker.COLOR_BLUE)
+				drawableId = R.drawable.lock_blue_on;
+			else if (color == Marker.COLOR_YELLOW)
+				drawableId = R.drawable.lock_on_yellow;
+			else if (color == Marker.COLOR_GREEN)
+				drawableId = R.drawable.lock_green_on;
+			else if (color == Marker.COLOR_GRAY)
+				drawableId = R.drawable.lock_gray_on;
 		}
 		Drawable lock = getResources().getDrawable(drawableId);
 		return lock;
@@ -650,7 +582,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			this.setVisibleButton(indexIcon);
 		} else {
 			if (fragment instanceof ListFragment) {
-				
+
 			} else {
 				setVisibleButton(mapIcon);
 			}
@@ -659,12 +591,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void handleRemoveIcon() {
-			String text = editText.getText().toString();
-			if (text.isEmpty() || text.equals(null)) {
-				removeIcon.setVisibility(View.GONE);
-			} else {
-				removeIcon.setVisibility(View.VISIBLE);
-			}
+		String text = editText.getText().toString();
+		if (text.isEmpty() || text.equals(null)) {
+			removeIcon.setVisibility(View.GONE);
+		} else {
+			removeIcon.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void setVisibleButton(ImageButton icon) {
@@ -685,7 +617,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 					.toLowerCase(Locale.getDefault());
 			adapter.filter(text);
 		} else {
-			searchIcon.setVisibility(View.VISIBLE);
+			searchIcon.setVisibility(View.GONE);
 			fragmentContainer.setOnTouchListener(null);
 		}
 		this.setCorrectIcons();
@@ -708,22 +640,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		return false;
 	}
 
-//	public void locateClick(View v) {
-//
-//	}
+	// public void locateClick(View v) {
+	//
+	// }
 
 	public void addMarkerClick(View v) {
 		campusMapView.toggleMarker();
 		setAddMarkerIcon();
 	}
-	
-	public void playAnimSound(int sound_index){
-		if(sound_index >= 0 && sound_index < soundPoolIds.length){
-		soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
+
+	public void playAnimSound(int sound_index) {
+		if (sound_index >= 0 && sound_index < soundPoolIds.length) {
+			soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
 		}
 	}
-	
-	public void playAnimSoundDelayed(int sound_index,long delay ){
+
+	public void playAnimSoundDelayed(int sound_index, long delay) {
 		Message msg = mHandler.obtainMessage(MSG_PLAY_SOUND, sound_index, 0);
 		mHandler.sendMessageDelayed(msg, delay);
 	}
@@ -760,31 +692,31 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void setExpAdapter(ExpandableListAdapter expAdapter) {
 		this.expAdapter = expAdapter;
 	}
-	
+
 	private static final String INSTANCE_CARD_STATE = "instanceCardState";
 	private static final String INSTANCE_VISIBILITY_INDEX = "instanceVisibilityIndex";
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(INSTANCE_CARD_STATE, cardTouchListener.getCardState());
 		outState.putBoolean(INSTANCE_VISIBILITY_INDEX, indexIcon.isShown());
 	}
-	
+
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		int cardState = savedInstanceState.getInt(INSTANCE_CARD_STATE);
-		boolean isIndexIconVisible = savedInstanceState.getBoolean(INSTANCE_VISIBILITY_INDEX);
-		if(isIndexIconVisible){
+		boolean isIndexIconVisible = savedInstanceState
+				.getBoolean(INSTANCE_VISIBILITY_INDEX);
+		if (isIndexIconVisible) {
 			indexIcon.setVisibility(View.VISIBLE);
 			mapIcon.setVisibility(View.GONE);
-		}
-		else{
+		} else {
 			indexIcon.setVisibility(View.GONE);
 			mapIcon.setVisibility(View.VISIBLE);
 		}
-		if(cardState != CardTouchListener.STATE_DISMISSED){ 
+		if (cardState != CardTouchListener.STATE_DISMISSED) {
 			displayMap();
 		}
 	}

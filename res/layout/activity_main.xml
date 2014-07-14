@@ -258,6 +258,7 @@
 	                        android:id="@+id/color_strip"
 	                        android:layout_width="12dp"
 	                        android:layout_height="fill_parent"
+	                        android:minHeight="@dimen/expanded_card_height"
 	                        android:layout_alignParentLeft="true"
 	                        android:layout_alignParentTop="true" >
 	

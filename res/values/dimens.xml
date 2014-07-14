@@ -5,4 +5,5 @@
     <dimen name="activity_vertical_margin">0dp</dimen>
 	<dimen name="card_height">320dp</dimen>
 	<dimen name="hidden_card_height">80dp</dimen>
+	<dimen name="expanded_card_height">240dp</dimen>
 </resources>

@@ -474,15 +474,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
         final ImageView icon = (ImageView)childrenView.findViewById(R.id.arrow_icon);
         final ListView childrenListView = (ListView) childrenView.findViewById(R.id.child_list);
         childrenListView.setVisibility(View.GONE);
-        childrenListView.setOnTouchListener(new OnTouchListener() {
-            // Setting on Touch Listener for handling the touch inside ScrollView
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-            // Disallow the touch request for parent scroll on touch of child view
-            v.getParent().requestDisallowInterceptTouchEvent(true);
-            return false;
-            }
-        });
+//        childrenListView.setOnTouchListener(new OnTouchListener() {
+//            // Setting on Touch Listener for handling the touch inside ScrollView
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//            // Disallow the touch request for parent scroll on touch of child view
+//            v.getParent().requestDisallowInterceptTouchEvent(true);
+//            return false;
+//            }
+//        });
         
         ArrayList<String> childNames = new ArrayList<String>();
         for(String name: building.children){

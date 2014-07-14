@@ -161,6 +161,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Locations mLocations = new Locations(this);
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
+		initShowDefault();
+		initImageUri();
 
 		fragmentContainer = (RelativeLayout) findViewById(R.id.fragment_container);
 
@@ -193,6 +195,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+	}
+	
+	private void initShowDefault(){
+		String[] keys = {"Canara Bank","Convocation Hall", "Hostel 13", "Hostel 15", "Main Gate", "Market Gate, Y point Gate",  };
+		for(String key : keys){
+			data.get(key).showDefault = true;
+		}
+	}
+	
+	private void initImageUri(){
+		String[] keys = {"Convocation Hall", "Guest House/ Jalvihar", "Guest House/ Vanvihar", "Gulmohar Restaurant", "Hostel 14", "IDC Industrial Design Centre", "Main Building", "Nestle Cafe (Coffee Shack)", "SOM School of Management", "VMCC Victor Menezes Convention Centre"};
+		String[] uri = {"convo_hall", "jalvihar", "vanvihar", "gulmohar", "h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc"};
+		for(int i = 0; i< keys.length; i++){
+			data.get(keys[i]).imageUri = uri[i];
+		}
 	}
 
 	private void setFonts() {

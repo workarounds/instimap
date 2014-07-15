@@ -142,6 +142,17 @@
             android:layout_height="8dp"
             android:layout_below="@id/header_container"
             android:background="@drawable/shadow_gradient" />
+        
+        <ImageView 
+            android:id="@+id/north_image"
+            android:src="@drawable/north"
+            android:contentDescription="north image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:layout_margin="10dp"
+            android:layout_below="@id/header_container"
+            android:layout_alignParentLeft="true"/>
     </RelativeLayout>
 
     <com.mrane.campusmap.ExtendedRelativeLayout

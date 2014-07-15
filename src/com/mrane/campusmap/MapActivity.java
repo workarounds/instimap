@@ -590,7 +590,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			else {
 				tag = "in";
 			}
-			Building parent = (Building) data.get(room.parentKey);
+			Marker parent = data.get(room.parentKey);
 			final String parentKey = parent.name;
 			String parentName = parent.name;
 			if (!parent.shortName.equals("0"))

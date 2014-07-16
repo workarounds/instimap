@@ -1,4 +1,4 @@
-package com.mrane.campusmap;
+package com.mrane.unused;
 
 import in.designlabs.instimap.R;
 import android.content.Context;

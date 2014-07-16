@@ -1,4 +1,6 @@
-package com.mrane.campusmap;
+package com.mrane.unused;
+
+import com.mrane.campusmap.MapActivity;
 
 import in.designlabs.instimap.R;
 import android.view.MotionEvent;
@@ -11,13 +13,14 @@ import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class CardTouchListener implements OnTouchListener, AnimationListener {
 
 	private MapActivity mainActivity;
 	private RelativeLayout bottomLayout;
-	private RelativeLayout placeCard;
+	private LinearLayout placeCard;
 	private float translation;
 	private int curTopMargin;
 	private int initTopMargin;
@@ -32,7 +35,7 @@ public class CardTouchListener implements OnTouchListener, AnimationListener {
 	
 	public CardTouchListener(MapActivity main){
 		mainActivity = main;
-		bottomLayout = main.bottomLayout;
+		bottomLayout = main.bottomLayoutContainer;
 		placeCard = main.placeCard;
 		translation = 0;
 		cardHeight = mainActivity.getResources().getDimension(R.dimen.card_height);

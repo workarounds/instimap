@@ -59,7 +59,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_action_search"
                 android:visibility="gone" />
-            
+
             <ImageButton
                 android:id="@+id/index_icon"
                 android:layout_width="48dp"
@@ -142,41 +142,28 @@
             android:layout_height="8dp"
             android:layout_below="@id/header_container"
             android:background="@drawable/shadow_gradient" />
-        
-        <ImageView 
-            android:id="@+id/north_image"
-            android:src="@drawable/north"
-            android:contentDescription="north image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="centerCrop"
-            android:layout_margin="10dp"
-            android:layout_below="@id/header_container"
-            android:layout_alignParentLeft="true"/>
     </RelativeLayout>
 
-    <com.mrane.campusmap.ExtendedRelativeLayout
-        android:id="@+id/bottom_layout"
+    <RelativeLayout
+        android:id="@+id/bottom_layout_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
-        android:visibility="invisible" >
+        android:layout_height="match_parent" >
 
-        <RelativeLayout
-            android:id="@+id/place_card"
+        <LinearLayout
+            android:id="@+id/linear_place_card"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:animateLayoutChanges="true"
             android:background="@drawable/bottom_card_background"
-            android:minHeight="@dimen/card_height"
-            android:visibility="invisible" >
+            android:orientation="vertical" >
 
             <RelativeLayout
-                android:id="@+id/small_card"
+                android:id="@+id/new_small_card"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/hidden_card_height"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/small_card_bg" >
+                android:layout_height="wrap_content"
+                android:background="@drawable/small_card_bg"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/place_color"
@@ -184,17 +171,6 @@
                     android:layout_height="@dimen/hidden_card_height"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true" />
-                <!--
-                     <ImageButton
-		            android:id="@+id/remove_card_icon"
-		            android:src="@drawable/ic_action_remove"
-		            android:layout_width="48dp"
-		            android:layout_height="48dp"
-		            android:layout_alignParentTop="true"
-		            android:layout_alignParentRight="true"
-		            android:background="@android:color/transparent"
-		            android:layout_margin="0dp"
-		            android:onClick="removeCardClick"/>-->
 
                 <ImageButton
                     android:id="@+id/add_marker_icon"
@@ -202,13 +178,13 @@
                     android:layout_height="48dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/search"
                     android:cropToPadding="true"
                     android:onClick="addMarkerClick"
                     android:padding="8dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/lock_all_off" />
 
@@ -241,70 +217,79 @@
                     android:textSize="@dimen/place_sub_head_text_size" />
             </RelativeLayout>
 
-            <ScrollView
-                android:id="@+id/expanded_place_card_scroll"
+            <RelativeLayout
+                android:id="@+id/new_expand_container"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/small_card" >
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:visibility="gone" >
 
-                <LinearLayout
-                    android:id="@+id/expanded_place_card"
+                <ScrollView
+                    android:id="@+id/new_expanded_place_card_scroll"
                     android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="horizontal"
-                    android:background="#e5e5e5" >
-                    <RelativeLayout 
+                    android:layout_height="@dimen/expanded_card_height"
+                    android:layout_alignParentTop="true" >
+
+                    <LinearLayout
+                        android:id="@+id/expanded_place_card"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="fill_parent"
+                        android:background="#e5e5e5"
+                        android:orientation="horizontal" >
 
-	                    <LinearLayout
-	                        android:id="@+id/other_details"
-	                        android:layout_width="match_parent"
-	                        android:layout_height="wrap_content"
-	                        android:layout_alignParentLeft="true"
-	                        android:layout_alignParentTop="true"
-	                        android:orientation="vertical" >
-	                    </LinearLayout>
-	                    <RelativeLayout
-	                        android:id="@+id/color_strip"
-	                        android:layout_width="12dp"
-	                        android:layout_height="fill_parent"
-	                        android:minHeight="@dimen/expanded_card_height"
-	                        android:layout_alignParentLeft="true"
-	                        android:layout_alignParentTop="true" >
-	
-	                        <View
-	                            android:id="@+id/place_group_color"
-	                            android:layout_width="12dp"
-	                            android:layout_height="fill_parent"
-	                            android:layout_alignParentBottom="true"
-	                            android:layout_alignParentLeft="true"
-	                            android:layout_alignParentTop="true"
-	                            android:layout_marginLeft="0dp"
-	                            android:paddingLeft="0dp"
-	                            android:alpha="0.5" />
-	
-	                        <View
-	                            android:layout_width="12dp"
-	                            android:layout_height="fill_parent"
-	                            android:layout_alignParentBottom="true"
-	                            android:layout_alignParentLeft="true"
-	                            android:layout_alignParentTop="true"
-	                            android:layout_marginLeft="0dp"
-	                            android:background="@color/transparent_black"
-	                            android:paddingLeft="0dp"
-	                            android:alpha="0.5" />
-	                    </RelativeLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-            </ScrollView>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignTop="@id/expanded_place_card_scroll"
-                android:background="@drawable/shadow_gradient" />
-        </RelativeLayout>
-    </com.mrane.campusmap.ExtendedRelativeLayout>
+                            <LinearLayout
+                                android:id="@+id/other_details"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:orientation="vertical" >
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/color_strip"
+                                android:layout_width="12dp"
+                                android:layout_height="fill_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true" >
+
+                                <View
+                                    android:id="@+id/place_group_color"
+                                    android:layout_width="12dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_marginLeft="0dp"
+                                    android:alpha="0.5"
+                                    android:paddingLeft="0dp" />
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_marginLeft="0dp"
+                                    android:alpha="0.5"
+                                    android:background="@color/transparent_black"
+                                    android:paddingLeft="0dp" />
+                            </RelativeLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/shadow_gradient" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

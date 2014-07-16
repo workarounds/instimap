@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
@@ -41,6 +42,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -49,7 +52,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,11 +81,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
 	private Fragment fragment;
-	public RelativeLayout placeCard;
+	private NewCardTouchListener newCardTouchListener;
+	public RelativeLayout expandContainer;
+	public RelativeLayout newSmallCard;
+	public LinearLayout placeCard;
 	public ImageView placeColor;
-	private CardTouchListener cardTouchListener;
 	private RelativeLayout fragmentContainer;
-	public RelativeLayout bottomLayout;
+	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
 	public EditText editText;
@@ -119,6 +123,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final int SOUND_ID_RESULT = 0;
 	public static final int SOUND_ID_ADD = 1;
 	public static final int SOUND_ID_REMOVE = 2;
+	private final static float INTERPOLATOR_FACTOR = 2.5f;
 	public SoundPool soundPool;
 	public int[] soundPoolIds;
 	@SuppressLint("HandlerLeak")
@@ -152,8 +157,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		setContentView(R.layout.activity_main);
 
-		bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
-		placeCard = (RelativeLayout) findViewById(R.id.place_card);
+		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
+		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
+		newSmallCard = (RelativeLayout) findViewById(R.id.new_small_card);
+		placeCard = (LinearLayout) findViewById(R.id.linear_place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
@@ -182,8 +189,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 
-		cardTouchListener = new CardTouchListener(this);
-		placeCard.setOnTouchListener(cardTouchListener);
+		newCardTouchListener = new NewCardTouchListener(this);
+		placeCard.setOnTouchListener(newCardTouchListener);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
@@ -196,18 +203,24 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
-	
-	private void initShowDefault(){
-		String[] keys = {"Canara Bank","Convocation Hall", "Hostel 13", "Hostel 15", "Main Gate", "Market Gate, Y point Gate",  };
-		for(String key : keys){
+
+	private void initShowDefault() {
+		String[] keys = { "Canara Bank", "Convocation Hall", "Hostel 13",
+				"Hostel 15", "Main Gate", "Market Gate, Y point Gate", };
+		for (String key : keys) {
 			data.get(key).showDefault = true;
 		}
 	}
-	
-	private void initImageUri(){
-		String[] keys = {"Convocation Hall", "Guest House/ Jalvihar", "Guest House/ Vanvihar", "Gulmohar Restaurant", "Hostel 14", "IDC Industrial Design Centre", "Main Building", "Nestle Cafe (Coffee Shack)", "SOM School of Management", "VMCC Victor Menezes Convention Centre"};
-		String[] uri = {"convo_hall", "jalvihar", "vanvihar", "gulmohar", "h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc"};
-		for(int i = 0; i< keys.length; i++){
+
+	private void initImageUri() {
+		String[] keys = { "Convocation Hall", "Guest House/ Jalvihar",
+				"Guest House/ Vanvihar", "Gulmohar Restaurant", "Hostel 14",
+				"IDC Industrial Design Centre", "Main Building",
+				"Nestle Cafe (Coffee Shack)", "SOM School of Management",
+				"VMCC Victor Menezes Convention Centre" };
+		String[] uri = { "convo_hall", "jalvihar", "vanvihar", "gulmohar",
+				"h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc" };
+		for (int i = 0; i < keys.length; i++) {
 			data.get(keys[i]).imageUri = uri[i];
 		}
 	}
@@ -222,22 +235,36 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		editText.setTypeface(regular);
 	}
 
+	@SuppressLint("NewApi")
 	private void initLayout() {
 		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		} else {
-			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) campusMapView
-					.getLayoutParams();
-			int topMargin = campusMapView.getHeight() + p.topMargin;
-			// float density = getResources().getDisplayMetrics().density;
-			params.setMargins(0, topMargin, 0, 0);
-			bottomLayout.setLayoutParams(params);
-			bottomLayout.setVisibility(View.INVISIBLE);
-			placeCard.setVisibility(View.INVISIBLE);
-			cardTouchListener.initTopMargin(topMargin);
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+				Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
+
+				LayoutTransition layoutTransition = new LayoutTransition();
+				layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
+				layoutTransition.setDuration(LayoutTransition.APPEARING, 0);
+
+				layoutTransition.setStartDelay(
+						LayoutTransition.CHANGE_APPEARING, 0);
+				layoutTransition.setDuration(LayoutTransition.CHANGE_APPEARING,
+						500);
+				layoutTransition.setInterpolator(
+						LayoutTransition.CHANGE_APPEARING, i);
+				
+				layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING, 600);
+				layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 0);
+				
+				layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+				layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 250);
+				layoutTransition.setInterpolator(
+						LayoutTransition.CHANGE_DISAPPEARING, i);
+				
+				placeCard.setLayoutTransition(layoutTransition);
+			}
 		}
 	}
 
@@ -338,7 +365,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void onItemClick(AdapterView<?> arg0, View arg1, int id, long arg3) {
 		if (adapter.getResultSize() == 0) {
 			toast.setText(message);
-			;
 			toast.show();
 		} else {
 			String selection = editText.getText().toString();
@@ -357,7 +383,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			Message msg = mHandler.obtainMessage(MSG_DISPLAY_MAP);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		} else {
-			// locateIcon.setVisibility(View.VISIBLE);
 			// get text from auto complete text box
 			String key = editText.getText().toString();
 
@@ -394,18 +419,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
 		setAddMarkerIcon(marker);
 		addDescriptionView(marker);
-		bottomLayout.setVisibility(View.VISIBLE);
-		placeCard.setVisibility(View.VISIBLE);
+		bottomLayoutContainer.setVisibility(View.VISIBLE);
+		newSmallCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));
-		placeCard.findViewById(R.id.place_group_color).setBackgroundColor(marker.getColor());
-		Runnable anim = cardTouchListener.showCardAnimation();
-		anim.run();
+		placeCard.findViewById(R.id.place_group_color).setBackgroundColor(
+				marker.getColor());
+		expandContainer.setVisibility(View.GONE);
+		// Runnable anim = cardTouchListener.showCardAnimation();
+		// anim.run();
 	}
 
 	private void setImage(LinearLayout parent, Marker marker) {
 		View v = getLayoutInflater().inflate(R.layout.card_image, parent);
-		ImageView iv = (ImageView)v.findViewById(R.id.place_image);
-		int imageId = getResources().getIdentifier(marker.imageUri, "drawable", getPackageName());
+		ImageView iv = (ImageView) v.findViewById(R.id.place_image);
+		int imageId = getResources().getIdentifier(marker.imageUri, "drawable",
+				getPackageName());
 		iv.setImageResource(imageId);
 	}
 
@@ -413,7 +441,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		LinearLayout parent = (LinearLayout) placeCard
 				.findViewById(R.id.other_details);
 		parent.removeAllViews();
-		if(!marker.imageUri.isEmpty()){
+		if (!marker.imageUri.isEmpty()) {
 			setImage(parent, marker);
 		}
 		if (marker instanceof Building) {
@@ -436,132 +464,140 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			Linkify.addLinks(descContent, Linkify.ALL);
 		}
 	}
-	
+
 	public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
+		ListAdapter listAdapter = listView.getAdapter();
+		if (listAdapter == null)
+			return;
 
-        int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
+		int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(),
+				MeasureSpec.UNSPECIFIED);
+		int totalHeight = 0;
+		View view = null;
+		for (int i = 0; i < listAdapter.getCount(); i++) {
+			view = listAdapter.getView(i, view, listView);
+			if (i == 0)
+				view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,
+						LayoutParams.WRAP_CONTENT));
 
-            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
+			view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+			totalHeight += view.getMeasuredHeight();
+		}
+		ViewGroup.LayoutParams params = listView.getLayoutParams();
+		params.height = totalHeight
+				+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+		listView.setLayoutParams(params);
+		listView.requestLayout();
+	}
 
 	private void setChildrenView(LinearLayout parent, Building building) {
-        View childrenView = getLayoutInflater().inflate(R.layout.children_view, parent);
-        
-        View headerLayout = childrenView.findViewById(R.id.header_layout);
-        TextView headerName = (TextView) childrenView.findViewById(R.id.list_header);
-        String headerText = "inside ";
-        if(building.shortName.equals("0")) headerText += building.name;
-        else headerText += building.shortName;
-        Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-        headerName.setTypeface(bold, Typeface.BOLD);
-        headerName.setText(headerText);
-        
-        final ImageView icon = (ImageView)childrenView.findViewById(R.id.arrow_icon);
-        final ListView childrenListView = (ListView) childrenView.findViewById(R.id.child_list);
-        childrenListView.setVisibility(View.GONE);
-//        childrenListView.setOnTouchListener(new OnTouchListener() {
-//            // Setting on Touch Listener for handling the touch inside ScrollView
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//            // Disallow the touch request for parent scroll on touch of child view
-//            v.getParent().requestDisallowInterceptTouchEvent(true);
-//            return false;
-//            }
-//        });
-        
-        ArrayList<String> childNames = new ArrayList<String>();
-        for(String name: building.children){
-            childNames.add(name);
-        }
-        
-        final CustomListAdapter adapter = new CustomListAdapter(this, R.layout.child, childNames);
-        childrenListView.setAdapter(adapter);
-        
-        childrenListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                    long arg3) {
-                String key = adapter.getItem(position);
-                removeEditTextFocus(key);
-                backToMap();
-            }
-            
-        });
-        
-        
-        headerLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if(childrenListView.getVisibility() == View.VISIBLE){
-                    childrenListView.setVisibility(View.GONE);
-                    icon.setImageResource(R.drawable.ic_action_next_item);
-                }
-                else{
-                	setListViewHeightBasedOnChildren(childrenListView);
-                    childrenListView.setVisibility(View.VISIBLE);
-                    icon.setImageResource(R.drawable.ic_action_expand);
-                }
-            }
-        });
-        
-    }
-    
-    private class CustomListAdapter extends ArrayAdapter<String> {
+		View childrenView = getLayoutInflater().inflate(R.layout.children_view,
+				parent);
 
-        private Context mContext;
-        private int id;
-        private List <String>items ;
+		View headerLayout = childrenView.findViewById(R.id.header_layout);
+		TextView headerName = (TextView) childrenView
+				.findViewById(R.id.list_header);
+		String headerText = "inside ";
+		if (building.shortName.equals("0"))
+			headerText += building.name;
+		else
+			headerText += building.shortName;
+		Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
+		headerName.setTypeface(bold, Typeface.BOLD);
+		headerName.setText(headerText);
 
-        public CustomListAdapter(Context context, int textViewResourceId , List<String> list ) 
-        {
-            super(context, textViewResourceId, list);           
-            mContext = context;
-            id = textViewResourceId;
-            items = list ;
-        }
+		final ImageView icon = (ImageView) childrenView
+				.findViewById(R.id.arrow_icon);
+		final ListView childrenListView = (ListView) childrenView
+				.findViewById(R.id.child_list);
+		childrenListView.setVisibility(View.GONE);
+		// childrenListView.setOnTouchListener(new OnTouchListener() {
+		// // Setting on Touch Listener for handling the touch inside ScrollView
+		// @Override
+		// public boolean onTouch(View v, MotionEvent event) {
+		// // Disallow the touch request for parent scroll on touch of child
+		// view
+		// v.getParent().requestDisallowInterceptTouchEvent(true);
+		// return false;
+		// }
+		// });
 
-        @Override
-        public View getView(int position, View v, ViewGroup parent)
-        {
-            View mView = v ;
-            if(mView == null){
-                LayoutInflater vi = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                mView = vi.inflate(id, null);
-            }
+		ArrayList<String> childNames = new ArrayList<String>();
+		for (String name : building.children) {
+			childNames.add(name);
+		}
 
-            TextView text = (TextView) mView.findViewById(R.id.child_name);
-            Log.d("testing", "position = " + position);
-            if(items.get(position) != null )
-            {
-                Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-                text.setText(items.get(position));
-                text.setTypeface(regular);
-            }
+		final CustomListAdapter adapter = new CustomListAdapter(this,
+				R.layout.child, childNames);
+		childrenListView.setAdapter(adapter);
 
-            return mView;
-        }
+		childrenListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				String key = adapter.getItem(position);
+				removeEditTextFocus(key);
+				backToMap();
+			}
+
+		});
+
+		headerLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (childrenListView.getVisibility() == View.VISIBLE) {
+					childrenListView.setVisibility(View.GONE);
+					icon.setImageResource(R.drawable.ic_action_next_item);
+				} else {
+					setListViewHeightBasedOnChildren(childrenListView);
+					childrenListView.setVisibility(View.VISIBLE);
+					icon.setImageResource(R.drawable.ic_action_expand);
+				}
+			}
+		});
+
+	}
+
+	private class CustomListAdapter extends ArrayAdapter<String> {
+
+		private Context mContext;
+		private int id;
+		private List<String> items;
+
+		public CustomListAdapter(Context context, int textViewResourceId,
+				List<String> list) {
+			super(context, textViewResourceId, list);
+			mContext = context;
+			id = textViewResourceId;
+			items = list;
+		}
+
+		@Override
+		public View getView(int position, View v, ViewGroup parent) {
+			View mView = v;
+			if (mView == null) {
+				LayoutInflater vi = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				mView = vi.inflate(id, null);
+			}
+
+			TextView text = (TextView) mView.findViewById(R.id.child_name);
+			Log.d("testing", "position = " + position);
+			if (items.get(position) != null) {
+				Typeface regular = Typeface.createFromAsset(getAssets(),
+						FONT_REGULAR);
+				text.setText(items.get(position));
+				text.setTypeface(regular);
+			}
+
+			return mView;
+		}
 
 	}
 
 	private SpannableStringBuilder getDescriptionText(Marker marker) {
 		String text = marker.description;
-		SpannableStringBuilder desc = new SpannableStringBuilder(
-				text);
+		SpannableStringBuilder desc = new SpannableStringBuilder(text);
 		String[] toBoldParts = { "Email", "Phone No.", "Fax No." };
 		for (String part : toBoldParts) {
 			setBold(desc, part);
@@ -584,10 +620,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (marker instanceof Room) {
 			Room room = (Room) marker;
 			String tag = room.tag;
-			if (!tag.equals("Inside")){
+			if (!tag.equals("Inside")) {
 				tag += ",";
-			}
-			else {
+			} else {
 				tag = "in";
 			}
 			Marker parent = data.get(room.parentKey);
@@ -617,7 +652,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 				@Override
 				public void onClick(View v) {
-					cardTouchListener.toggleExpansion();
+					newCardTouchListener.toggleExpansion();
 				}
 			});
 		}
@@ -642,36 +677,39 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void expandCard() {
-		Runnable anim = cardTouchListener.expandCardAnimation();
-		anim.run();
+		expandContainer.setVisibility(View.VISIBLE);
+		// Runnable anim = cardTouchListener.expandCardAnimation();
+		// anim.run();
 	}
 
 	public void dismissCard() {
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE);
-		Runnable anim = cardTouchListener.dismissCardAnimation();
-		anim.run();
+		newSmallCard.setVisibility(View.GONE);
+		expandContainer.setVisibility(View.GONE);
+		// Runnable anim = cardTouchListener.dismissCardAnimation();
+		// anim.run();
 	}
 
 	public boolean removeMarker() {
 		if (campusMapView.getResultMarker() == null) {
 			return false;
 		} else {
-			final int state = cardTouchListener.getCardState();
-			switch (state) {
-			case CardTouchListener.STATE_DISMISSED:
-			case CardTouchListener.STATE_HIDDEN:
-				editText.getText().clear();
-				campusMapView.setResultMarker(null);
-				this.dismissCard();
-				campusMapView.invalidate();
-				break;
-			case CardTouchListener.STATE_EXPANDED:
-			case CardTouchListener.STATE_UNKNOWN:
-				showCard();
-				break;
-			default:
-				break;
-			}
+			 final int state = newCardTouchListener.getCardState();
+			 switch (state) {
+			 case NewCardTouchListener.STATE_DISMISSED:
+			 case NewCardTouchListener.STATE_HIDDEN:
+			 editText.getText().clear();
+			 campusMapView.setResultMarker(null);
+			 this.dismissCard();
+			 campusMapView.invalidate();
+			 break;
+			 case NewCardTouchListener.STATE_EXPANDED:
+			 case NewCardTouchListener.STATE_UNKNOWN:
+			 showCard();
+			 break;
+			 default:
+			 break;
+			 }
 			return true;
 		}
 	}
@@ -857,7 +895,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt(INSTANCE_CARD_STATE, cardTouchListener.getCardState());
+		// outState.putInt(INSTANCE_CARD_STATE,
+		// cardTouchListener.getCardState());
 		outState.putBoolean(INSTANCE_VISIBILITY_INDEX, indexIcon.isShown());
 	}
 
@@ -874,7 +913,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			indexIcon.setVisibility(View.GONE);
 			mapIcon.setVisibility(View.VISIBLE);
 		}
-		if (cardState != CardTouchListener.STATE_DISMISSED) {
+		if (cardState != NewCardTouchListener.STATE_DISMISSED) {
 			displayMap();
 		}
 	}

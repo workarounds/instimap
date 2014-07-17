@@ -215,13 +215,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void initImageUri() {
 		String[] keys = { "Convocation Hall", "Guest House/ Jalvihar",
 				"Guest House/ Vanvihar", "Gulmohar Restaurant", "Hostel 14",
-				"IDC Industrial Design Centre", "Main Building",
-				"Nestle Cafe (Coffee Shack)", "SOM School of Management",
-				"VMCC Victor Menezes Convention Centre" };
+				"Industrial Design Centre", "Main Building",
+				"Nestle Cafe (Coffee Shack)", "School of Management",
+				"Victor Menezes Convention Centre" };
 		String[] uri = { "convo_hall", "jalvihar", "vanvihar", "gulmohar",
 				"h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc" };
 		for (int i = 0; i < keys.length; i++) {
-			data.get(keys[i]).imageUri = uri[i];
+			if(data.containsKey(keys[i])) {
+				data.get(keys[i]).imageUri = uri[i];
+			} else {
+				Log.d("null point", "check " + keys[i]);
+			}
 		}
 	}
 
@@ -255,11 +259,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_APPEARING, i);
 				
-				layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING, 600);
-				layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 0);
+				//layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+				//layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 500);
+				layoutTransition.disableTransitionType(LayoutTransition.DISAPPEARING);
 				
 				layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-				layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 250);
+				layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 500);
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_DISAPPEARING, i);
 				

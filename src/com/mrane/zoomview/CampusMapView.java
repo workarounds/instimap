@@ -130,7 +130,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	    grayPointer = BitmapFactory.decodeResource(getResources(), drawable.marker_gray, options);
 	    grayMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_gray_s, options);
 	    grayLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_gray_h, options);
-        w = pointerWidth*density/2;
+        w = pointerWidth;
         h = bluePointer.getHeight() * (w/bluePointer.getWidth());
         bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);
         bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);

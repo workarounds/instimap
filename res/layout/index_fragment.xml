@@ -12,6 +12,7 @@
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:groupIndicator="@null"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:transcriptMode="disabled" />
 
 </LinearLayout>

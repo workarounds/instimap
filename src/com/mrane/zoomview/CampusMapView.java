@@ -66,6 +66,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private static long DURATION_MARKER_ANIMATION = 500;
 	private static long DELAY_MARKER_ANIMATION = 675;
 	private static float MAX_SCALE = 1F;
+	private DisplayMetrics displayMetrics;
 	private float density;
 	private boolean isFirstLoad = true;
 
@@ -79,7 +80,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	}
 
 	private void initialise(){
-		density = getResources().getDisplayMetrics().density;
+		displayMetrics = getResources().getDisplayMetrics();
+		density = displayMetrics.density;
 		highlightedMarkerScale = 1.0f;
         initMarkers();
         
@@ -132,6 +134,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	    grayLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_gray_h, options);
         w = pointerWidth;
         h = bluePointer.getHeight() * (w/bluePointer.getWidth());
+        
         bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);
         bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);
         yellowPointer = Bitmap.createScaledBitmap(yellowPointer, (int)w, (int)h, true);
@@ -370,8 +373,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawMarkerBitmap(Canvas canvas, Marker marker){
 		Bitmap highlightedPin = getMarkerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-        float vX = vPin.x - (highlightedPin.getWidth()/2);
-        float vY = vPin.y - highlightedPin.getHeight();
+        float vX = vPin.x - (highlightedPin.getScaledWidth(displayMetrics)/2);
+        float vY = vPin.y - highlightedPin.getScaledHeight(displayMetrics);
         canvas.drawBitmap(highlightedPin, vX, vY, paint);
 	}
 	
@@ -390,23 +393,23 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawPionterAndText(Canvas canvas, Marker marker){
 		Bitmap pin = getPointerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-        float vX = vPin.x - (pin.getWidth()/2);
-        float vY = vPin.y - (pin.getHeight()/2);
+        float vX = vPin.x - (pin.getScaledWidth(displayMetrics)/2);
+        float vY = vPin.y - (pin.getScaledHeight(displayMetrics)/2);
         canvas.drawBitmap(pin, vX, vY, paint);
         if(isShowPinTextScale(marker)){
         	String name;
     		if(marker.shortName.equals("0")) name = marker.name;
             else name = marker.shortName;
             textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
-            float tX = vPin.x +pin.getWidth();
+            float tX = vPin.x +pin.getScaledWidth(displayMetrics);
             float tY = vPin.y + bounds.height()/2;
             canvas.drawText(name, tX, tY, textPaint);
         }
 	}
 	
 	private boolean isInView(PointF point){
-		int displayWidth = getResources().getDisplayMetrics().widthPixels;
-		int displayHeight = getResources().getDisplayMetrics().heightPixels;
+		int displayWidth = displayMetrics.widthPixels;
+		int displayHeight = displayMetrics.heightPixels;
 		
 		int viewX = (int)sourceToViewCoord(point).x;
 		int viewY = (int)sourceToViewCoord(point).y;
@@ -501,8 +504,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			delay = DELAY_MARKER_ANIMATION;
 		}
 		
-		if(android.os.Build.VERSION.SDK_INT>=11){
+		if(android.os.Build.VERSION.SDK_INT >= 11){
 			playAnim(delay);
+		} else {
+			highlightedMarkerScale = 1.0f;
 		}
 		mainActivity.playAnimSoundDelayed(sound_index, delay);
 		if(isImageReady()) invalidate();
@@ -596,25 +601,27 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		if(specialMarkerList.contains(m)) return true;
 		PointF left = viewToSourceCoord(0, 0);
 		PointF right = viewToSourceCoord(getWidth(), 0);
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		float xDpi = metrics.xdpi;
+		float xDpi = displayMetrics.xdpi;
 		if((right.x-left.x)*xDpi/getWidth() < getSWidth()/RATIO_SHOW_PIN) return true;
 		return false;
 	}
 	
 	private boolean isShowPinTextScale(Marker m){
 		if(specialMarkerList.contains(m)) return true;
-		PointF left = viewToSourceCoord(0, 0);
-		PointF right = viewToSourceCoord(getWidth(), 0);
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		float xDpi = metrics.xdpi;
-		if((right.x-left.x)*xDpi/getWidth() < getSWidth()*density/(RATIO_SHOW_PIN_TEXT*2)) return true;
+//		PointF left = viewToSourceCoord(0, 0);
+//		PointF right = viewToSourceCoord(getWidth(), 0);
+//		float xDpi = displayMetrics.xdpi;
+//		if((right.x-left.x)*xDpi/getWidth() < getSWidth()*density/(RATIO_SHOW_PIN_TEXT*2)) return true;
+		if(getScale() >= (getShowTextScale())) return true;
 		return false;
 	}
 	
 	private float getShowTextScale(){
-		float xDpi = getResources().getDisplayMetrics().xdpi;
+		float xDpi = displayMetrics.xdpi;
 		float scale = (RATIO_SHOW_PIN_TEXT*xDpi*2/density + 20)/getSWidth();
+		if(scale > getMaxScale()) {
+			scale = 0.7f*getMaxScale();
+		}
 		return scale;
 	}
 

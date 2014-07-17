@@ -53,16 +53,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = infalInflater.inflate(R.layout.list_item, null);
 		}
-		
-//		boolean even = childPosition%2 == 0;
-//		int bgColor = 0;
-//		if(even){
-//			bgColor = R.color.list_item_gray_even;
-//		}
-//		else{
-//			bgColor = R.color.list_item_gray_odd;
-//		}
-//		convertView.setBackgroundColor(_context.getResources().getColor(bgColor));
 
 		TextView txtListChild = (TextView) convertView
 				.findViewById(R.id.lblListItem);

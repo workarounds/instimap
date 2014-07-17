@@ -6,7 +6,7 @@
     <!-- Background -->
     <item>
 	<shape>
-            <solid android:color="#D0FFFFFF" />
+            <solid android:color="#e5e5e5" />
 	</shape>
     </item>
 </layer-list>

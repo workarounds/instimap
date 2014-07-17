@@ -1,6 +1,7 @@
 package com.mrane.campusmap;
 
 import in.designlabs.instimap.R;
+import in.designlabs.instimap.R.color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Locale;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -27,11 +29,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -42,6 +46,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
@@ -124,6 +129,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final int SOUND_ID_ADD = 1;
 	public static final int SOUND_ID_REMOVE = 2;
 	private final static float INTERPOLATOR_FACTOR = 2.5f;
+	public int screenWidth;
+	public int screenHeight;
 	public SoundPool soundPool;
 	public int[] soundPoolIds;
 	@SuppressLint("HandlerLeak")
@@ -221,7 +228,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String[] uri = { "convo_hall", "jalvihar", "vanvihar", "gulmohar",
 				"h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc" };
 		for (int i = 0; i < keys.length; i++) {
-			if(data.containsKey(keys[i])) {
+			if (data.containsKey(keys[i])) {
 				data.get(keys[i]).imageUri = uri[i];
 			} else {
 				Log.d("null point", "check " + keys[i]);
@@ -258,16 +265,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 						500);
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_APPEARING, i);
-				
-				//layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING, 0);
-				//layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 500);
-				layoutTransition.disableTransitionType(LayoutTransition.DISAPPEARING);
-				
-				layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
-				layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING, 500);
+
+				// layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING,
+				// 0);
+				// layoutTransition.setDuration(LayoutTransition.DISAPPEARING,
+				// 500);
+				layoutTransition
+						.disableTransitionType(LayoutTransition.DISAPPEARING);
+
+				layoutTransition.setStartDelay(
+						LayoutTransition.CHANGE_DISAPPEARING, 0);
+				layoutTransition.setDuration(
+						LayoutTransition.CHANGE_DISAPPEARING, 500);
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_DISAPPEARING, i);
-				
+
 				placeCard.setLayoutTransition(layoutTransition);
 			}
 		}
@@ -639,6 +651,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			int start = result.length();
 			result.append(parentName);
 			int end = result.length();
+			result.append(" ");
 			ClickableSpan parentSpan = new ClickableSpan() {
 
 				@Override
@@ -648,9 +661,52 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				}
 			};
 			result.setSpan(parentSpan, start, end,
+					SpannableStringBuilder.SPAN_INCLUSIVE_INCLUSIVE);
+			ClickableSpan restSpan1 = new ClickableSpan() {
+				private TextPaint ds;
+
+				@Override
+				public void onClick(View widget) {
+					updateDrawState(ds);
+					widget.invalidate();
+					newCardTouchListener.toggleExpansion();
+				}
+
+				@Override
+				public void updateDrawState(TextPaint ds) {
+					ds.setColor(color.gray);
+					ds.bgColor = Color.TRANSPARENT;
+					ds.setUnderlineText(false);
+					this.ds = ds;
+				}
+			};
+			
+			ClickableSpan restSpan2 = new ClickableSpan() {
+				private TextPaint ds;
+
+				@Override
+				public void onClick(View widget) {
+					updateDrawState(ds);
+					widget.invalidate();
+					newCardTouchListener.toggleExpansion();
+				}
+
+				@Override
+				public void updateDrawState(TextPaint ds) {
+					ds.setColor(color.gray);
+					ds.bgColor = Color.TRANSPARENT;
+					ds.setUnderlineText(false);
+					this.ds = ds;
+				}
+			};
+
+			result.setSpan(restSpan1, 0, start,
+					SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+			result.setSpan(restSpan2, end, end + 1,
 					SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
 			placeSubHeadTextView.setMovementMethod(LinkMovementMethod
 					.getInstance());
+			// placeSubHeadTextView.setHighlightColor(Color.TRANSPARENT);
 			placeSubHeadTextView.setOnClickListener(null);
 		} else {
 			placeSubHeadTextView.setOnClickListener(new OnClickListener() {
@@ -699,22 +755,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (campusMapView.getResultMarker() == null) {
 			return false;
 		} else {
-			 final int state = newCardTouchListener.getCardState();
-			 switch (state) {
-			 case NewCardTouchListener.STATE_DISMISSED:
-			 case NewCardTouchListener.STATE_HIDDEN:
-			 editText.getText().clear();
-			 campusMapView.setResultMarker(null);
-			 this.dismissCard();
-			 campusMapView.invalidate();
-			 break;
-			 case NewCardTouchListener.STATE_EXPANDED:
-			 case NewCardTouchListener.STATE_UNKNOWN:
-			 showCard();
-			 break;
-			 default:
-			 break;
-			 }
+			final int state = newCardTouchListener.getCardState();
+			switch (state) {
+			case NewCardTouchListener.STATE_DISMISSED:
+			case NewCardTouchListener.STATE_HIDDEN:
+				editText.getText().clear();
+				campusMapView.setResultMarker(null);
+				this.dismissCard();
+				campusMapView.invalidate();
+				break;
+			case NewCardTouchListener.STATE_EXPANDED:
+			case NewCardTouchListener.STATE_UNKNOWN:
+				showCard();
+				break;
+			default:
+				break;
+			}
 			return true;
 		}
 	}
@@ -921,6 +977,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (cardState != NewCardTouchListener.STATE_DISMISSED) {
 			displayMap();
 		}
+	}
+	
+	private void getScreenDimensions() {
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+		wm.getDefaultDisplay().getMetrics(displayMetrics);
+		screenWidth = displayMetrics.widthPixels;
+		screenHeight = displayMetrics.heightPixels;
 	}
 
 }

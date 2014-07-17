@@ -8,17 +8,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 
 import com.mrane.data.Marker;
 
-public class IndexFragment extends Fragment {
+public class IndexFragment extends Fragment implements OnGroupExpandListener,
+		OnGroupCollapseListener, OnGroupClickListener {
 
 	MapActivity mainActivity;
 	ExpandableListAdapter adapter;
@@ -28,11 +31,11 @@ public class IndexFragment extends Fragment {
 	List<String> headers = new ArrayList<String>();
 	HashMap<String, List<String>> childData = new HashMap<String, List<String>>();
 	int pos;
+	int prevGroup = -1;
 
 	public IndexFragment() {
 	}
 
-	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -47,8 +50,49 @@ public class IndexFragment extends Fragment {
 		mainActivity.setExpAdapter(adapter);
 		list.setAdapter(adapter);
 		list.setOnChildClickListener(mainActivity);
+		list.setOnGroupExpandListener(this);
+		list.setOnGroupCollapseListener(this);
+		list.setOnGroupClickListener(this);
 
 		return rootView;
+	}
+
+	@Override
+	  public void onResume() {
+		String name = mainActivity.editText.getText().toString();
+		if(name.isEmpty()) {
+			collapseAllGroups();
+			list.setSelectedGroup(0);
+		} else {
+			if(data.containsKey(name)) {
+				String groupName = data.get(name).getGroupName();
+				int groupId = getGroupId(groupName);
+				if(groupId != -1) {
+					list.expandGroup(groupId);
+					list.setSelectedGroup(groupId);
+				}
+			}
+		}
+	     super.onResume();
+	  }
+	
+	private int getGroupId(String groupName) {
+		int groupCount = adapter.getGroupCount();
+		int temp = -1;
+		for (int i=0; i < groupCount; i++) {
+			if(adapter.getGroup(i).equals(groupName)) {
+				temp = i;
+			}
+		}
+		return temp;
+	}
+
+	private void collapseAllGroups() {
+		int groupCount = adapter.getGroupCount();
+		for (int i=0; i < groupCount; i++) {
+			list.collapseGroup(i);
+		}
+		
 	}
 
 	private void setChildData() {
@@ -61,11 +105,11 @@ public class IndexFragment extends Fragment {
 	}
 
 	private void sortChildData() {
-		for(String header: headers) {
+		for (String header : headers) {
 			List<String> child = childData.get(header);
 			Collections.sort(child);
 		}
-		
+
 	}
 
 	private void setHeaderAndChildData() {
@@ -75,6 +119,39 @@ public class IndexFragment extends Fragment {
 			childData.put(header, new ArrayList<String>());
 		}
 		setChildData();
+	}
+
+	@Override
+	public void onGroupExpand(int groupPosition) {
+		if (prevGroup != -1 && prevGroup != groupPosition) {
+			list.collapseGroup(prevGroup);
+		}
+		prevGroup = groupPosition;
+	}
+
+	@Override
+	public void onGroupCollapse(int groupPosition) {
+		if (prevGroup != -1) {
+			//list.setSelectionFromTop(prevGroup, 0);
+		}
+	}
+	
+	@Override
+	public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition,
+	        long id) {
+	    // Implement this method to scroll to the correct position as this doesn't
+	    // happen automatically if we override onGroupExpand() as above
+	    parent.smoothScrollToPosition(groupPosition);
+
+	    // Need default behaviour here otherwise group does not get expanded/collapsed
+	    // on click
+	    if (parent.isGroupExpanded(groupPosition)) {
+	        parent.collapseGroup(groupPosition);
+	    } else {
+	        parent.expandGroup(groupPosition);
+	    }
+
+	    return true;
 	}
 
 }

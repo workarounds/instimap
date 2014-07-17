@@ -129,15 +129,15 @@
                 android:background="@color/list_item_seperator_black" />
         </RelativeLayout>
 
-        <ImageView 
+        <ImageView
             android:id="@+id/north_image"
-            android:src="@drawable/north"
-            android:layout_margin="8dp"
-            android:layout_height="50dp"
             android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/header_container"
+            android:layout_margin="8dp"
             android:scaleType="centerCrop"
-            android:layout_below="@id/header_container"/>
-        
+            android:src="@drawable/north" />
+
         <RelativeLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
@@ -238,58 +238,58 @@
                     android:layout_height="@dimen/expanded_card_height"
                     android:layout_alignParentTop="true" >
 
-                    <LinearLayout
-                        android:id="@+id/expanded_place_card"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
-                        android:background="#e5e5e5"
-                        android:orientation="horizontal" >
+                        android:layout_height="match_parent" >
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:id="@+id/expanded_place_card"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent"
+                            android:background="#e5e5e5"
+                            android:orientation="horizontal" >
+                        </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/other_details"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:orientation="vertical" >
-                            </LinearLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/color_strip"
-                                android:layout_width="12dp"
-                                android:layout_height="fill_parent"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true" >
-
-                                <View
-                                    android:id="@+id/place_group_color"
-                                    android:layout_width="12dp"
-                                    android:layout_height="fill_parent"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_marginLeft="0dp"
-                                    android:alpha="0.5"
-                                    android:paddingLeft="0dp" />
-
-                                <View
-                                    android:layout_width="12dp"
-                                    android:layout_height="fill_parent"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_marginLeft="0dp"
-                                    android:alpha="0.5"
-                                    android:background="@color/transparent_black"
-                                    android:paddingLeft="0dp" />
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/other_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:orientation="vertical" >
+                        </LinearLayout>
+                    </RelativeLayout>
                 </ScrollView>
+
+                <RelativeLayout
+                    android:id="@+id/color_strip"
+                    android:layout_width="12dp"
+                    android:layout_height="@dimen/expanded_card_height"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" >
+
+                    <View
+                        android:id="@+id/place_group_color"
+                        android:layout_width="12dp"
+                        android:layout_height="@dimen/expanded_card_height"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="0dp"
+                        android:alpha="0.5"
+                        android:paddingLeft="0dp" />
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="@dimen/expanded_card_height"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="0dp"
+                        android:alpha="0.5"
+                        android:background="@color/transparent_black"
+                        android:paddingLeft="0dp" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"

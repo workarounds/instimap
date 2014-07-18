@@ -56,7 +56,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,12 +91,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public RelativeLayout newSmallCard;
 	public LinearLayout placeCard;
 	private RelativeLayout headerContainer;
+	private LinearLayout settingsContainer;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
 	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
-	public LinearLayout settingsContainer;
+	private RelativeLayout settingsOuter;
 	public EditText editText;
 	public HashMap<String, Marker> data;
 	private List<Marker> markerlist;
@@ -111,7 +111,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	public SharedPreferences sharedpreferences;
-	public AudioManager audiomanager;
+	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
 	public boolean muted;
 	private boolean noFragments = true;
@@ -178,6 +178,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
 		settingsContainer = (LinearLayout) findViewById(R.id.settings_container);
+		settingsOuter = (RelativeLayout) findViewById(R.id.settings_outer);
 
 		Locations mLocations = new Locations(this);
 		data = mLocations.data;
@@ -211,11 +212,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexFragment = new IndexFragment();
 
 		initSettingsFragment();
-		audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		// audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		muted = sharedpreferences.getBoolean("mute", false);
-		audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
+		// audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
 		Log.d("test123", "@oc muted value is : " + muted);
 
 		initSoundPool();
@@ -336,7 +337,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		this.setCorrectIcons();
-		if(isSettingsOpen) this.closeSettings();
+		if (isSettingsOpen)
+			this.closeSettings();
 	}
 
 	@Override
@@ -372,6 +374,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			transaction.commit();
 		}
 		noFragments = false;
+		closeSettings();
 	}
 
 	private void backToMap() {
@@ -827,16 +830,19 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				return false;
 			}
 		};
+		settingsOuter.setOnTouchListener(settingsCanceller);
 		headerContainer.setOnTouchListener(settingsCanceller);
-		placeCard.setOnTouchListener(settingsCanceller);
-		
+
 	}
 
 	private void closeSettings() {
-		settingsContainer.setVisibility(View.GONE);
-		isSettingsOpen = false;
-		headerContainer.setOnTouchListener(null);
-		placeCard.setOnTouchListener(null);
+		if (isSettingsOpen) {
+			settingsContainer.setVisibility(View.GONE);
+			isSettingsOpen = false;
+
+			settingsOuter.setOnTouchListener(null);
+			headerContainer.setOnTouchListener(null);
+		}
 	}
 
 	public void removeClick(View v) {

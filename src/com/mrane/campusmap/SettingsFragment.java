@@ -2,7 +2,6 @@ package com.mrane.campusmap;
 
 import in.designlabs.instimap.R;
 import android.content.SharedPreferences.Editor;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,7 +39,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		editor.putBoolean("mute", checkBox.isChecked());
 		Log.d("test123","on click called with bool : " + checkBox.isChecked());
 		mainActivity.muted = checkBox.isChecked();
-		mainActivity.audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, mainActivity.muted);
+		// mainActivity.audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, mainActivity.muted);
 		editor.commit();
 	}
 }

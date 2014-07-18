@@ -109,15 +109,15 @@
 
             <ImageButton
                 android:id="@+id/menu_icon"
-                android:layout_height="44dp"
                 android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="menu"
-                android:paddingTop="10dp"
+                android:onClick="menuClick"
                 android:paddingBottom="10dp"
                 android:paddingLeft="8dp"
-                android:layout_alignParentRight="true"
-                android:onClick="menuClick"
+                android:paddingTop="10dp"
                 android:src="@drawable/menu" />
 
             <ImageButton
@@ -129,9 +129,9 @@
                 android:contentDescription="remove"
                 android:onClick="removeClick"
                 android:paddingBottom="8dp"
-                android:paddingTop="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="0dp"
+                android:paddingTop="8dp"
                 android:src="@drawable/ic_action_remove"
                 android:visibility="gone" />
 
@@ -167,19 +167,6 @@
             android:layout_height="8dp"
             android:layout_below="@id/header_container"
             android:background="@drawable/shadow_gradient" />
-        
-        <LinearLayout 
-            android:id="@+id/settings_container"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="@drawable/bottom_card_background"
-            android:orientation="vertical"
-            android:layout_below="@id/header_container"
-            android:layout_alignParentRight="true"
-            android:visibility="gone">
-            
-        </LinearLayout>
-        
     </RelativeLayout>
 
     <RelativeLayout
@@ -326,6 +313,27 @@
                     android:layout_alignParentTop="true"
                     android:background="@drawable/shadow_gradient" />
             </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/settings_outer"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="48dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/settings_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_card_background"
+            android:orientation="vertical"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone" >
         </LinearLayout>
     </RelativeLayout>
 

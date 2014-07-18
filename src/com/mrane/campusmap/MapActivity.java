@@ -12,6 +12,7 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -107,10 +108,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton removeIcon;
 	public ImageButton indexIcon;
 	public ImageButton mapIcon;
+	public ImageButton menuIcon;
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	public SharedPreferences sharedpreferences;
+	public String addedMarkerString;
 	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
 	public boolean muted;
@@ -198,6 +201,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setImageAsset("map.jpg");
 		campusMapView.setData(data);
 
+		menuIcon = (ImageButton) findViewById(R.id.menu_icon);
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
@@ -216,6 +220,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		muted = sharedpreferences.getBoolean("mute", false);
+		// addedMarkerString = sharedpreferences.getString("addedMarkers", "");
+		// campusMapView.setAddedMarkers(addedMarkerString);
 		// audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
 		Log.d("test123", "@oc muted value is : " + muted);
 
@@ -226,6 +232,27 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
+	
+	@Override
+	protected void onPause() {
+		// String s = campusMapView.getAddedMarkerString();
+		// Editor editor = sharedpreferences.edit();
+		// editor.putString("addedMarkers", s);
+		// editor.commit();
+		//Log.d("test123", "onPause called");
+		super.onPause();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// String s = campusMapView.getAddedMarkerString();
+		// Editor editor = sharedpreferences.edit();
+		// editor.putString("addedMarkers", s);
+		// editor.commit();
+		// Log.d("test123", "onDestroy called");
+		super.onDestroy();
+	}
+
 
 	private void initSettingsFragment() {
 		transaction = fragmentManager.beginTransaction();
@@ -288,13 +315,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_APPEARING, i);
 
-				// layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING,
-				// 0);
-				// layoutTransition.setDuration(LayoutTransition.DISAPPEARING,
-				// 500);
-				layoutTransition
-						.disableTransitionType(LayoutTransition.DISAPPEARING);
-
+				 layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING,
+				 0);
+				 layoutTransition.setDuration(LayoutTransition.DISAPPEARING,
+				 500);
+				
 				layoutTransition.setStartDelay(
 						LayoutTransition.CHANGE_DISAPPEARING, 0);
 				layoutTransition.setDuration(
@@ -820,6 +845,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void openSettings() {
+		menuIcon.setBackgroundColor(Color.rgb(229, 229, 229));
 		settingsContainer.setVisibility(View.VISIBLE);
 		isSettingsOpen = true;
 		OnTouchListener settingsCanceller = new OnTouchListener() {
@@ -836,6 +862,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void closeSettings() {
+		menuIcon.setBackgroundColor(Color.TRANSPARENT);
 		if (isSettingsOpen) {
 			settingsContainer.setVisibility(View.GONE);
 			isSettingsOpen = false;

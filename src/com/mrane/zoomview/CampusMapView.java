@@ -26,6 +26,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +55,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap blueLockedMarker;
 	private Bitmap yellowLockedMarker;
 	private Bitmap greenLockedMarker;
-	private Bitmap grayLockedMarker;	
+	private Bitmap grayLockedMarker;
 	private float pointerWidth = 20;
 	private float highlightedMarkerScale;
 	private Paint paint;
@@ -73,458 +74,502 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	public CampusMapView(Context context) {
 		this(context, null);
 	}
-	
+
 	public CampusMapView(Context context, AttributeSet attr) {
 		super(context, attr);
 		initialise();
 	}
 
-	private void initialise(){
+	private void initialise() {
 		displayMetrics = getResources().getDisplayMetrics();
 		density = displayMetrics.density;
 		highlightedMarkerScale = 1.0f;
-        initMarkers();
-        
-        initPaints();
-        
-        mainActivity = MapActivity.getMainActivity();
-        
-        setGestureDetector();
-        super.setMaxScale(density*MAX_SCALE);
+		initMarkers();
+
+		initPaints();
+
+		mainActivity = MapActivity.getMainActivity();
+
+		setGestureDetector();
+		super.setMaxScale(density * MAX_SCALE);
 	}
-	
+
 	@Override
-	protected void onImageReady(){
-		if(isFirstLoad){
-			Runnable runnable = new Runnable(){
-				public void run(){
-					AnimationBuilder anim = animateScaleAndCenter(getTargetMinScale(), MapActivity.MAP_CENTER);
-					anim.withDuration(MapActivity.DURATION_INIT_MAP_ANIM).start();
+	protected void onImageReady() {
+		if (isFirstLoad) {
+			Runnable runnable = new Runnable() {
+				public void run() {
+					AnimationBuilder anim = animateScaleAndCenter(
+							getTargetMinScale(), MapActivity.MAP_CENTER);
+					anim.withDuration(MapActivity.DURATION_INIT_MAP_ANIM)
+							.start();
 					isFirstLoad = false;
 				}
 			};
 			mainActivity.runOnUiThread(runnable);
 		}
 	}
-	
-	public void setFirstLoad(boolean b){
+
+	public void setFirstLoad(boolean b) {
 		isFirstLoad = b;
 	}
-	
-	private void initMarkers(){
+
+	private void initMarkers() {
 		float w = 0;
 		float h = 0;
 		Options options = new BitmapFactory.Options();
-	    options.inScaled = false;
-		
-	    bluePointer = BitmapFactory.decodeResource(getResources(), drawable.marker_blue, options);
-	    blueMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_blue_s, options);
-	    blueLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_blue_h, options);
+		options.inScaled = false;
 
-	    yellowPointer = BitmapFactory.decodeResource(getResources(), drawable.marker_yellow, options);
-	    yellowMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_yellow_s, options);
-	    yellowLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_yellow_h, options);
+		bluePointer = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_blue, options);
+		blueMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_blue_s, options);
+		blueLockedMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_blue_h, options);
 
-	    greenPointer = BitmapFactory.decodeResource(getResources(), drawable.marker_green, options);
-	    greenMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_green_s, options);
-	    greenLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_green_h, options);
+		yellowPointer = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_yellow, options);
+		yellowMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_yellow_s, options);
+		yellowLockedMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_yellow_h, options);
 
-	    grayPointer = BitmapFactory.decodeResource(getResources(), drawable.marker_gray, options);
-	    grayMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_gray_s, options);
-	    grayLockedMarker = BitmapFactory.decodeResource(getResources(), drawable.marker_gray_h, options);
-        w = pointerWidth;
-        h = bluePointer.getHeight() * (w/bluePointer.getWidth());
-        
-        bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);
-        bluePointer = Bitmap.createScaledBitmap(bluePointer, (int)w, (int)h, true);
-        yellowPointer = Bitmap.createScaledBitmap(yellowPointer, (int)w, (int)h, true);
-        greenPointer = Bitmap.createScaledBitmap(greenPointer, (int)w, (int)h, true);
-        grayPointer = Bitmap.createScaledBitmap(grayPointer, (int)w, (int)h, true);
-        w = 4f*w;
-        h = blueMarker.getHeight() * (w/blueMarker.getWidth());
-        blueMarker = Bitmap.createScaledBitmap(blueMarker, (int)w, (int)h, true);
-        yellowMarker = Bitmap.createScaledBitmap(yellowMarker, (int)w, (int)h, true);
-        greenMarker = Bitmap.createScaledBitmap(greenMarker, (int)w, (int)h, true);
-        grayMarker = Bitmap.createScaledBitmap(grayMarker, (int)w, (int)h, true);
-        blueLockedMarker = Bitmap.createScaledBitmap(blueLockedMarker, (int)w, (int)h, true);
-        yellowLockedMarker = Bitmap.createScaledBitmap(yellowLockedMarker, (int)w, (int)h, true);
-        greenLockedMarker = Bitmap.createScaledBitmap(greenLockedMarker, (int)w, (int)h, true);
-        grayLockedMarker = Bitmap.createScaledBitmap(grayLockedMarker, (int)w, (int)h, true);
+		greenPointer = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_green, options);
+		greenMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_green_s, options);
+		greenLockedMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_green_h, options);
+
+		grayPointer = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_gray, options);
+		grayMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_gray_s, options);
+		grayLockedMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_gray_h, options);
+		w = pointerWidth;
+		h = bluePointer.getHeight() * (w / bluePointer.getWidth());
+
+		bluePointer = Bitmap.createScaledBitmap(bluePointer, (int) w, (int) h,
+				true);
+		bluePointer = Bitmap.createScaledBitmap(bluePointer, (int) w, (int) h,
+				true);
+		yellowPointer = Bitmap.createScaledBitmap(yellowPointer, (int) w,
+				(int) h, true);
+		greenPointer = Bitmap.createScaledBitmap(greenPointer, (int) w,
+				(int) h, true);
+		grayPointer = Bitmap.createScaledBitmap(grayPointer, (int) w, (int) h,
+				true);
+		w = 4f * w;
+		h = blueMarker.getHeight() * (w / blueMarker.getWidth());
+		blueMarker = Bitmap.createScaledBitmap(blueMarker, (int) w, (int) h,
+				true);
+		yellowMarker = Bitmap.createScaledBitmap(yellowMarker, (int) w,
+				(int) h, true);
+		greenMarker = Bitmap.createScaledBitmap(greenMarker, (int) w, (int) h,
+				true);
+		grayMarker = Bitmap.createScaledBitmap(grayMarker, (int) w, (int) h,
+				true);
+		blueLockedMarker = Bitmap.createScaledBitmap(blueLockedMarker, (int) w,
+				(int) h, true);
+		yellowLockedMarker = Bitmap.createScaledBitmap(yellowLockedMarker,
+				(int) w, (int) h, true);
+		greenLockedMarker = Bitmap.createScaledBitmap(greenLockedMarker,
+				(int) w, (int) h, true);
+		grayLockedMarker = Bitmap.createScaledBitmap(grayLockedMarker, (int) w,
+				(int) h, true);
 	}
-	
-	private void initPaints(){
+
+	private void initPaints() {
 		paint = new Paint();
-        paint.setAntiAlias(true);
-        textPaint = new Paint();
-        textPaint.setAntiAlias(true);
-        //textPaint.setColor(Color.rgb(254, 250, 217));
-        textPaint.setColor(Color.WHITE);
-        textPaint.setShadowLayer(8.0f*density, -1*density, 1*density, Color.BLACK);
-        textPaint.setTextSize(16*density);
-        Typeface boldCn = Typeface.createFromAsset(getContext().getAssets(), MapActivity.FONT_SEMIBOLD);
-        textPaint.setTypeface(boldCn);
-        
-        strokePaint = new Paint();
-        strokePaint.setAntiAlias(true);
-        strokePaint.setColor(Color.BLACK);
-        strokePaint.setTypeface(Typeface.DEFAULT_BOLD);
-        strokePaint.setTextSize(14*density);
-        strokePaint.setStyle(Style.STROKE);
-        strokePaint.setStrokeJoin(Join.ROUND);
-        strokePaint.setStrokeWidth(0.2f*density);
-        
-	}
-	
-	public float getTargetMinScale() {
-    	return Math.max(getWidth() / (float) getSWidth(), (getHeight())/ (float) getSHeight());
-    }
+		paint.setAntiAlias(true);
+		textPaint = new Paint();
+		textPaint.setAntiAlias(true);
+		// textPaint.setColor(Color.rgb(254, 250, 217));
+		textPaint.setColor(Color.WHITE);
+		textPaint.setShadowLayer(8.0f * density, -1 * density, 1 * density,
+				Color.BLACK);
+		textPaint.setTextSize(16 * density);
+		Typeface boldCn = Typeface.createFromAsset(getContext().getAssets(),
+				MapActivity.FONT_SEMIBOLD);
+		textPaint.setTypeface(boldCn);
 
-	public void setData(HashMap<String, Marker> markerData){
+		strokePaint = new Paint();
+		strokePaint.setAntiAlias(true);
+		strokePaint.setColor(Color.BLACK);
+		strokePaint.setTypeface(Typeface.DEFAULT_BOLD);
+		strokePaint.setTextSize(14 * density);
+		strokePaint.setStyle(Style.STROKE);
+		strokePaint.setStrokeJoin(Join.ROUND);
+		strokePaint.setStrokeWidth(0.2f * density);
+
+	}
+
+	public float getTargetMinScale() {
+		return Math.max(getWidth() / (float) getSWidth(), (getHeight())
+				/ (float) getSHeight());
+	}
+
+	public void setData(HashMap<String, Marker> markerData) {
 		data = markerData;
 		markerList = data.values();
 		addedMarkerList = new ArrayList<Marker>();
 		specialMarkerList = new ArrayList<Marker>();
 		setSpecialMarkers();
 	}
-	
+
 	private void setSpecialMarkers() {
-		for(Marker m : markerList){
-			if(m.showDefault){
+		for (Marker m : markerList) {
+			if (m.showDefault) {
 				specialMarkerList.add(m);
 			}
 		}
 	}
 
-	public static int getShowPinRatio(){
+	public static int getShowPinRatio() {
 		return RATIO_SHOW_PIN;
 	}
-	
-	public static void setShowPinRatio(int ratio){
+
+	public static void setShowPinRatio(int ratio) {
 		RATIO_SHOW_PIN = ratio;
 	}
-	
-	public static int getShowPinTextRatio(){
+
+	public static int getShowPinTextRatio() {
 		return RATIO_SHOW_PIN_TEXT;
 	}
-	
-	public static void setShowPinTextRatio(int ratio){
+
+	public static void setShowPinTextRatio(int ratio) {
 		RATIO_SHOW_PIN_TEXT = ratio;
 	}
-	
-	public Marker getResultMarker(){
+
+	public Marker getResultMarker() {
 		return resultMarker;
 	}
-	
+
 	@Deprecated
-	public Marker getHighlightedMarker(){
+	public Marker getHighlightedMarker() {
 		return getResultMarker();
 	}
-	
-	public void setResultMarker(Marker marker){
+
+	public void setResultMarker(Marker marker) {
 		resultMarker = marker;
 	}
-	
-	public boolean isResultMarker(Marker marker){
-		if(resultMarker == null) return false;
+
+	public boolean isResultMarker(Marker marker) {
+		if (resultMarker == null)
+			return false;
 		return resultMarker == marker;
 	}
-	
-	public void showResultMarker(){
-		if(resultMarker != null){
+
+	public void showResultMarker() {
+		if (resultMarker != null) {
 			boolean noDelay = false;
-			if(isInView(getResultMarker().point)) noDelay = true;
-			AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(), resultMarker.point);
+			if (isInView(getResultMarker().point))
+				noDelay = true;
+			AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(),
+					resultMarker.point);
 			anim.withDuration(750).start();
 			setMarkerAnimation(noDelay, MapActivity.SOUND_ID_RESULT);
 		}
 	}
-	
-	public void setAndShowResultMarker(Marker marker){
+
+	public void setAndShowResultMarker(Marker marker) {
 		setResultMarker(marker);
 		showResultMarker();
 	}
-	
-	public void addMarker(Marker m){
-		if(!addedMarkerList.contains(m)){
+
+	public void addMarker(Marker m) {
+		if (!addedMarkerList.contains(m)) {
 			addedMarkerList.add(m);
-			
+
 		}
 	}
-	
-	public void addMarker(){
+
+	public void addMarker() {
 		Marker m = getResultMarker();
 		addMarker(m);
 	}
-	
-	public void addMarkers(Collection<? extends Marker> markers){
-		for(Marker m : markers){
+
+	public void addMarkers(Collection<? extends Marker> markers) {
+		for (Marker m : markers) {
 			addMarker(m);
 		}
 	}
-	
-	public void addMarkers(Marker[] markerArray){
+
+	public void addMarkers(Marker[] markerArray) {
 		List<Marker> markerList = Arrays.asList(markerArray);
 		addMarkers(markerList);
 	}
-	
-	public void removeAddedMarker(Marker m){
-		if(addedMarkerList.contains(m)){
+
+	public void removeAddedMarker(Marker m) {
+		if (addedMarkerList.contains(m)) {
 			addedMarkerList.remove(m);
 		}
 	}
-	
-	public void removeAddedMarkers(Collection<? extends Marker> markers){
-		for(Marker m : markers){
+
+	public void removeAddedMarkers(Collection<? extends Marker> markers) {
+		for (Marker m : markers) {
 			removeAddedMarker(m);
 		}
 	}
-	
-	public void removeAddedMarkers(Marker[] markerArray){
+
+	public void removeAddedMarkers(Marker[] markerArray) {
 		List<Marker> markerList = Arrays.asList(markerArray);
 		removeAddedMarkers(markerList);
 	}
-	
-	public void removeAddedMarkers(){
+
+	public void removeAddedMarkers() {
 		addedMarkerList.clear();
 	}
-	
-	public boolean isAddedMarker(Marker m){
+
+	public boolean isAddedMarker(Marker m) {
 		return addedMarkerList.contains(m);
 	}
-	
-	public boolean isAddedMarker(){
+
+	public boolean isAddedMarker() {
 		return isAddedMarker(getResultMarker());
 	}
-	
-	public void toggleMarker(Marker m){
-		if(isAddedMarker(m)){
+
+	public void toggleMarker(Marker m) {
+		if (isAddedMarker(m)) {
 			removeAddedMarker(m);
 			mainActivity.playAnimSound(MapActivity.SOUND_ID_REMOVE);
-		}
-		else{
+		} else {
 			addMarker(m);
-			if(!isInView(m.point)){
-				AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(), m.point);
+			if (!isInView(m.point)) {
+				AnimationBuilder anim = animateScaleAndCenter(
+						getShowTextScale(), m.point);
 				anim.withDuration(750).start();
 				setMarkerAnimation(false, MapActivity.SOUND_ID_ADD);
-			}
-			else{
+			} else {
 				setMarkerAnimation(true, MapActivity.SOUND_ID_ADD);
 			}
 		}
 		invalidate();
 	}
-	
-	public void toggleMarker(){
+
+	public void toggleMarker() {
 		toggleMarker(getResultMarker());
 	}
-	
+
 	@Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 
-        // Don't draw pin before image is ready so it doesn't move around during setup.
-        if (!isImageReady()) {
-            return;
-        }        
-        
+		// Don't draw pin before image is ready so it doesn't move around during
+		// setup.
+		if (!isImageReady()) {
+			return;
+		}
 
-        for(Marker marker : markerList){
-        	if(isInView(marker.point)){
-            	if(isShowPinScale(marker) && !(isResultMarker(marker) || addedMarkerList.contains(marker))){
-            		if(showShowUp(marker)) drawPionterAndText(canvas, marker);
-            	}
-        	}
-        }
-        for(Marker marker : addedMarkerList){
-        	if(isInView(marker.point)){
-        		if(!isResultMarker(marker)){
-        			drawMarkerBitmap(canvas, marker);
-		            drawMarkerText(canvas, marker);
-        		}
-        	}
-        }
-        Marker marker = getResultMarker();
-        if(marker != null){
-        	if(isInView(marker.point)){
-        		drawMarkerBitmap(canvas, marker);
-            	drawMarkerText(canvas, marker);
-        	}
-        }
+		for (Marker marker : markerList) {
+			if (isInView(marker.point)) {
+				if (isShowPinScale(marker)
+						&& !(isResultMarker(marker) || addedMarkerList
+								.contains(marker))) {
+					if (showShowUp(marker))
+						drawPionterAndText(canvas, marker);
+				}
+			}
+		}
+		for (Marker marker : addedMarkerList) {
+			if (isInView(marker.point)) {
+				if (!isResultMarker(marker)) {
+					drawMarkerBitmap(canvas, marker);
+					drawMarkerText(canvas, marker);
+				}
+			}
+		}
+		Marker marker = getResultMarker();
+		if (marker != null) {
+			if (isInView(marker.point)) {
+				drawMarkerBitmap(canvas, marker);
+				drawMarkerText(canvas, marker);
+			}
+		}
 
-    }
-	
+	}
+
 	private boolean showShowUp(Marker marker) {
 		boolean result = true;
-		if(marker instanceof Building){
+		if (marker instanceof Building) {
 			String[] childKeys = ((Building) marker).children;
-			for(String childKey : childKeys){
+			for (String childKey : childKeys) {
 				Marker child = data.get(childKey);
-				if(isAddedMarker(child) || isResultMarker(child)){
+				if (isAddedMarker(child) || isResultMarker(child)) {
 					result = false;
 					break;
 				}
 			}
 		}
-		if(marker instanceof Room) result = false;
+		if (marker instanceof Room)
+			result = false;
 		return result;
 	}
 
-	private void drawMarkerBitmap(Canvas canvas, Marker marker){
+	private void drawMarkerBitmap(Canvas canvas, Marker marker) {
 		Bitmap highlightedPin = getMarkerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-        float vX = vPin.x - (highlightedPin.getScaledWidth(displayMetrics)/2);
-        float vY = vPin.y - highlightedPin.getScaledHeight(displayMetrics);
-        canvas.drawBitmap(highlightedPin, vX, vY, paint);
+		float vX = vPin.x - (highlightedPin.getScaledWidth(displayMetrics) / 2);
+		float vY = vPin.y - highlightedPin.getScaledHeight(displayMetrics);
+		canvas.drawBitmap(highlightedPin, vX, vY, paint);
 	}
-	
-	private void drawMarkerText(Canvas canvas, Marker marker){
+
+	private void drawMarkerText(Canvas canvas, Marker marker) {
 		String name;
 		PointF vPin = sourceToViewCoord(marker.point);
-		if(marker.shortName.equals("0")) name = marker.name;
-        else name = marker.shortName;
-        textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
-        float tX = vPin.x - bounds.width()/2;
-        float tY = vPin.y + bounds.height();
-        canvas.drawText(name, tX, tY, textPaint);
-        //canvas.drawText(names[0], tX, tY, strokePaint);
+		if (marker.shortName.equals("0"))
+			name = marker.name;
+		else
+			name = marker.shortName;
+		textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
+		float tX = vPin.x - bounds.width() / 2;
+		float tY = vPin.y + bounds.height();
+		canvas.drawText(name, tX, tY, textPaint);
+		// canvas.drawText(names[0], tX, tY, strokePaint);
 	}
-	
-	private void drawPionterAndText(Canvas canvas, Marker marker){
+
+	private void drawPionterAndText(Canvas canvas, Marker marker) {
 		Bitmap pin = getPointerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-        float vX = vPin.x - (pin.getScaledWidth(displayMetrics)/2);
-        float vY = vPin.y - (pin.getScaledHeight(displayMetrics)/2);
-        canvas.drawBitmap(pin, vX, vY, paint);
-        if(isShowPinTextScale(marker)){
-        	String name;
-    		if(marker.shortName.equals("0")) name = marker.name;
-            else name = marker.shortName;
-            textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
-            float tX = vPin.x +pin.getScaledWidth(displayMetrics);
-            float tY = vPin.y + bounds.height()/2;
-            canvas.drawText(name, tX, tY, textPaint);
-        }
+		float vX = vPin.x - (pin.getScaledWidth(displayMetrics) / 2);
+		float vY = vPin.y - (pin.getScaledHeight(displayMetrics) / 2);
+		canvas.drawBitmap(pin, vX, vY, paint);
+		if (isShowPinTextScale(marker)) {
+			String name;
+			if (marker.shortName.equals("0"))
+				name = marker.name;
+			else
+				name = marker.shortName;
+			textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
+			float tX = vPin.x + pin.getScaledWidth(displayMetrics);
+			float tY = vPin.y + bounds.height() / 2;
+			canvas.drawText(name, tX, tY, textPaint);
+		}
 	}
-	
-	private boolean isInView(PointF point){
+
+	private boolean isInView(PointF point) {
 		int displayWidth = displayMetrics.widthPixels;
 		int displayHeight = displayMetrics.heightPixels;
-		
-		int viewX = (int)sourceToViewCoord(point).x;
-		int viewY = (int)sourceToViewCoord(point).y;
-		
-		if(viewX > -displayWidth/3 && viewX < displayWidth && viewY > 0 && viewY < displayHeight) return true;
-		
+
+		int viewX = (int) sourceToViewCoord(point).x;
+		int viewY = (int) sourceToViewCoord(point).y;
+
+		if (viewX > -displayWidth / 3 && viewX < displayWidth && viewY > 0
+				&& viewY < displayHeight)
+			return true;
+
 		return false;
 	}
-	
+
 	private Marker getNearestMarker(PointF touchPoint) {
 		Marker resultMarker = null;
 		float minDist = 100000000f;
-		for(Marker marker: markerList){
+		for (Marker marker : markerList) {
 			PointF point = marker.point;
-			float dist  = (float) calculateDistance(point, touchPoint);
-			
-			if(dist < minDist && isMarkerVisible(marker)){
+			float dist = (float) calculateDistance(point, touchPoint);
+
+			if (dist < minDist && isMarkerVisible(marker)) {
 				minDist = dist;
 				resultMarker = marker;
 			}
 		}
 		return resultMarker;
 	}
-	
-	private double calculateDistance(PointF point1, PointF point2){
+
+	private double calculateDistance(PointF point1, PointF point2) {
 		float xDiff = point1.x - point2.x;
 		float yDiff = point1.y - point2.y;
-		
-		return Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+
+		return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 	}
-	
-	private Bitmap getPointerBitmap(Marker marker){
+
+	private Bitmap getPointerBitmap(Marker marker) {
 		int color = marker.getColor();
-		
-		if(color == Marker.COLOR_BLUE){
+
+		if (color == Marker.COLOR_BLUE) {
 			return bluePointer;
-		}
-		else if(color == Marker.COLOR_YELLOW){
+		} else if (color == Marker.COLOR_YELLOW) {
 			return yellowPointer;
-		}
-		else if(color == Marker.COLOR_GREEN){
+		} else if (color == Marker.COLOR_GREEN) {
 			return greenPointer;
-		}
-		else if(color == Marker.COLOR_GRAY){
+		} else if (color == Marker.COLOR_GRAY) {
 			return grayPointer;
 		}
-		
+
 		return bluePointer;
 	}
-	
-	private Bitmap getMarkerBitmap(Marker marker){
+
+	private Bitmap getMarkerBitmap(Marker marker) {
 		int color = marker.getColor();
-		
+
 		Bitmap markerBitmap = null;
-		
-		if(color == Marker.COLOR_BLUE){
+
+		if (color == Marker.COLOR_BLUE) {
 			markerBitmap = blueMarker;
-			if(isAddedMarker(marker)) markerBitmap = blueLockedMarker;
-		}
-		else if(color == Marker.COLOR_YELLOW){
+			if (isAddedMarker(marker))
+				markerBitmap = blueLockedMarker;
+		} else if (color == Marker.COLOR_YELLOW) {
 			markerBitmap = yellowMarker;
-			if(isAddedMarker(marker)) markerBitmap = yellowLockedMarker;
-		}
-		else if(color == Marker.COLOR_GREEN){
+			if (isAddedMarker(marker))
+				markerBitmap = yellowLockedMarker;
+		} else if (color == Marker.COLOR_GREEN) {
 			markerBitmap = greenMarker;
-			if(isAddedMarker(marker)) markerBitmap = greenLockedMarker;
-		}
-		else if(color == Marker.COLOR_GRAY){
+			if (isAddedMarker(marker))
+				markerBitmap = greenLockedMarker;
+		} else if (color == Marker.COLOR_GRAY) {
 			markerBitmap = grayMarker;
-			if(isAddedMarker(marker)) markerBitmap = grayLockedMarker;
+			if (isAddedMarker(marker))
+				markerBitmap = grayLockedMarker;
 		}
-		
-		if(highlightedMarkerScale != 1.0f && isResultMarker(marker)){
-			float w = markerBitmap.getWidth()*highlightedMarkerScale;
-			float h = markerBitmap.getHeight()*highlightedMarkerScale;
-			markerBitmap = Bitmap.createScaledBitmap(markerBitmap, (int)w, (int)h, true);
+
+		if (highlightedMarkerScale != 1.0f && isResultMarker(marker)) {
+			float w = markerBitmap.getWidth() * highlightedMarkerScale;
+			float h = markerBitmap.getHeight() * highlightedMarkerScale;
+			markerBitmap = Bitmap.createScaledBitmap(markerBitmap, (int) w,
+					(int) h, true);
 		}
-		
-		if(isResultMarker(marker)) {
-			float w = markerBitmap.getWidth()*1.2f;
-			float h = markerBitmap.getHeight()*1.2f;
-			markerBitmap = Bitmap.createScaledBitmap(markerBitmap, (int)w, (int)h, true);
+
+		if (isResultMarker(marker)) {
+			float w = markerBitmap.getWidth() * 1.2f;
+			float h = markerBitmap.getHeight() * 1.2f;
+			markerBitmap = Bitmap.createScaledBitmap(markerBitmap, (int) w,
+					(int) h, true);
 		}
-		
+
 		return markerBitmap;
 	}
-	
-	private void setMarkerAnimation(boolean noDelay, int _sound_index){
+
+	private void setMarkerAnimation(boolean noDelay, int _sound_index) {
 		final int sound_index = _sound_index;
 		long delay = 0;
-		if(!noDelay){
+		if (!noDelay) {
 			delay = DELAY_MARKER_ANIMATION;
 		}
-		
-		if(android.os.Build.VERSION.SDK_INT >= 11){
+
+		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			playAnim(delay);
 		} else {
 			highlightedMarkerScale = 1.0f;
 		}
 		mainActivity.playAnimSoundDelayed(sound_index, delay);
-		if(isImageReady()) invalidate();
+		if (isImageReady())
+			invalidate();
 	}
-	
+
 	@SuppressLint("NewApi")
-	private void playAnim(long delay){
+	private void playAnim(long delay) {
 		highlightedMarkerScale = 0.1f;
 		ValueAnimator valAnim = new ValueAnimator();
-		valAnim.setFloatValues(0.1f,1.0f);
+		valAnim.setFloatValues(0.1f, 1.0f);
 		valAnim.setDuration(DURATION_MARKER_ANIMATION);
 		valAnim.addUpdateListener(new AnimatorUpdateListener() {
-			
+
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
 				highlightedMarkerScale = (Float) animation.getAnimatedValue();
-				if(isImageReady()) invalidate();
+				if (isImageReady())
+					invalidate();
 			}
 		});
 		TimeInterpolator i = new BounceInterpolator();
@@ -532,97 +577,137 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		valAnim.setStartDelay(delay);
 		valAnim.start();
 	}
-	
+
 	private void setGestureDetector() {
-		final GestureDetector gestureDetector = new GestureDetector(mainActivity, new GestureDetector.SimpleOnGestureListener(){
-			@Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                if (isImageReady()) {
-                    PointF sCoord = viewToSourceCoord(e.getX(), e.getY());
-                    Marker marker = getNearestMarker(sCoord);
-                    if(isMarkerInTouchRegion(marker, sCoord)){
-                    	//mMainActivity.resultMarker(marker.name);
-                    	mainActivity.editText.setText(marker.name);
-                    	mainActivity.displayMap();
-                    }
-                } else {
-                    
-                }
-                return true;
-            }
-		});
-		
+		final GestureDetector gestureDetector = new GestureDetector(
+				mainActivity, new GestureDetector.SimpleOnGestureListener() {
+					@Override
+					public boolean onSingleTapConfirmed(MotionEvent e) {
+						if (isImageReady()) {
+							PointF sCoord = viewToSourceCoord(e.getX(),
+									e.getY());
+							Marker marker = getNearestMarker(sCoord);
+							if (isMarkerInTouchRegion(marker, sCoord)) {
+								// mMainActivity.resultMarker(marker.name);
+								mainActivity.editText.setText(marker.name);
+								mainActivity.displayMap();
+							}
+						} else {
+
+						}
+						return true;
+					}
+				});
+
 		setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-            	final float targetMinScale = getTargetMinScale();
-            	int action = motionEvent.getAction();
-            	if(targetMinScale > getScale()){
-            		callSuperOnTouch(motionEvent);
-	            	if(action == MotionEvent.ACTION_UP){
-	            		Runnable anim = new Runnable(){
-	            			public void run(){
-	            				AnimationBuilder animation = animateScale(targetMinScale);
-	            				animation.withDuration(200).withEasing(SubsamplingScaleImageView.EASE_OUT_QUAD).start();
-	            			}
-	            		};
-	            		anim.run();
-	            	}
-	            	return true;
-            	}
-                return gestureDetector.onTouchEvent(motionEvent);
-            }
+			@Override
+			public boolean onTouch(View view, MotionEvent motionEvent) {
+				final float targetMinScale = getTargetMinScale();
+				int action = motionEvent.getAction();
+				if (targetMinScale > getScale()) {
+					callSuperOnTouch(motionEvent);
+					if (action == MotionEvent.ACTION_UP) {
+						Runnable anim = new Runnable() {
+							public void run() {
+								AnimationBuilder animation = animateScale(targetMinScale);
+								animation
+										.withDuration(200)
+										.withEasing(
+												SubsamplingScaleImageView.EASE_OUT_QUAD)
+										.start();
+							}
+						};
+						anim.run();
+					}
+					return true;
+				}
+				return gestureDetector.onTouchEvent(motionEvent);
+			}
 		});
-		
+
 	}
-	
-	private void callSuperOnTouch(MotionEvent me){
+
+	private void callSuperOnTouch(MotionEvent me) {
 		super.onTouchEvent(me);
 	}
 
 	private boolean isMarkerInTouchRegion(Marker marker, PointF o) {
-		if(marker != null){
-			PointF point  = sourceToViewCoord(marker.point);
+		if (marker != null) {
+			PointF point = sourceToViewCoord(marker.point);
 			PointF origin = sourceToViewCoord(o);
 			float dist = (float) calculateDistance(point, origin);
-			if(dist < pointerWidth*density*2 && isMarkerVisible(marker)) { return true;}
+			if (dist < pointerWidth * density * 2 && isMarkerVisible(marker)) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	private boolean isMarkerVisible(Marker marker) {
-		if(marker == resultMarker) return true;
-		if(addedMarkerList.contains(marker)) return true;
-		if(isShowPinScale(marker) && showShowUp(marker)) return true;
+		if (marker == resultMarker)
+			return true;
+		if (addedMarkerList.contains(marker))
+			return true;
+		if (isShowPinScale(marker) && showShowUp(marker))
+			return true;
 		return false;
 	}
-	
-	private boolean isShowPinScale(Marker m){
-		if(specialMarkerList.contains(m)) return true;
+
+	private boolean isShowPinScale(Marker m) {
+		if (specialMarkerList.contains(m))
+			return true;
 		PointF left = viewToSourceCoord(0, 0);
 		PointF right = viewToSourceCoord(getWidth(), 0);
 		float xDpi = displayMetrics.xdpi;
-		if((right.x-left.x)*xDpi/getWidth() < getSWidth()/RATIO_SHOW_PIN) return true;
+		if ((right.x - left.x) * xDpi / getWidth() < getSWidth()
+				/ RATIO_SHOW_PIN)
+			return true;
 		return false;
 	}
-	
-	private boolean isShowPinTextScale(Marker m){
-		if(specialMarkerList.contains(m)) return true;
-//		PointF left = viewToSourceCoord(0, 0);
-//		PointF right = viewToSourceCoord(getWidth(), 0);
-//		float xDpi = displayMetrics.xdpi;
-//		if((right.x-left.x)*xDpi/getWidth() < getSWidth()*density/(RATIO_SHOW_PIN_TEXT*2)) return true;
-		if(getScale() >= (getShowTextScale())) return true;
+
+	private boolean isShowPinTextScale(Marker m) {
+		if (specialMarkerList.contains(m))
+			return true;
+		// PointF left = viewToSourceCoord(0, 0);
+		// PointF right = viewToSourceCoord(getWidth(), 0);
+		// float xDpi = displayMetrics.xdpi;
+		// if((right.x-left.x)*xDpi/getWidth() <
+		// getSWidth()*density/(RATIO_SHOW_PIN_TEXT*2)) return true;
+		if (getScale() >= (getShowTextScale()))
+			return true;
 		return false;
 	}
-	
-	private float getShowTextScale(){
+
+	private float getShowTextScale() {
 		float xDpi = displayMetrics.xdpi;
-		float scale = (RATIO_SHOW_PIN_TEXT*xDpi*2/density + 20)/getSWidth();
-		if(scale > getMaxScale()) {
-			scale = 0.7f*getMaxScale();
+		float scale = (RATIO_SHOW_PIN_TEXT * xDpi * 2 / density + 20)
+				/ getSWidth();
+		if (scale > getMaxScale()) {
+			scale = 0.7f * getMaxScale();
 		}
 		return scale;
 	}
+
+//	public void setAddedMarkers(String addedMarkerString) {
+//		addedMarkerList = new ArrayList<Marker>();
+//		String[] addedMarkerNames = addedMarkerString.split("###");
+//		for (String s : addedMarkerNames) {
+//			if (!s.equals("")) {
+//				Log.d("test123","names = " + s);
+//				if (data.containsKey(s)) {
+//					addedMarkerList.add(data.get(s));
+//				}
+//			}
+//		}
+//	}
+//
+//	public String getAddedMarkerString() {
+//		String s = "";
+//		for (Marker m : addedMarkerList) {
+//			s = s + m.name + "###";
+//		}
+//		Log.d("test123","addedMarkerStringGen = " + s);
+//		return s;
+//	}
 
 }

@@ -11,6 +11,7 @@ import java.util.Locale;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -35,7 +36,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -46,7 +46,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
@@ -57,6 +56,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,14 +87,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private IndexFragment indexFragment;
 	private Fragment fragment;
 	private NewCardTouchListener newCardTouchListener;
+	private boolean isSettingsOpen = false;
 	public RelativeLayout expandContainer;
 	public RelativeLayout newSmallCard;
 	public LinearLayout placeCard;
+	private RelativeLayout headerContainer;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
 	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
+	public LinearLayout settingsContainer;
 	public EditText editText;
 	public HashMap<String, Marker> data;
 	private List<Marker> markerlist;
@@ -107,7 +110,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton addMarkerIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
+	public SharedPreferences sharedpreferences;
+	public AudioManager audiomanager;
 	public int expandedGroup = -1;
+	public boolean muted;
 	private boolean noFragments = true;
 	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
@@ -125,12 +131,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final String FONT_BOLD = "myriadpro_bold_cn.otf";
 	public static final String FONT_SEMIBOLD = "myriadpro_semibold.otf";
 	public static final String FONT_REGULAR = "myriadpro_regular.otf";
+	public static final String PREFERENCE_NAME = "preferences";
 	public static final int SOUND_ID_RESULT = 0;
 	public static final int SOUND_ID_ADD = 1;
 	public static final int SOUND_ID_REMOVE = 2;
 	private final static float INTERPOLATOR_FACTOR = 2.5f;
-	public int screenWidth;
-	public int screenHeight;
 	public SoundPool soundPool;
 	public int[] soundPoolIds;
 	@SuppressLint("HandlerLeak")
@@ -164,6 +169,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		setContentView(R.layout.activity_main);
 
+		headerContainer = (RelativeLayout) findViewById(R.id.header_container);
 		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
 		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
 		newSmallCard = (RelativeLayout) findViewById(R.id.new_small_card);
@@ -171,6 +177,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
+		settingsContainer = (LinearLayout) findViewById(R.id.settings_container);
 
 		Locations mLocations = new Locations(this);
 		data = mLocations.data;
@@ -203,12 +210,26 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
 
+		initSettingsFragment();
+		audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
+				Context.MODE_PRIVATE);
+		muted = sharedpreferences.getBoolean("mute", false);
+		audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
+		Log.d("test123", "@oc muted value is : " + muted);
+
 		initSoundPool();
 		setFonts();
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+	}
+
+	private void initSettingsFragment() {
+		transaction = fragmentManager.beginTransaction();
+		transaction.add(R.id.settings_container, new SettingsFragment());
+		transaction.commit();
 	}
 
 	private void initShowDefault() {
@@ -315,7 +336,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		this.setCorrectIcons();
-
+		if(isSettingsOpen) this.closeSettings();
 	}
 
 	@Override
@@ -365,16 +386,20 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onBackPressed() {
-		if (noFragments) {
-			if (!this.removeMarker()) {
-				super.onBackPressed();
-			} else {
-				if (editText.length() > 0) {
-				}
-			}
+		if (isSettingsOpen) {
+			closeSettings();
 		} else {
-			backToMap();
-			this.removeEditTextFocus("");
+			if (noFragments) {
+				if (!this.removeMarker()) {
+					super.onBackPressed();
+				} else {
+					if (editText.length() > 0) {
+					}
+				}
+			} else {
+				backToMap();
+				this.removeEditTextFocus("");
+			}
 		}
 	}
 
@@ -680,7 +705,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 					this.ds = ds;
 				}
 			};
-			
+
 			ClickableSpan restSpan2 = new ClickableSpan() {
 				private TextPaint ds;
 
@@ -781,6 +806,37 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		editText.setText("");
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+	}
+
+	public void menuClick(View v) {
+		if (settingsContainer.getVisibility() == View.GONE) {
+			openSettings();
+		} else {
+			closeSettings();
+		}
+	}
+
+	private void openSettings() {
+		settingsContainer.setVisibility(View.VISIBLE);
+		isSettingsOpen = true;
+		OnTouchListener settingsCanceller = new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				closeSettings();
+				return false;
+			}
+		};
+		headerContainer.setOnTouchListener(settingsCanceller);
+		placeCard.setOnTouchListener(settingsCanceller);
+		
+	}
+
+	private void closeSettings() {
+		settingsContainer.setVisibility(View.GONE);
+		isSettingsOpen = false;
+		headerContainer.setOnTouchListener(null);
+		placeCard.setOnTouchListener(null);
 	}
 
 	public void removeClick(View v) {
@@ -907,8 +963,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void playAnimSound(int sound_index) {
+		Log.d("test123", "@pas muted value is : " + muted);
 		if (sound_index >= 0 && sound_index < soundPoolIds.length) {
-			soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
+			if (!muted) {
+				soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
+			}
 		}
 	}
 
@@ -977,14 +1036,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (cardState != NewCardTouchListener.STATE_DISMISSED) {
 			displayMap();
 		}
-	}
-	
-	private void getScreenDimensions() {
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
-		wm.getDefaultDisplay().getMetrics(displayMetrics);
-		screenWidth = displayMetrics.widthPixels;
-		screenHeight = displayMetrics.heightPixels;
 	}
 
 }

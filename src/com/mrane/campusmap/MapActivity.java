@@ -131,7 +131,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
 //	public static final String FONT_BOLD = "myriadpro_bold_cn.ttf";
-//	public static final String FONT_SEMIBOLD = "myriadpro_semibold.ttf";
+	public static final String FONT_SEMIBOLD = "myriadpro_semibold.ttf";
 //	public static final String FONT_REGULAR = "myriadpro_regular.ttf";
 	public static final String FONT_REGULAR = "rigascreen_regular.ttf";
 	public static final String PREFERENCE_NAME = "preferences";

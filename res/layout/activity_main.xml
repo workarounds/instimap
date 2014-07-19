@@ -25,9 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="0dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -178,8 +178,8 @@
         android:id="@+id/bottom_layout_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp" >
 
         <LinearLayout
             android:id="@+id/linear_place_card"
@@ -327,8 +327,8 @@
         android:id="@+id/settings_outer"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:paddingRight="10dp"
-        android:paddingTop="58dp"
+        android:paddingRight="5dp"
+        android:paddingTop="53dp"
         android:background="@android:color/transparent"
         android:orientation="vertical" >
 

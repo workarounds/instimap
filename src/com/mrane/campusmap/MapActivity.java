@@ -12,7 +12,6 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -131,9 +130,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
-	public static final String FONT_BOLD = "myriadpro_bold_cn.otf";
-	public static final String FONT_SEMIBOLD = "myriadpro_semibold.otf";
-	public static final String FONT_REGULAR = "myriadpro_regular.otf";
+//	public static final String FONT_BOLD = "myriadpro_bold_cn.ttf";
+//	public static final String FONT_SEMIBOLD = "myriadpro_semibold.ttf";
+//	public static final String FONT_REGULAR = "myriadpro_regular.ttf";
+	public static final String FONT_REGULAR = "rigascreen_regular.ttf";
 	public static final String PREFERENCE_NAME = "preferences";
 	public static final int SOUND_ID_RESULT = 0;
 	public static final int SOUND_ID_ADD = 1;
@@ -344,12 +344,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void afterTextChanged(Editable arg0) {
-		if (editTextFocused) {
-			String text = editText.getText().toString()
-					.toLowerCase(Locale.getDefault());
-			adapter.filter(text);
-		}
-
+		String text = editText.getText().toString()
+				.toLowerCase(Locale.getDefault());
+		adapter.filter(text);
 	}
 
 	@Override
@@ -364,6 +361,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		this.setCorrectIcons();
 		if (isSettingsOpen)
 			this.closeSettings();
+		
 	}
 
 	@Override

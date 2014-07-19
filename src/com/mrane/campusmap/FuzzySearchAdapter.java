@@ -11,6 +11,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class FuzzySearchAdapter extends BaseAdapter {
 	private ArrayList<Marker> inputlist;
 	private List<ScoredMarker> map;
 	private Locale l;
+	private String searchedText = "";
 
 	public FuzzySearchAdapter(Context context, List<Marker> inputlist) {
 		mContext = context;
@@ -85,7 +87,8 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			view = inflater.inflate(R.layout.row_layout, null);
 
 			holder.label = (TextView) view.findViewById(R.id.label);
-			Typeface regular = Typeface.createFromAsset(mContext.getAssets(), MapActivity.FONT_REGULAR);
+			Typeface regular = Typeface.createFromAsset(mContext.getAssets(),
+					MapActivity.FONT_REGULAR);
 			holder.label.setTypeface(regular);
 			holder.rowContainer = (LinearLayout) view
 					.findViewById(R.id.row_container);
@@ -98,22 +101,93 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		if (this.getResultSize() == 0) {
 			holder.label.setText("Sorry, no results found.");
 		} else {
-
-			if (position == 0) {
-				holder.label.setText(Html.fromHtml("<b>"
-						+ resultlist.get(position).name + "</b>"));
-				// holder.rowContainer.setBackgroundColor(Color.GRAY);
-				// holder.rowContainer.getBackground().setAlpha(100);
-			} else {
-				holder.label.setText(resultlist.get(position).name);
-				// holder.rowContainer.setBackgroundColor(Color.TRANSPARENT);
-			}
+			holder.label.setText(getSpannedText(resultlist.get(position).name,
+					searchedText));
 		}
 		return view;
 	}
 
+	private Spanned getSpannedText(String name, String searchedText2) {
+		String smallLetterName = name.toLowerCase(l);
+		searchedText2 = searchedText2.toLowerCase(l).replaceAll("\\s", "");
+		if (searchedText2.equals("")) {
+			return Html.fromHtml(name);
+		} else {
+			String htmlName = "";
+			if (isShortForm(smallLetterName, searchedText2)) {
+				htmlName = getHighlightedShortform(name, searchedText2);
+			} else {
+				int i = 0;
+				int j = 0;
+				while (i < searchedText2.length()) {
+					if (smallLetterName.charAt(j) == searchedText2.charAt(i)) {
+						htmlName += "<b>" + name.charAt(j) + "</b>";
+						i++;
+						j++;
+					} else {
+						htmlName += name.charAt(j);
+						j++;
+					}
+				}
+				if (j < name.length()) {
+					htmlName += name.substring(j, name.length());
+				}
+			}
+			return Html.fromHtml(htmlName);
+		}
+	}
+
+	private String getHighlightedShortform(String name, String searchedText2) {
+		String smallCapsName = name.toLowerCase(l);
+		String possibleShortform = "";
+		for (int i = 0; i < searchedText2.length(); i++) {
+			possibleShortform = "";
+			for (int j = 0; j < searchedText2.length(); j++) {
+				if (j <= i) {
+					possibleShortform += searchedText2.charAt(j);
+				} else {
+					possibleShortform += "(.*)" + " " + searchedText2.charAt(j);
+				}
+			}
+			possibleShortform += "(.*)";
+			if (smallCapsName.matches(possibleShortform)) {
+				name = makeBold(name, searchedText2.substring(0, i + 1));
+				i++;
+				while (i < searchedText2.length()) {
+					name = makeBold(name, " " + searchedText2.charAt(i));
+					i++;
+				}
+			}
+		}
+		return name;
+	}
+
+	private String makeBold(String name, String substring) {
+		String smallCapsName = name.toLowerCase(l);
+		int firstIndex = smallCapsName.indexOf(substring);
+		if (name.charAt(firstIndex) == ' ') {
+			name = name.substring(0, firstIndex + 1)
+					+ "<b>"
+					+ name.substring(firstIndex + 1,
+							firstIndex + substring.length())
+					+ "</b>"
+					+ name.substring(firstIndex + substring.length(),
+							name.length());
+		} else {
+			name = name.substring(0, firstIndex)
+					+ "<b>"
+					+ name.substring(firstIndex,
+							firstIndex + substring.length())
+					+ "</b>"
+					+ name.substring(firstIndex + substring.length(),
+							name.length());
+		}
+		return name;
+	}
+
 	public void filter(String charText) {
 		charText = charText.toLowerCase(Locale.getDefault());
+		searchedText = charText;
 		resultlist.clear();
 		map.clear();
 		if (charText.length() == 0) {
@@ -156,6 +230,9 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			if (m.name.toLowerCase(l).startsWith(charText)) {
 				return 1;
 			}
+			if (isShortForm(m.name, charText)) {
+				return 2;
+			}
 			for (String s : m.name.split(" ")) {
 				b = b || s.toLowerCase(l).startsWith("" + charText.charAt(0));
 				if (!b) {
@@ -173,6 +250,27 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		} else {
 			return 0;
 		}
+	}
+
+	private boolean isShortForm(String name, String charText) {
+		name = name.toLowerCase(l);
+		charText = charText.toLowerCase(l).replaceAll("\\s", "");
+		String possibleShortform = "";
+		for (int i = 0; i < charText.length(); i++) {
+			possibleShortform = "";
+			for (int j = 0; j < charText.length(); j++) {
+				if (j <= i) {
+					possibleShortform += charText.charAt(j);
+				} else {
+					possibleShortform += "(.*)" + " " + charText.charAt(j);
+				}
+			}
+			possibleShortform += "(.*)";
+			if (name.matches(possibleShortform)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public class MarkerScoreComparator implements Comparator<ScoredMarker> {

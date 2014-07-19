@@ -1,5 +1,6 @@
 package com.mrane.campusmap;
 
+import in.designlabs.instimap.R;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -36,8 +37,10 @@ public class NewCardTouchListener implements OnTouchListener {
 	public void toggleExpansion() {
 		if (getCardState() == STATE_HIDDEN) {
 			mainActivity.expandCard();
+			mainActivity.toggleCardIcon.setImageResource(R.drawable.arrow_circle_down);
 		} else {
 			mainActivity.showCard();
+			mainActivity.toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
 		}
 	}
 
@@ -53,6 +56,5 @@ public class NewCardTouchListener implements OnTouchListener {
 		}
 		return STATE_UNKNOWN;
 	}
-	
 
 }

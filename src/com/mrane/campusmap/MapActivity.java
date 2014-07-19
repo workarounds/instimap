@@ -109,6 +109,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton mapIcon;
 	public ImageButton menuIcon;
 	public ImageButton addMarkerIcon;
+	public ImageButton toggleCardIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	public SharedPreferences sharedpreferences;
@@ -207,6 +208,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
 		mapIcon = (ImageButton) findViewById(R.id.map_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
+		toggleCardIcon = (ImageButton) findViewById(R.id.toggle_card_icon);
 
 		newCardTouchListener = new NewCardTouchListener(this);
 		placeCard.setOnTouchListener(newCardTouchListener);
@@ -493,6 +495,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeCard.findViewById(R.id.place_group_color).setBackgroundColor(
 				marker.getColor());
 		expandContainer.setVisibility(View.GONE);
+		toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
 		// Runnable anim = cardTouchListener.showCardAnimation();
 		// anim.run();
 	}
@@ -868,6 +871,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			settingsOuter.setOnTouchListener(null);
 			headerContainer.setOnTouchListener(null);
 		}
+	}
+	
+	public void toggleCardClick(View v) {
+		newCardTouchListener.toggleExpansion();
 	}
 
 	public void removeClick(View v) {

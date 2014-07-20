@@ -1678,7 +1678,7 @@ public class Locations {
 		data.get("Convocation Hall").showDefault = true;
 		data.get("Hostel 13").showDefault = true;
 		data.get("Hostel 15").showDefault = true;
-		data.get("Main Gate").showDefault = true;
+		data.get("Main Gate no. 2").showDefault = true;
 		data.get("Market Gate, Y point Gate").showDefault = true;
 		data.get("Canara Bank").showDefault = true;
 		data.get("Convocation Hall").showDefault = true;

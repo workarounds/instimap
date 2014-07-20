@@ -73,6 +73,7 @@ import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.zoomview.CampusMapView;
 import com.mrane.zoomview.SubsamplingScaleImageView;
+import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
@@ -496,6 +497,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				marker.getColor());
 		expandContainer.setVisibility(View.GONE);
 		toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
+		reCenterMarker(marker);
 		// Runnable anim = cardTouchListener.showCardAnimation();
 		// anim.run();
 	}
@@ -793,8 +795,23 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void expandCard() {
 		expandContainer.setVisibility(View.VISIBLE);
+		reCenterMarker();
 		// Runnable anim = cardTouchListener.expandCardAnimation();
 		// anim.run();
+	}
+
+	private void reCenterMarker() {
+		Marker marker = campusMapView.getResultMarker();
+		reCenterMarker(marker);
+	}
+	
+	private void reCenterMarker(Marker marker){
+		PointF p = marker.point;
+		float shift = getResources().getDimension(R.dimen.expanded_card_height)/2.0f;
+		if(newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED) shift = 0;
+		PointF center = new PointF(p.x, p.y + shift);
+		AnimationBuilder anim = campusMapView.animateCenter(center);
+		anim.start();
 	}
 
 	public void dismissCard() {

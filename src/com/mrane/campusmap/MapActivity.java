@@ -535,6 +535,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			descContent.setTypeface(regular);
 			descContent.setText(getDescriptionText(marker));
 			Linkify.addLinks(descContent, Linkify.ALL);
+			descContent.setLinkTextColor(Color.rgb(19, 140, 190));
 		}
 	}
 
@@ -709,11 +710,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			int end = result.length();
 			result.append(" ");
 			ClickableSpan parentSpan = new ClickableSpan() {
-
 				@Override
 				public void onClick(View widget) {
 					editText.setText(parentKey);
 					displayMap();
+				}
+				
+				@Override
+				public void updateDrawState(TextPaint p){
+					p.setColor(Color.rgb(19, 140, 190));
+					p.setUnderlineText(true);
 				}
 			};
 			result.setSpan(parentSpan, start, end,

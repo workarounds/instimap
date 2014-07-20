@@ -437,7 +437,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		canvas.drawBitmap(pin, vX, vY, paint);
 		if (isShowPinTextScale(marker)) {
 			String name;
-			if (marker.shortName.equals("0"))
+			if (marker.shortName.equals("0") || marker.shortName.isEmpty())
 				name = marker.name;
 			else
 				name = marker.shortName;

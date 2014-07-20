@@ -265,7 +265,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void initShowDefault() {
 		String[] keys = { "Canara Bank", "Convocation Hall", "Hostel 13",
-				"Hostel 15", "Main Gate", "Market Gate, Y point Gate", };
+				"Hostel 15", "Main Gate no. 2", "Market Gate, Y point Gate no. 3", };
 		for (String key : keys) {
 			data.get(key).showDefault = true;
 		}

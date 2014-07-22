@@ -118,11 +118,10 @@
                 android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="menu"
+                android:cropToPadding="true"
                 android:onClick="menuClick"
-                android:paddingBottom="10dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="10dp"
+                android:padding="12dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/menu" />
 
             <ImageButton

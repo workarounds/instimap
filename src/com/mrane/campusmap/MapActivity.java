@@ -861,7 +861,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void menuClick(View v) {
-		if (settingsContainer.getVisibility() == View.GONE) {
+		if (!isSettingsOpen) {
 			openSettings();
 		} else {
 			closeSettings();
@@ -869,31 +869,34 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void openSettings() {
-		menuIcon.setBackgroundColor(Color.rgb(229, 229, 229));
 		settingsContainer.setVisibility(View.VISIBLE);
 		isSettingsOpen = true;
 		OnTouchListener settingsCanceller = new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				closeSettings();
+				int action = event.getAction();
+				if(action == MotionEvent.ACTION_DOWN)	closeSettings();
 				return false;
 			}
 		};
 		settingsOuter.setOnTouchListener(settingsCanceller);
-		headerContainer.setOnTouchListener(settingsCanceller);
-
+		menuIcon.setOnClickListener(null);
 	}
 
 	private void closeSettings() {
 		menuIcon.setBackgroundColor(Color.TRANSPARENT);
-		if (isSettingsOpen) {
-			settingsContainer.setVisibility(View.GONE);
-			isSettingsOpen = false;
+		settingsContainer.setVisibility(View.GONE);
+		isSettingsOpen = false;
 
-			settingsOuter.setOnTouchListener(null);
-			headerContainer.setOnTouchListener(null);
-		}
+		settingsOuter.setOnTouchListener(null);
+		menuIcon.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				menuClick(v);
+			}
+		});
 	}
 	
 	public void toggleCardClick(View v) {

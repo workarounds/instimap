@@ -56,7 +56,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap yellowLockedMarker;
 	private Bitmap greenLockedMarker;
 	private Bitmap grayLockedMarker;
-	private float pointerWidth = 20;
+	private float pointerWidth = 12;
 	private float highlightedMarkerScale;
 	private Paint paint;
 	private Paint textPaint;
@@ -118,7 +118,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		float w = 0;
 		float h = 0;
 		Options options = new BitmapFactory.Options();
-		options.inScaled = false;
+		options.inScaled = true;
 
 		bluePointer = BitmapFactory.decodeResource(getResources(),
 				drawable.marker_dot_blue, options);
@@ -147,8 +147,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				drawable.marker_gray_s, options);
 		grayLockedMarker = BitmapFactory.decodeResource(getResources(),
 				drawable.marker_gray_h, options);
-		w = pointerWidth;
-		h = bluePointer.getHeight() * (w / bluePointer.getWidth());
+		w = pointerWidth*density;
+		h = bluePointer.getScaledHeight(displayMetrics) * (w / bluePointer.getScaledWidth(displayMetrics));
 
 		bluePointer = Bitmap.createScaledBitmap(bluePointer, (int) w, (int) h,
 				true);
@@ -161,7 +161,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		grayPointer = Bitmap.createScaledBitmap(grayPointer, (int) w, (int) h,
 				true);
 		w = 4f * w;
-		h = blueMarker.getHeight() * (w / blueMarker.getWidth());
+		h = blueMarker.getScaledHeight(displayMetrics) * (w / blueMarker.getScaledWidth(displayMetrics));
 		blueMarker = Bitmap.createScaledBitmap(blueMarker, (int) w, (int) h,
 				true);
 		yellowMarker = Bitmap.createScaledBitmap(yellowMarker, (int) w,
@@ -410,8 +410,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawMarkerBitmap(Canvas canvas, Marker marker) {
 		Bitmap highlightedPin = getMarkerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-		float vX = vPin.x - (highlightedPin.getScaledWidth(displayMetrics) / 2);
-		float vY = vPin.y - highlightedPin.getScaledHeight(displayMetrics);
+		float vX = vPin.x - (highlightedPin.getWidth() / 2);
+		float vY = vPin.y - highlightedPin.getHeight();
 		canvas.drawBitmap(highlightedPin, vX, vY, paint);
 	}
 
@@ -432,8 +432,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawPionterAndText(Canvas canvas, Marker marker) {
 		Bitmap pin = getPointerBitmap(marker);
 		PointF vPin = sourceToViewCoord(marker.point);
-		float vX = vPin.x - (pin.getScaledWidth(displayMetrics) / 2);
-		float vY = vPin.y - (pin.getScaledHeight(displayMetrics) / 2);
+		float vX = vPin.x - (pin.getWidth() / 2);
+		float vY = vPin.y - (pin.getHeight() / 2);
 		canvas.drawBitmap(pin, vX, vY, paint);
 		if (isShowPinTextScale(marker)) {
 			String name;
@@ -442,7 +442,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			else
 				name = marker.shortName;
 			textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
-			float tX = vPin.x + pin.getScaledWidth(displayMetrics);
+			float tX = vPin.x + pin.getWidth();
 			float tY = vPin.y + bounds.height() / 2;
 			canvas.drawText(name, tX, tY, textPaint);
 		}

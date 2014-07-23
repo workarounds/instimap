@@ -267,7 +267,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		String[] keys = { "Canara Bank", "Convocation Hall", "Hostel 13",
 				"Hostel 15", "Main Gate no. 2", "Market Gate, Y point Gate no. 3", };
 		for (String key : keys) {
+			if(data.containsKey(key)) {
 			data.get(key).showDefault = true;
+			} else {
+				Log.d("null point","key not found (initShowDefault): " + key);
+			}
 		}
 	}
 

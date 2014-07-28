@@ -1,5 +1,8 @@
 package com.mrane.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +23,8 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 	private final String PARENTREL = "parent_rel";
 	private final String DESC = "description";
 	private final String CHILDIDS = "child_ids";
+	private final String LAT = "lat";
+	private final String LONG = "long";
 
 	public GetLocationsFromServer(String URL) {
 		this.url = URL;
@@ -44,16 +49,33 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 			JSONArray markers;
 			try {
 				markers = new JSONArray(jsonStr);
-				
-				for(int i=0; i<markers.length(); i++) {
+
+				for (int i = 0; i < markers.length(); i++) {
 					JSONObject marker = markers.getJSONObject(i);
-					String id = marker.getString(ID);
+					int id = marker.getInt(ID);
 					String name = marker.getString(NAME);
 					String shortName = marker.getString(SHORTNAME);
-					int groupID = marker.getInt(GROUPID);
+					int groupIndex = marker.getInt(GROUPID);
 					float pixelX = marker.getLong(PIXELX);
 					float pixelY = marker.getLong(PIXELY);
-					int parentID = marker.getInt(PARENTID);
+					int parentId = marker.getInt(PARENTID);
+					String parentRel = marker.getString(PARENTREL);
+					String description = marker.getString(DESC);
+
+					List<Integer> childIdList = new ArrayList<Integer>();
+					JSONArray children = marker.getJSONArray(CHILDIDS);
+					for (int j = 0; j < children.length(); j++) {
+						childIdList.add(children.getInt(j));
+					}
+					int[] childIds = toIntArray(childIdList);
+
+					long lat = marker.getLong(LAT);
+					long lng = marker.getLong(LONG);
+
+					Marker m = new Marker(id, name, shortName, pixelX, pixelY,
+							groupIndex, description, parentId, parentRel,
+							childIds, lat, lng);
+					Log.d("JsonParse","" + name);
 				}
 
 			} catch (JSONException e) {
@@ -69,8 +91,16 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		// Dismiss the progress dialog
+		
 
+	}
+
+	int[] toIntArray(List<Integer> list) {
+		int[] ret = new int[list.size()];
+		int i = 0;
+		for (Integer e : list)
+			ret[i++] = e.intValue();
+		return ret;
 	}
 
 }

@@ -101,7 +101,7 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		if (this.getResultSize() == 0) {
 			holder.label.setText("Sorry, no results found.");
 		} else {
-			holder.label.setText(getSpannedText(resultlist.get(position).name,
+			holder.label.setText(getSpannedText(resultlist.get(position).getName(),
 					searchedText));
 		}
 		return view;
@@ -194,7 +194,7 @@ public class FuzzySearchAdapter extends BaseAdapter {
 			resultlist.addAll(inputlist);
 		} else if (charText.length() > 10) {
 			for (Marker m : inputlist) {
-				if (m.name.toLowerCase(Locale.getDefault()).contains(charText)) {
+				if (m.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
 					resultlist.add(m);
 				}
 			}
@@ -225,15 +225,15 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		for (int i = 0; i < charText.length(); i++) {
 			tempCharText += charText.charAt(i) + "(.*)";
 		}
-		if (m.name.toLowerCase(l).matches(tempCharText)) {
+		if (m.getName().toLowerCase(l).matches(tempCharText)) {
 			boolean b = false;
-			if (m.name.toLowerCase(l).startsWith(charText)) {
+			if (m.getName().toLowerCase(l).startsWith(charText)) {
 				return 1;
 			}
-			if (isShortForm(m.name, charText)) {
+			if (isShortForm(m.getName(), charText)) {
 				return 2;
 			}
-			for (String s : m.name.split(" ")) {
+			for (String s : m.getName().split(" ")) {
 				b = b || s.toLowerCase(l).startsWith("" + charText.charAt(0));
 				if (!b) {
 					tempScore += 10;
@@ -281,7 +281,7 @@ public class FuzzySearchAdapter extends BaseAdapter {
 
 	public class MarkerNameComparator implements Comparator<Marker> {
 		public int compare(Marker m1, Marker m2) {
-			return m1.name.toLowerCase(l).compareTo(m2.name.toLowerCase(l));
+			return m1.getName().toLowerCase(l).compareTo(m2.getName().toLowerCase(l));
 		}
 	}
 }

@@ -69,6 +69,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.data.Building;
+import com.mrane.data.GetLocationsFromServer;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -130,6 +131,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final long DELAY_INIT_LAYOUT = 250;
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
+	private static final String JSONUrl = "http://home.iitb.ac.in/~madhu.kiran/data.json";
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
@@ -236,6 +238,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		
+		new GetLocationsFromServer(JSONUrl).execute();
 	}
 
 	@Override
@@ -270,7 +274,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				"Market Gate, Y point Gate no. 3", };
 		for (String key : keys) {
 			if (data.containsKey(key)) {
-				data.get(key).showDefault = true;
+				data.get(key).setShowDefault(true);
 			} else {
 				Log.d("null point", "key not found (initShowDefault): " + key);
 			}
@@ -287,7 +291,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				"h14", "idc", "mainbuilding", "nescafestall", "som", "vmcc" };
 		for (int i = 0; i < keys.length; i++) {
 			if (data.containsKey(keys[i])) {
-				data.get(keys[i]).imageUri = uri[i];
+				data.get(keys[i]).setImageUri(uri[i]);
 			} else {
 				Log.d("null point", "check " + keys[i]);
 			}
@@ -461,7 +465,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		} else {
 			String selection = editText.getText().toString();
 			if (id < adapter.getCount()) {
-				selection = adapter.getItem(id).name;
+				selection = adapter.getItem(id).getName();
 			}
 			this.hideKeyboard();
 			this.removeEditTextFocus(selection);
@@ -503,9 +507,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void showCard(Marker marker) {
-		String name = marker.name;
-		if (!marker.shortName.equals("0"))
-			name = marker.shortName;
+		String name = marker.getName();
+		if (!marker.getShortName().equals("0"))
+			name = marker.getShortName();
 		placeNameTextView.setText(name);
 		setSubHeading(marker);
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
@@ -526,7 +530,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void setImage(LinearLayout parent, Marker marker) {
 		View v = getLayoutInflater().inflate(R.layout.card_image, parent);
 		ImageView iv = (ImageView) v.findViewById(R.id.place_image);
-		int imageId = getResources().getIdentifier(marker.imageUri, "drawable",
+		int imageId = getResources().getIdentifier(marker.getImageUri(), "drawable",
 				getPackageName());
 		iv.setImageResource(imageId);
 	}
@@ -535,13 +539,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		LinearLayout parent = (LinearLayout) placeCard
 				.findViewById(R.id.other_details);
 		parent.removeAllViews();
-		if (!marker.imageUri.isEmpty()) {
+		if (!marker.getImageUri().isEmpty()) {
 			setImage(parent, marker);
 		}
 		if (marker instanceof Building) {
 			setChildrenView(parent, (Building) marker);
 		}
-		if (!marker.description.isEmpty()) {
+		if (!marker.getDescription().isEmpty()) {
 			View desc = getLayoutInflater().inflate(R.layout.place_description,
 					parent);
 
@@ -593,10 +597,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		TextView headerName = (TextView) childrenView
 				.findViewById(R.id.list_header);
 		String headerText = "inside ";
-		if (building.shortName.equals("0"))
-			headerText += building.name;
+		if (building.getShortName().equals("0"))
+			headerText += building.getName();
 		else
-			headerText += building.shortName;
+			headerText += building.getShortName();
 		Typeface bold = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
 		headerName.setTypeface(bold, Typeface.BOLD);
 		headerName.setText(headerText);
@@ -691,7 +695,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private SpannableStringBuilder getDescriptionText(Marker marker) {
-		String text = marker.description;
+		String text = marker.getDescription();
 		SpannableStringBuilder desc = new SpannableStringBuilder(text);
 		String[] toBoldParts = { "Email", "Phone No.", "Fax No." };
 		for (String part : toBoldParts) {
@@ -711,7 +715,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void setSubHeading(Marker marker) {
 		SpannableStringBuilder result = new SpannableStringBuilder("");
-		result.append(marker.name);
+		result.append(marker.getName());
 		if (marker instanceof Room) {
 			Room room = (Room) marker;
 			String tag = room.tag;
@@ -721,10 +725,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				tag = "in";
 			}
 			Marker parent = data.get(room.parentKey);
-			final String parentKey = parent.name;
-			String parentName = parent.name;
-			if (!parent.shortName.equals("0"))
-				parentName = parent.shortName;
+			final String parentKey = parent.getName();
+			String parentName = parent.getName();
+			if (!parent.getShortName().equals("0"))
+				parentName = parent.getShortName();
 			result.append(" - " + tag + " ");
 			int start = result.length();
 			result.append(parentName);
@@ -833,7 +837,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void reCenterMarker(Marker marker) {
-		PointF p = marker.point;
+		PointF p = marker.getPoint();
 		float shift = getResources().getDimension(R.dimen.expanded_card_height) / 2.0f;
 		if (newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED)
 			shift = 0;
@@ -973,7 +977,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				editText.getText().clear();
 			}
 		} else {
-			editText.setText(oldMarker.name);
+			editText.setText(oldMarker.getName());
 		}
 	}
 

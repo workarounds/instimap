@@ -220,7 +220,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void setSpecialMarkers() {
 		for (Marker m : markerList) {
-			if (m.showDefault) {
+			if (m.isShowDefault()) {
 				specialMarkerList.add(m);
 			}
 		}
@@ -264,10 +264,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	public void showResultMarker() {
 		if (resultMarker != null) {
 			boolean noDelay = false;
-			if (isInView(getResultMarker().point))
+			if (isInView(getResultMarker().getPoint()))
 				noDelay = true;
 			AnimationBuilder anim = animateScaleAndCenter(getShowTextScale(),
-					resultMarker.point);
+					resultMarker.getPoint());
 			anim.withDuration(750).start();
 			setMarkerAnimation(noDelay, MapActivity.SOUND_ID_RESULT);
 		}
@@ -336,9 +336,9 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			mainActivity.playAnimSound(MapActivity.SOUND_ID_REMOVE);
 		} else {
 			addMarker(m);
-			if (!isInView(m.point)) {
+			if (!isInView(m.getPoint())) {
 				AnimationBuilder anim = animateScaleAndCenter(
-						getShowTextScale(), m.point);
+						getShowTextScale(), m.getPoint());
 				anim.withDuration(750).start();
 				setMarkerAnimation(false, MapActivity.SOUND_ID_ADD);
 			} else {
@@ -363,7 +363,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		}
 
 		for (Marker marker : markerList) {
-			if (isInView(marker.point)) {
+			if (isInView(marker.getPoint())) {
 				if (isShowPinScale(marker)
 						&& !(isResultMarker(marker) || addedMarkerList
 								.contains(marker))) {
@@ -373,7 +373,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			}
 		}
 		for (Marker marker : addedMarkerList) {
-			if (isInView(marker.point)) {
+			if (isInView(marker.getPoint())) {
 				if (!isResultMarker(marker)) {
 					drawMarkerBitmap(canvas, marker);
 					drawMarkerText(canvas, marker);
@@ -382,7 +382,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		}
 		Marker marker = getResultMarker();
 		if (marker != null) {
-			if (isInView(marker.point)) {
+			if (isInView(marker.getPoint())) {
 				drawMarkerBitmap(canvas, marker);
 				drawMarkerText(canvas, marker);
 			}
@@ -409,7 +409,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void drawMarkerBitmap(Canvas canvas, Marker marker) {
 		Bitmap highlightedPin = getMarkerBitmap(marker);
-		PointF vPin = sourceToViewCoord(marker.point);
+		PointF vPin = sourceToViewCoord(marker.getPoint());
 		float vX = vPin.x - (highlightedPin.getWidth() / 2);
 		float vY = vPin.y - highlightedPin.getHeight();
 		canvas.drawBitmap(highlightedPin, vX, vY, paint);
@@ -417,11 +417,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void drawMarkerText(Canvas canvas, Marker marker) {
 		String name;
-		PointF vPin = sourceToViewCoord(marker.point);
-		if (marker.shortName.equals("0"))
-			name = marker.name;
+		PointF vPin = sourceToViewCoord(marker.getPoint());
+		if (marker.getShortName().equals("0"))
+			name = marker.getName();
 		else
-			name = marker.shortName;
+			name = marker.getShortName();
 		textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
 		float tX = vPin.x - bounds.width() / 2;
 		float tY = vPin.y + bounds.height();
@@ -431,18 +431,18 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private void drawPionterAndText(Canvas canvas, Marker marker) {
 		Bitmap pin = getPointerBitmap(marker);
-		PointF vPin = sourceToViewCoord(marker.point);
+		PointF vPin = sourceToViewCoord(marker.getPoint());
 		float vX = vPin.x - (pin.getWidth() / 2);
 		float vY = vPin.y - (pin.getHeight() / 2);
 		canvas.drawBitmap(pin, vX, vY, paint);
 		if (isShowPinTextScale(marker)) {
 			String name;
-			if (marker.shortName.equals("0") || marker.shortName.isEmpty())
-				name = marker.name;
+			if (marker.getShortName().equals("0") || marker.getShortName().isEmpty())
+				name = marker.getName();
 			else
-				name = marker.shortName;
+				name = marker.getShortName();
 			Paint temp = new Paint(textPaint);
-			if(marker.groupIndex == Marker.RESIDENCES) temp.setTextSize(12*density);
+			if(marker.getGroupIndex() == Marker.RESIDENCES) temp.setTextSize(12*density);
 			textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
 			float tX = vPin.x + pin.getWidth();
 			float tY = vPin.y + bounds.height() / 2;
@@ -468,7 +468,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		Marker resultMarker = null;
 		float minDist = 100000000f;
 		for (Marker marker : markerList) {
-			PointF point = marker.point;
+			PointF point = marker.getPoint();
 			float dist = (float) calculateDistance(point, touchPoint);
 
 			if (dist < minDist && isMarkerVisible(marker)) {
@@ -591,7 +591,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 							Marker marker = getNearestMarker(sCoord);
 							if (isMarkerInTouchRegion(marker, sCoord)) {
 								// mMainActivity.resultMarker(marker.name);
-								mainActivity.editText.setText(marker.name);
+								mainActivity.editText.setText(marker.getName());
 								mainActivity.displayMap();
 							}
 						} else {
@@ -635,7 +635,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	private boolean isMarkerInTouchRegion(Marker marker, PointF o) {
 		if (marker != null) {
-			PointF point = sourceToViewCoord(marker.point);
+			PointF point = sourceToViewCoord(marker.getPoint());
 			PointF origin = sourceToViewCoord(o);
 			float dist = (float) calculateDistance(point, origin);
 			if (dist < pointerWidth * density * 2 && isMarkerVisible(marker)) {

@@ -7,14 +7,20 @@ import android.graphics.Color;
 import android.graphics.PointF;
 
 public class Marker {
-	public String name;
-	public String shortName;
-	public PointF point;
-	public int groupIndex;
-	public boolean showDefault;
-	public String description;
-	public String tag;
-	public String imageUri;
+	private int id;
+	private String name;
+	private String shortName;
+	private PointF point;
+	private int groupIndex;
+	private boolean showDefault;
+	private String description;
+	private String tag;
+	private String imageUri;
+	private int parentId;
+	private String parentRel;
+	private int[] childIds;
+	private long lat;
+	private long lng;
 
 	public static final int COLOR_BLUE = Color.rgb(75, 186, 238);
 	public static final int COLOR_YELLOW = Color.rgb(255, 186, 0);
@@ -48,25 +54,30 @@ public class Marker {
 	private static final String LABS_NAME = "Labs";
 
 	public Marker(String name, String shortName, float x, float y,
-			int groupIndex) {
-		this.point = new PointF(x, y);
+			int groupIndex, String description) {
+		this.setPoint(new PointF(x, y));
 		this.groupIndex = groupIndex;
-		this.name = name;
-		this.shortName = shortName;
-		this.showDefault = false;
-		this.description = "";
-		this.imageUri = "";
+		this.setName(name);
+		this.setShortName(shortName);
+		this.setShowDefault(false);
+		this.setDescription(description);
+		this.setImageUri("");
 	}
 
-	public Marker(String name, String shortName, float x, float y,
-			int groupIndex, String description) {
-		this.point = new PointF(x, y);
-		this.groupIndex = groupIndex;
+	public Marker(int id, String name, String shortName, float pixelX, float pixelY,
+			int groupIndex, String description, int parentId, String parentRel,
+			int[] childIds, long lat, long lng) {
+		this.id = id;
 		this.name = name;
 		this.shortName = shortName;
-		this.showDefault = false;
+		this.point = new PointF(pixelX, pixelY);
+		this.groupIndex = groupIndex;
 		this.description = description;
-		this.imageUri = "";
+		this.parentId = parentId;
+		this.parentRel = parentRel;
+		this.childIds = childIds;
+		this.lat = lat;
+		this.lng = lng;
 	}
 
 	public static int getColor(int group) {
@@ -170,5 +181,77 @@ public class Marker {
 			result = LABS;
 
 		return result;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public PointF getPoint() {
+		return point;
+	}
+
+	public void setPoint(PointF point) {
+		this.point = point;
+	}
+
+	public int getGroupIndex() {
+		return groupIndex;
+	}
+
+	public void setGroupIndex(int groupIndex) {
+		this.groupIndex = groupIndex;
+	}
+
+	public boolean isShowDefault() {
+		return showDefault;
+	}
+
+	public void setShowDefault(boolean showDefault) {
+		this.showDefault = showDefault;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getImageUri() {
+		return imageUri;
+	}
+
+	public void setImageUri(String imageUri) {
+		this.imageUri = imageUri;
 	}
 }

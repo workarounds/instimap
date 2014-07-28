@@ -99,7 +99,7 @@ public class IndexFragment extends Fragment implements OnGroupExpandListener,
 		Collection<Marker> keys = data.values();
 		for (Marker key : keys) {
 			List<String> child = childData.get(key.getGroupName());
-			child.add(key.name);
+			child.add(key.getName());
 		}
 		sortChildData();
 	}

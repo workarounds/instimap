@@ -31,7 +31,7 @@ public class LocationsBuilder {
 		HashMap<String, Marker> markers = new HashMap<String, Marker>();
 		Cursor cursor = database.query("locations", null, null, null, null, null, null);
 		Marker m = cursorToMarker(cursor);
-		markers.put(m.name, m);
+		markers.put(m.getName(), m);
 		return markers;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
@@ -132,9 +133,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
-//	public static final String FONT_BOLD = "myriadpro_bold_cn.ttf";
+	// public static final String FONT_BOLD = "myriadpro_bold_cn.ttf";
 	public static final String FONT_SEMIBOLD = "rigascreen_bold.ttf";
-//	public static final String FONT_REGULAR = "myriadpro_regular.ttf";
+	// public static final String FONT_REGULAR = "myriadpro_regular.ttf";
 	public static final String FONT_REGULAR = "rigascreen_regular.ttf";
 	public static final String PREFERENCE_NAME = "preferences";
 	public static final int SOUND_ID_RESULT = 0;
@@ -219,7 +220,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexFragment = new IndexFragment();
 
 		initSettingsFragment();
-		// audiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		// audiomanager = (AudioManager)
+		// getSystemService(Context.AUDIO_SERVICE);
 		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		muted = sharedpreferences.getBoolean("mute", false);
@@ -235,17 +237,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		// String s = campusMapView.getAddedMarkerString();
 		// Editor editor = sharedpreferences.edit();
 		// editor.putString("addedMarkers", s);
 		// editor.commit();
-		//Log.d("test123", "onPause called");
+		// Log.d("test123", "onPause called");
 		super.onPause();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// String s = campusMapView.getAddedMarkerString();
@@ -256,7 +258,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onDestroy();
 	}
 
-
 	private void initSettingsFragment() {
 		transaction = fragmentManager.beginTransaction();
 		transaction.add(R.id.settings_container, new SettingsFragment());
@@ -265,12 +266,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void initShowDefault() {
 		String[] keys = { "Canara Bank", "Convocation Hall", "Hostel 13",
-				"Hostel 15", "Main Gate no. 2", "Market Gate, Y point Gate no. 3", };
+				"Hostel 15", "Main Gate no. 2",
+				"Market Gate, Y point Gate no. 3", };
 		for (String key : keys) {
-			if(data.containsKey(key)) {
-			data.get(key).showDefault = true;
+			if (data.containsKey(key)) {
+				data.get(key).showDefault = true;
 			} else {
-				Log.d("null point","key not found (initShowDefault): " + key);
+				Log.d("null point", "key not found (initShowDefault): " + key);
 			}
 		}
 	}
@@ -322,11 +324,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				layoutTransition.setInterpolator(
 						LayoutTransition.CHANGE_APPEARING, i);
 
-				 layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING,
-				 0);
-				 layoutTransition.setDuration(LayoutTransition.DISAPPEARING,
-				 500);
-				
+				layoutTransition
+						.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+				layoutTransition
+						.setDuration(LayoutTransition.DISAPPEARING, 500);
+
 				layoutTransition.setStartDelay(
 						LayoutTransition.CHANGE_DISAPPEARING, 0);
 				layoutTransition.setDuration(
@@ -353,7 +355,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void afterTextChanged(Editable arg0) {
 		String text = editText.getText().toString()
 				.toLowerCase(Locale.getDefault());
-		adapter.filter(text);
+		adapter.filter(refineText(text));
+	}
+
+	private String refineText(String text) {
+		String refinedText = text.replaceAll(Pattern.quote("("), "@")
+				.replaceAll(Pattern.quote(")"), "@")
+				.replaceAll(Pattern.quote("."), "@")
+				.replaceAll(Pattern.quote("+"), "@")
+				.replaceAll(Pattern.quote("{"), "@")
+				.replaceAll(Pattern.quote("?"), "@")
+				.replaceAll(Pattern.quote("\\"), "@")
+				.replaceAll(Pattern.quote("["), "@")
+				.replaceAll(Pattern.quote("^"), "@")
+				.replaceAll(Pattern.quote("$"), "@");
+
+		return refinedText;
 	}
 
 	@Override
@@ -368,7 +385,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		this.setCorrectIcons();
 		if (isSettingsOpen)
 			this.closeSettings();
-		
+
 	}
 
 	@Override
@@ -719,9 +736,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 					editText.setText(parentKey);
 					displayMap();
 				}
-				
+
 				@Override
-				public void updateDrawState(TextPaint p){
+				public void updateDrawState(TextPaint p) {
 					p.setColor(Color.rgb(19, 140, 190));
 					p.setUnderlineText(true);
 				}
@@ -814,11 +831,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Marker marker = campusMapView.getResultMarker();
 		reCenterMarker(marker);
 	}
-	
-	private void reCenterMarker(Marker marker){
+
+	private void reCenterMarker(Marker marker) {
 		PointF p = marker.point;
-		float shift = getResources().getDimension(R.dimen.expanded_card_height)/2.0f;
-		if(newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED) shift = 0;
+		float shift = getResources().getDimension(R.dimen.expanded_card_height) / 2.0f;
+		if (newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED)
+			shift = 0;
 		PointF center = new PointF(p.x, p.y + shift);
 		AnimationBuilder anim = campusMapView.animateCenter(center);
 		anim.start();
@@ -880,7 +898,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				int action = event.getAction();
-				if(action == MotionEvent.ACTION_DOWN)	closeSettings();
+				if (action == MotionEvent.ACTION_DOWN)
+					closeSettings();
 				return false;
 			}
 		};
@@ -895,14 +914,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		settingsOuter.setOnTouchListener(null);
 		menuIcon.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				menuClick(v);
 			}
 		});
 	}
-	
+
 	public void toggleCardClick(View v) {
 		newCardTouchListener.toggleExpansion();
 	}

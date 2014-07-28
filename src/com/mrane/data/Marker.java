@@ -21,18 +21,18 @@ public class Marker {
 	public static final int COLOR_GREEN = Color.rgb(162, 208, 104);
 	public static final int COLOR_GRAY = Color.rgb(156, 156, 156);
 
-	private static final int DEPARTMENTS = 1;
-	private static final int HOSTELS = 2;
-	private static final int RESIDENCES = 3;
-	private static final int HALLS_N_AUDITORIUMS = 4;
-	private static final int FOOD_STALLS = 5;
-	private static final int BANKS_N_ATMS = 6;
-	private static final int SCHOOLS = 7;
-	private static final int SPORTS = 8;
-	private static final int OTHERS = 9;
-	private static final int GATES = 10;
-	private static final int PRINT = 11;
-	private static final int LABS = 12;
+	public static final int DEPARTMENTS = 1;
+	public static final int HOSTELS = 2;
+	public static final int RESIDENCES = 3;
+	public static final int HALLS_N_AUDITORIUMS = 4;
+	public static final int FOOD_STALLS = 5;
+	public static final int BANKS_N_ATMS = 6;
+	public static final int SCHOOLS = 7;
+	public static final int SPORTS = 8;
+	public static final int OTHERS = 9;
+	public static final int GATES = 10;
+	public static final int PRINT = 11;
+	public static final int LABS = 12;
 
 	private static final String DEPARTMENTS_NAME = "Departments";
 	private static final String HOSTELS_NAME = "Hostels";

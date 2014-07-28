@@ -441,10 +441,12 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				name = marker.name;
 			else
 				name = marker.shortName;
+			Paint temp = new Paint(textPaint);
+			if(marker.groupIndex == Marker.RESIDENCES) temp.setTextSize(12*density);
 			textPaint.getTextBounds(name, 0, name.length() - 1, bounds);
 			float tX = vPin.x + pin.getWidth();
 			float tY = vPin.y + bounds.height() / 2;
-			canvas.drawText(name, tX, tY, textPaint);
+			canvas.drawText(name, tX, tY, temp);
 		}
 	}
 

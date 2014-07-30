@@ -241,7 +241,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		
-		new GetLocations(JSONUrl, mainActivity).execute();
+		//new GetLocations(JSONUrl, mainActivity).execute();
 	}
 
 	@Override

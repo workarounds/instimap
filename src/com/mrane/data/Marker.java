@@ -73,11 +73,11 @@ public class Marker {
 		this.point = new PointF(pixelX, pixelY);
 		this.groupIndex = groupIndex;
 		this.description = description;
-		this.parentId = parentId;
-		this.parentRel = parentRel;
-		this.childIds = childIds;
-		this.lat = lat;
-		this.lng = lng;
+		this.setParentId(parentId);
+		this.setParentRel(parentRel);
+		this.setChildIds(childIds);
+		this.setLat(lat);
+		this.setLng(lng);
 	}
 
 	public static int getColor(int group) {
@@ -253,5 +253,45 @@ public class Marker {
 
 	public void setImageUri(String imageUri) {
 		this.imageUri = imageUri;
+	}
+
+	public int[] getChildIds() {
+		return childIds;
+	}
+
+	public void setChildIds(int[] childIds) {
+		this.childIds = childIds;
+	}
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getParentRel() {
+		return parentRel;
+	}
+
+	public void setParentRel(String parentRel) {
+		this.parentRel = parentRel;
+	}
+
+	public long getLat() {
+		return lat;
+	}
+
+	public void setLat(long lat) {
+		this.lat = lat;
+	}
+
+	public long getLng() {
+		return lng;
+	}
+
+	public void setLng(long lng) {
+		this.lng = lng;
 	}
 }

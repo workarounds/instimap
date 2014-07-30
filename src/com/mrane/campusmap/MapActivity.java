@@ -69,7 +69,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.data.Building;
-import com.mrane.data.GetLocationsFromServer;
+import com.mrane.data.GetLocations;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -103,6 +103,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private RelativeLayout settingsOuter;
 	public EditText editText;
 	public HashMap<String, Marker> data;
+	private HashMap<Integer, String> idMap;
+	private HashMap<String, Marker> valueMap;
 	private List<Marker> markerlist;
 	public FragmentTransaction transaction;
 	public CampusMapView campusMapView;
@@ -239,7 +241,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		
-		new GetLocationsFromServer(JSONUrl).execute();
+		new GetLocations(JSONUrl, mainActivity).execute();
 	}
 
 	@Override
@@ -1127,6 +1129,22 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (cardState != NewCardTouchListener.STATE_DISMISSED) {
 			displayMap();
 		}
+	}
+
+	public HashMap<Integer, String> getIdMap() {
+		return idMap;
+	}
+
+	public void setIdMap(HashMap<Integer, String> idMap) {
+		this.idMap = idMap;
+	}
+
+	public HashMap<String, Marker> getValueMap() {
+		return valueMap;
+	}
+
+	public void setValueMap(HashMap<String, Marker> valueMap) {
+		this.valueMap = valueMap;
 	}
 
 }

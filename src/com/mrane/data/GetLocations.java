@@ -1,18 +1,22 @@
 package com.mrane.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
+import com.mrane.campusmap.MapActivity;
 
-	String url = "";
+public class GetLocations extends AsyncTask<Void, Void, Void> {
+
+	// Json key names
 	private final String ID = "id";
 	private final String NAME = "name";
 	private final String SHORTNAME = "short_name";
@@ -26,8 +30,18 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 	private final String LAT = "lat";
 	private final String LONG = "long";
 
-	public GetLocationsFromServer(String URL) {
+	// constructor variable (arguments)
+	private MapActivity mainActivity;
+	private String url = "";
+	
+	// output vaiables
+	@SuppressLint("UseSparseArrays") 
+	private HashMap<Integer, String> idMap = new HashMap<Integer, String>();
+	private HashMap<String, Marker> valueMap = new HashMap<String, Marker>();
+	
+	public GetLocations(String URL, MapActivity mainActivity) {
 		this.url = URL;
+		this.mainActivity = mainActivity;
 	}
 
 	@Override
@@ -75,6 +89,9 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 					Marker m = new Marker(id, name, shortName, pixelX, pixelY,
 							groupIndex, description, parentId, parentRel,
 							childIds, lat, lng);
+					
+					idMap.put(id, name);
+					valueMap.put(name, m);
 					Log.d("JsonParse","" + name);
 				}
 
@@ -91,7 +108,8 @@ public class GetLocationsFromServer extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		
+		mainActivity.setIdMap(idMap);
+		mainActivity.setValueMap(valueMap);
 
 	}
 

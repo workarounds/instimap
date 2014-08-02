@@ -3,6 +3,7 @@ package com.mrane.campusmap;
 import in.designlabs.instimap.R;
 import in.designlabs.instimap.R.color;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -73,6 +76,7 @@ import com.mrane.data.GetLocations;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
+import com.mrane.data.UpdateLocations;
 import com.mrane.zoomview.CampusMapView;
 import com.mrane.zoomview.SubsamplingScaleImageView;
 import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
@@ -134,6 +138,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private Toast toast;
 	private String message = "Sorry, no such place in our data.";
 	private static final String JSONUrl = "http://home.iitb.ac.in/~madhu.kiran/data.json";
+	private static final String JSONFILE = "data.json";
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
@@ -241,7 +246,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		
-		new GetLocations(JSONUrl, mainActivity).execute();
+		new GetLocations(JSONFILE, mainActivity).execute();
 	}
 
 	@Override
@@ -1145,6 +1150,31 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void setValueMap(HashMap<String, Marker> valueMap) {
 		this.valueMap = valueMap;
+	}
+	
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	public void checkForDataUpdate() {
+		if(isNetworkAvailable()) {
+			new UpdateLocations(JSONUrl, JSONFILE, this).execute();
+		}	
+	}
+	
+	public void writeToFile(String jsonFileName, String jsonString) {
+		FileOutputStream outputStream;
+
+		try {
+		  outputStream = this.openFileOutput(jsonFileName, Context.MODE_PRIVATE);
+		  outputStream.write(jsonString.getBytes());
+		  outputStream.close();
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}	
 	}
 
 }

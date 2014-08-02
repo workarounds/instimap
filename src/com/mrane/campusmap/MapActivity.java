@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -69,7 +70,6 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.data.Building;
-import com.mrane.data.GetLocations;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -223,7 +223,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
 
-		initSettingsFragment();
 		// audiomanager = (AudioManager)
 		// getSystemService(Context.AUDIO_SERVICE);
 		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
@@ -264,10 +263,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onDestroy();
 	}
 
-	private void initSettingsFragment() {
-		transaction = fragmentManager.beginTransaction();
-		transaction.add(R.id.settings_container, new SettingsFragment());
-		transaction.commit();
+	private void goToSettingsActivity() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+//		transaction = fragmentManager.beginTransaction();
+//		transaction.add(R.id.settings_container, new SettingsFragment());
+//		transaction.commit();
 	}
 
 	private void initShowDefault() {
@@ -389,9 +390,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		this.setCorrectIcons();
-		if (isSettingsOpen)
-			this.closeSettings();
-
 	}
 
 	@Override
@@ -427,7 +425,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			transaction.commit();
 		}
 		noFragments = false;
-		closeSettings();
 	}
 
 	private void backToMap() {
@@ -442,20 +439,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@Override
 	public void onBackPressed() {
-		if (isSettingsOpen) {
-			closeSettings();
-		} else {
-			if (noFragments) {
-				if (!this.removeMarker()) {
-					super.onBackPressed();
-				} else {
-					if (editText.length() > 0) {
-					}
-				}
+		if (noFragments) {
+			if (!this.removeMarker()) {
+				super.onBackPressed();
 			} else {
-				backToMap();
-				this.removeEditTextFocus("");
+				if (editText.length() > 0) {
+				}
 			}
+		} else {
+			backToMap();
+			this.removeEditTextFocus("");
 		}
 	}
 
@@ -889,43 +882,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void menuClick(View v) {
-		if (!isSettingsOpen) {
-			openSettings();
-		} else {
-			closeSettings();
-		}
-	}
-
-	private void openSettings() {
-		settingsContainer.setVisibility(View.VISIBLE);
-		isSettingsOpen = true;
-		OnTouchListener settingsCanceller = new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				int action = event.getAction();
-				if (action == MotionEvent.ACTION_DOWN)
-					closeSettings();
-				return false;
-			}
-		};
-		settingsOuter.setOnTouchListener(settingsCanceller);
-		menuIcon.setOnClickListener(null);
-	}
-
-	private void closeSettings() {
-		menuIcon.setBackgroundColor(Color.TRANSPARENT);
-		settingsContainer.setVisibility(View.GONE);
-		isSettingsOpen = false;
-
-		settingsOuter.setOnTouchListener(null);
-		menuIcon.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				menuClick(v);
-			}
-		});
+		goToSettingsActivity();
 	}
 
 	public void toggleCardClick(View v) {

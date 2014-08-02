@@ -267,7 +267,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void goToSettingsActivity() {
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
-		//overridePendingTransition(android.R.anim.slide_in_left, R.anim.nothing);
+		overridePendingTransition(R.anim.activity_slide_in_left, R.anim.nothing);
 //		transaction = fragmentManager.beginTransaction();
 //		transaction.add(R.id.settings_container, new SettingsFragment());
 //		transaction.commit();

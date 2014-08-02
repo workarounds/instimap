@@ -157,7 +157,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_ANIMATE:
-				showReslutOnMap((String) msg.obj);
+				showResultOnMap((String) msg.obj);
 				break;
 			case MSG_INIT_LAYOUT:
 				initLayout();
@@ -492,7 +492,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		}
 	}
 
-	private void showReslutOnMap(String key) {
+	private void showResultOnMap(String key) {
 		Marker marker = data.get(key);
 		showCard(marker);
 		campusMapView.setAndShowResultMarker(marker);

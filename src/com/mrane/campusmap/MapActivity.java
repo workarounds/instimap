@@ -73,6 +73,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.data.Building;
+import com.mrane.data.GetLocations;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -93,18 +94,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private IndexFragment indexFragment;
 	private Fragment fragment;
 	private NewCardTouchListener newCardTouchListener;
-	private boolean isSettingsOpen = false;
 	public RelativeLayout expandContainer;
 	public RelativeLayout newSmallCard;
 	public LinearLayout placeCard;
 	private RelativeLayout headerContainer;
-	private LinearLayout settingsContainer;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
 	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
-	private RelativeLayout settingsOuter;
 	public EditText editText;
 	public HashMap<String, Marker> data;
 	private HashMap<Integer, String> idMap;
@@ -192,8 +190,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
-		settingsContainer = (LinearLayout) findViewById(R.id.settings_container);
-		settingsOuter = (RelativeLayout) findViewById(R.id.settings_outer);
 
 		Locations mLocations = new Locations(this);
 		data = mLocations.data;

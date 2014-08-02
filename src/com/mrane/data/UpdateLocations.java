@@ -1,11 +1,5 @@
 package com.mrane.data;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +14,7 @@ import android.util.Log;
 
 import com.mrane.campusmap.MapActivity;
 
-public class GetLocations extends AsyncTask<Void, Void, Void> {
+public class UpdateLocations extends AsyncTask<Void, Void, Void> {
 
 	// Json key names
 	private final String ID = "id";
@@ -37,20 +31,22 @@ public class GetLocations extends AsyncTask<Void, Void, Void> {
 	private final String LONG = "long";
 
 	// constructor variable (arguments)
+	private String fileName;
 	private MapActivity mainActivity;
-	private String fileName = "";
-	
+	private String url = "";
+
 	private String jsonStr = null;
-	private boolean readFromFile = false;
-	
+	private boolean gotValidJson = false;
+
 	// output vaiables
-	@SuppressLint("UseSparseArrays") 
+	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, String> idMap = new HashMap<Integer, String>();
 	private HashMap<String, Marker> valueMap = new HashMap<String, Marker>();
-	
-	public GetLocations(String jsonFileName, MapActivity mainActivity) {
-		this.fileName = jsonFileName;
+
+	public UpdateLocations(String URL, String fileName, MapActivity mainActivity) {
+		this.url = URL;
 		this.mainActivity = mainActivity;
+		this.fileName = fileName;
 	}
 
 	@Override
@@ -62,27 +58,11 @@ public class GetLocations extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... params) {
 		jsonStr = null;
-		try {
-		 FileInputStream fis = mainActivity.openFileInput(fileName);
-		   InputStreamReader isr = new InputStreamReader(fis);
-		   BufferedReader bufferedReader = new BufferedReader(isr);
-		   StringBuilder sb = new StringBuilder();
-		   String line;
-		   while ((line = bufferedReader.readLine()) != null) {
-		       sb.append(line);
-		   }
-		   jsonStr = sb.toString();
-		   readFromFile = true;
-		   Log.d("GetLocations","file read from internal memory");
-		} catch(FileNotFoundException e) {
-			Log.e("GetLocations", "file not yet created");
-			Log.d("GetLocations","read file from assets");
-			jsonStr = readFromAssets();
-		} catch (IOException e)  {
-			Log.e("GetLocations","unable to read file");
-			Log.d("GetLocations","read file from assets");
-			jsonStr = readFromAssets();
-		}
+		// Creating service handler class instance
+		ServiceHandler sh = new ServiceHandler();
+
+		// Making a request to url and getting response
+		jsonStr = sh.makeServiceCall(url, ServiceHandler.GET);
 
 		if (jsonStr != null) {
 
@@ -115,12 +95,12 @@ public class GetLocations extends AsyncTask<Void, Void, Void> {
 					Marker m = new Marker(id, name, shortName, pixelX, pixelY,
 							groupIndex, description, parentId, parentRel,
 							childIds, lat, lng);
-					
+
 					idMap.put(id, name);
 					valueMap.put(name, m);
 				}
-				
-				Log.d("GetLocations","parsed json");
+				gotValidJson = true;
+				Log.d("Update locations", "updating json");
 
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -132,37 +112,15 @@ public class GetLocations extends AsyncTask<Void, Void, Void> {
 		return null;
 	}
 
-	private String readFromAssets() {
-		String fileContent = "";
-
-	    try {
-	        InputStream stream = mainActivity.getAssets().open(fileName);
-
-	        int size = stream.available();
-	        byte[] buffer = new byte[size];
-	        stream.read(buffer);
-	        stream.close();
-	        fileContent = new String(buffer);
-	    } catch (IOException e) {
-	        // Handle exceptions here
-	    }
-
-	    return fileContent;
-	}
-	
-
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		mainActivity.setIdMap(idMap);
-		mainActivity.setValueMap(valueMap);
-		if (!readFromFile) {
-			mainActivity.writeToFile(fileName, jsonStr);
+		if (gotValidJson) {
+			if (jsonStr != null) {
+				mainActivity.writeToFile(fileName, jsonStr);
+				Log.d("UpdateLocations", ""+ fileName);
+			}
 		}
-		
-		
-		mainActivity.checkForDataUpdate();
-
 	}
 
 	int[] toIntArray(List<Integer> list) {

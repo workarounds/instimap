@@ -418,7 +418,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private void drawMarkerText(Canvas canvas, Marker marker) {
 		String name;
 		PointF vPin = sourceToViewCoord(marker.getPoint());
-		if (marker.getShortName().equals("0"))
+		if (marker.getShortName().equals("0") || marker.getShortName().isEmpty())
 			name = marker.getName();
 		else
 			name = marker.getShortName();

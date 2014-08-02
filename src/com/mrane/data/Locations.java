@@ -154,7 +154,7 @@ Marker m71 = new Marker("B 24 Nilgiri", "B 24 Nilgiri", 3318, 2324, 3, "Flat nos
 data.put(m71.getName(), m71);
 Marker m72 = new Building("Old Computer Science Engineering Department", "Old CSE", 4002, 1545, 1, new String[] {"New Software Lab"}, "http://www.cse.iitb.ac.in/\nTel: +912225767701 / +912225767702 / +912225762771\nThe department offers academic programs for B. Tech, Dual degree (B Tech + M Tech), Dual Degree PG (M. Tech + Ph. D) and Ph. D. Research areas include algorithms, programming languages and Compilers, database and information systems, artificial intelligence and natural language processing, software engineering, formal methods, distributed systems, computer networks, data mining, computer graphics, computer vision and image understanding, real-time and embedded systems, formal languages and bio-inspired computing");
 data.put(m72.getName(), m72);
-Marker m73 = new Marker("B 19 Old Multistoried Building- Residence ", "0", 1413, 2885, 3, "Building lift phone Tel: +912225762884\nFlat nos. 75-98");
+Marker m73 = new Marker("B 19 Old Multistoried Building- Residence ", "B 19", 1413, 2885, 3, "Building lift phone Tel: +912225762884\nFlat nos. 75-98");
 data.put(m73.getName(), m73);
 Marker m74 = new Marker("ONGC Research Centre", "0", 4234, 2162, 1, "Currently, the centre is working on a project titled Physical and Numerical Models for Un-conventional Flood Patterns. The project relates to increasing countrys currrent oil production by means of Enhanced Oil Recovery (EOR) processes. ");
 data.put(m74.getName(), m74);
@@ -458,7 +458,7 @@ Marker m223 = new Marker("Sameer Hill", "0", 4830, 675, 9, "");
 data.put(m223.getName(), m223);
 Marker m224 = new Marker("C22, A wing, Sahyadri", "Sahyadri", 4657, 1093, 3, "Hill side, Flat nos. 151 - 168");
 data.put(m224.getName(), m224);
-Marker m225 = new Marker("B21 Satpura ", "", 3332, 2602, 3, "");
+Marker m225 = new Marker("B21 Satpura", "B 21", 3332, 2602, 3, "");
 data.put(m225.getName(), m225);
 Marker m226 = new Marker("Girish Gaitonde Building", "GG Bldg", 3668, 1937, 1, "Contact persons:\nMadhumati Shetty +912225767401\nVaishali Deshpande  +912225767402\nSantosh S. Kharat +912225767402\nTanvi D. Shelatkar +912225767402");
 data.put(m226.getName(), m226);

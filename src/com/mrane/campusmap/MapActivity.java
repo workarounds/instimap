@@ -208,7 +208,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setImageAsset("map.jpg");
 		campusMapView.setData(data);
 
-		menuIcon = (ImageButton) findViewById(R.id.menu_icon);
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
@@ -225,12 +224,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		settingsManager = new SettingsManager(this);
 		campusMapView.setSettingsManager(settingsManager);
-
-		// audiomanager = (AudioManager)
-		// getSystemService(Context.AUDIO_SERVICE);
-		// addedMarkerString = sharedpreferences.getString("addedMarkers", "");
-		// campusMapView.setAddedMarkers(addedMarkerString);
-		// audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
 
 		initSoundPool();
 		setFonts();
@@ -885,7 +878,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
 
-	public void menuClick(View v) {
+	public void settingsClick(View v) {
 		goToSettingsActivity();
 	}
 

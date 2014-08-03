@@ -16,4 +16,5 @@
 	<string name="setting_residences_summary_on">Residences will be shown on the map</string>
 	<string name="setting_residences_summary_off">Residences will not be shown on the map</string>
 	<string name="setting_residences_title">Show residences</string>
+	<string name="settings_last_updated_key">lastupdated</string>
 </resources>

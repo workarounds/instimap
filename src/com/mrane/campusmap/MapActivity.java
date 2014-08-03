@@ -223,6 +223,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexFragment = new IndexFragment();
 		
 		settingsManager = new SettingsManager(this);
+		campusMapView.setSettingsManager(settingsManager);
 
 		// audiomanager = (AudioManager)
 		// getSystemService(Context.AUDIO_SERVICE);

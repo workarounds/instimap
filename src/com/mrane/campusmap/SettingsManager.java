@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 
 public class SettingsManager implements OnSharedPreferenceChangeListener {
 	private SharedPreferences sharedPrefs;
@@ -14,7 +15,7 @@ public class SettingsManager implements OnSharedPreferenceChangeListener {
 	private boolean residencesPref;
 	
 	public SettingsManager(Context context){
-		sharedPrefs = context.getSharedPreferences(MapActivity.PREFERENCE_NAME, Context.MODE_PRIVATE);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Resources res = context.getResources();
 		muteKey = res.getString(R.string.setting_mute_key);
 		residencesKey = res.getString(R.string.setting_residences_key);

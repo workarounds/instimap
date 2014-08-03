@@ -90,7 +90,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		initPaints();
 
 		mainActivity = MapActivity.getMainActivity();
-		settingsManager = mainActivity.getSettingsManager();
 		
 		setGestureDetector();
 		super.setMaxScale(density * MAX_SCALE);
@@ -110,6 +109,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			};
 			mainActivity.runOnUiThread(runnable);
 		}
+	}
+	
+	public void setSettingsManager(SettingsManager sm){
+		settingsManager = sm;
 	}
 
 	public void setFirstLoad(boolean b) {

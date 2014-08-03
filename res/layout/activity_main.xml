@@ -186,9 +186,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:animateLayoutChanges="true"
-            android:background="@drawable/bottom_card_background"
+            android:background="@android:color/transparent"
             android:orientation="vertical" >
-
+			
+            <ImageView
+            android:id="@+id/settings_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="10dp"
+            android:cropToPadding="true"
+            android:src="@drawable/settings"
+            android:background="@drawable/searchbar_background" />
+            
             <RelativeLayout
                 android:id="@+id/new_small_card"
                 android:layout_width="match_parent"

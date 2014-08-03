@@ -147,6 +147,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final int SOUND_ID_ADD = 1;
 	public static final int SOUND_ID_REMOVE = 2;
 	private final static float INTERPOLATOR_FACTOR = 2.5f;
+	private final static long UPDATETIMEPERIOD = 3 * 24 * 3600 * 1000;
 	public SoundPool soundPool;
 	public int[] soundPoolIds;
 	@SuppressLint("HandlerLeak")
@@ -221,7 +222,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-		
+
 		settingsManager = new SettingsManager(this);
 		campusMapView.setSettingsManager(settingsManager);
 
@@ -231,7 +232,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-		
+
 		new GetLocations(JSONFILE, mainActivity).execute();
 	}
 
@@ -259,9 +260,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 		overridePendingTransition(R.anim.activity_slide_in_left, R.anim.nothing);
-//		transaction = fragmentManager.beginTransaction();
-//		transaction.add(R.id.settings_container, new SettingsFragment());
-//		transaction.commit();
+		// transaction = fragmentManager.beginTransaction();
+		// transaction.add(R.id.settings_container, new SettingsFragment());
+		// transaction.commit();
 	}
 
 	private void initShowDefault() {
@@ -350,8 +351,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		soundPoolIds[SOUND_ID_REMOVE] = soundPool.load(this,
 				R.raw.remove_marker, 3);
 	}
-	
-	public SettingsManager getSettingsManager(){
+
+	public SettingsManager getSettingsManager() {
 		return settingsManager;
 	}
 
@@ -522,8 +523,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void setImage(LinearLayout parent, Marker marker) {
 		View v = getLayoutInflater().inflate(R.layout.card_image, parent);
 		ImageView iv = (ImageView) v.findViewById(R.id.place_image);
-		int imageId = getResources().getIdentifier(marker.getImageUri(), "drawable",
-				getPackageName());
+		int imageId = getResources().getIdentifier(marker.getImageUri(),
+				"drawable", getPackageName());
 		iv.setImageResource(imageId);
 	}
 
@@ -1099,30 +1100,42 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void setValueMap(HashMap<String, Marker> valueMap) {
 		this.valueMap = valueMap;
 	}
-	
+
 	private boolean isNetworkAvailable() {
-	    ConnectivityManager connectivityManager 
-	          = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		ConnectivityManager connectivityManager = (ConnectivityManager) this
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager
+				.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 	public void checkForDataUpdate() {
-		if(isNetworkAvailable()) {
-			new UpdateLocations(JSONUrl, JSONFILE, this).execute();
-		}	
+		long lastUpdatedOn = settingsManager.getLastUpdatedOn();
+		long currentTime = System.currentTimeMillis();
+		if ((currentTime - lastUpdatedOn) > UPDATETIMEPERIOD) {
+			if (isNetworkAvailable()) {
+				Log.d("MapActivity","Checking for updates");
+				new UpdateLocations(JSONUrl, JSONFILE, this).execute();
+			}
+		}
 	}
-	
+
 	public void writeToFile(String jsonFileName, String jsonString) {
 		FileOutputStream outputStream;
 
 		try {
-		  outputStream = this.openFileOutput(jsonFileName, Context.MODE_PRIVATE);
-		  outputStream.write(jsonString.getBytes());
-		  outputStream.close();
+			outputStream = this.openFileOutput(jsonFileName,
+					Context.MODE_PRIVATE);
+			outputStream.write(jsonString.getBytes());
+			outputStream.close();
 		} catch (Exception e) {
-		  e.printStackTrace();
-		}	
+			e.printStackTrace();
+		}
+	}
+
+	public void setUpdateTime() {
+		long lastUpdatedOn = System.currentTimeMillis();
+		settingsManager.setLastUpdatedOn(lastUpdatedOn);		
 	}
 
 }

@@ -125,5 +125,19 @@ public class NewLocations {
 		}
 	}
 	
+	/**
+	 * use this to check if the marker has parent
+	 * @param childMarker
+	 * @return
+	 */
+	public boolean hasParent(Marker childMarker) {
+		try {
+			this.getParentMarker(childMarker);
+			return true;
+		} catch(CustomException e) {
+			return false;
+		}
+	}
+	
 	
 }

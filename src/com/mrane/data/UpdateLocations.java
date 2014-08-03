@@ -118,6 +118,7 @@ public class UpdateLocations extends AsyncTask<Void, Void, Void> {
 		if (gotValidJson) {
 			if (jsonStr != null) {
 				mainActivity.writeToFile(fileName, jsonStr);
+				mainActivity.setUpdateTime();
 				Log.d("UpdateLocations", ""+ fileName);
 			}
 		}

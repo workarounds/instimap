@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 
 import com.mrane.campusmap.MapActivity;
+import com.mrane.campusmap.SettingsManager;
 import com.mrane.data.Building;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -70,6 +71,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private DisplayMetrics displayMetrics;
 	private float density;
 	private boolean isFirstLoad = true;
+	private SettingsManager settingsManager;
 
 	public CampusMapView(Context context) {
 		this(context, null);
@@ -89,7 +91,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		initPaints();
 
 		mainActivity = MapActivity.getMainActivity();
-
+		settingsManager = mainActivity.getSettingsManager();
+		
 		setGestureDetector();
 		super.setMaxScale(density * MAX_SCALE);
 	}
@@ -367,7 +370,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				if (isShowPinScale(marker)
 						&& !(isResultMarker(marker) || addedMarkerList
 								.contains(marker))) {
-					if (showShowUp(marker))
+					if (shouldShowUp(marker))
 						drawPionterAndText(canvas, marker);
 				}
 			}
@@ -390,8 +393,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 	}
 
-	private boolean showShowUp(Marker marker) {
+	private boolean shouldShowUp(Marker marker) {
 		boolean result = true;
+		if(marker.getGroupIndex() == Marker.RESIDENCES){
+			result = settingsManager.showResidences();
+		}
 		if (marker instanceof Building) {
 			String[] childKeys = ((Building) marker).children;
 			for (String childKey : childKeys) {
@@ -650,7 +656,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			return true;
 		if (addedMarkerList.contains(marker))
 			return true;
-		if (isShowPinScale(marker) && showShowUp(marker))
+		if (isShowPinScale(marker) && shouldShowUp(marker))
 			return true;
 		return false;
 	}

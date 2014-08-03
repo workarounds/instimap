@@ -208,7 +208,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setImageAsset("map.jpg");
 		campusMapView.setData(data);
 
-		menuIcon = (ImageButton) findViewById(R.id.menu_icon);
 		searchIcon = (ImageButton) findViewById(R.id.search_icon);
 		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
 		indexIcon = (ImageButton) findViewById(R.id.index_icon);
@@ -879,7 +878,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
 
-	public void menuClick(View v) {
+	public void settingsClick(View v) {
 		goToSettingsActivity();
 	}
 

@@ -112,41 +112,16 @@
                 android:textSize="@dimen/searchbar_text_size" />
 
             <ImageButton
-                android:id="@+id/menu_icon"
-                android:layout_width="wrap_content"
+                android:id="@+id/remove_icon"
+                android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
-                android:contentDescription="menu"
-                android:cropToPadding="true"
-                android:onClick="menuClick"
-                android:padding="12dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/menu" />
-
-            <ImageButton
-                android:id="@+id/remove_icon"
-                android:layout_width="40dp"
-                android:layout_height="48dp"
-                android:layout_toLeftOf="@id/menu_icon"
-                android:background="@android:color/transparent"
                 android:contentDescription="remove"
                 android:onClick="removeClick"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="0dp"
-                android:paddingTop="8dp"
+                android:padding="8dp"
                 android:src="@drawable/ic_action_remove"
                 android:visibility="gone" />
-
-            <View
-                android:id="@+id/seperator_2"
-                android:layout_width="1dp"
-                android:layout_height="32dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toLeftOf="@id/remove_icon"
-                android:background="@color/list_item_seperator_black" />
         </RelativeLayout>
 
         <ImageView
@@ -196,7 +171,8 @@
             android:padding="10dp"
             android:cropToPadding="true"
             android:src="@drawable/settings"
-            android:background="@drawable/searchbar_background" />
+            android:background="@drawable/searchbar_background"
+            android:onClick="settingsClick" />
             
             <RelativeLayout
                 android:id="@+id/new_small_card"
@@ -277,6 +253,7 @@
                 android:id="@+id/new_expand_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/list_item_gray_even"
                 android:visibility="gone" >
 
                 <ScrollView

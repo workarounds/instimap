@@ -14,7 +14,6 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -87,6 +86,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnTouchListener, OnChildClickListener {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
+	private SettingsManager settingsManager;
 	private FuzzySearchAdapter adapter;
 	private ExpandableListAdapter expAdapter;
 	private FragmentManager fragmentManager;
@@ -119,11 +119,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton toggleCardIcon;
 	public LocationManager locationManager;
 	public LocationListener locationListener;
-	public SharedPreferences sharedpreferences;
 	public String addedMarkerString;
 	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
-	public boolean muted;
 	private boolean noFragments = true;
 	private boolean editTextFocused = false;
 	private final String firstStackTag = "FIRST_TAG";
@@ -223,16 +221,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
+		
+		settingsManager = new SettingsManager(this);
 
 		// audiomanager = (AudioManager)
 		// getSystemService(Context.AUDIO_SERVICE);
-		sharedpreferences = getSharedPreferences(PREFERENCE_NAME,
-				Context.MODE_PRIVATE);
-		muted = sharedpreferences.getBoolean("mute", false);
 		// addedMarkerString = sharedpreferences.getString("addedMarkers", "");
 		// campusMapView.setAddedMarkers(addedMarkerString);
 		// audiomanager.setStreamMute(AudioManager.STREAM_MUSIC, muted);
-		Log.d("test123", "@oc muted value is : " + muted);
 
 		initSoundPool();
 		setFonts();
@@ -358,6 +354,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		soundPoolIds[SOUND_ID_ADD] = soundPool.load(this, R.raw.add_marker, 2);
 		soundPoolIds[SOUND_ID_REMOVE] = soundPool.load(this,
 				R.raw.remove_marker, 3);
+	}
+	
+	public SettingsManager getSettingsManager(){
+		return settingsManager;
 	}
 
 	@Override
@@ -1015,9 +1015,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void playAnimSound(int sound_index) {
-		Log.d("test123", "@pas muted value is : " + muted);
 		if (sound_index >= 0 && sound_index < soundPoolIds.length) {
-			if (!muted) {
+			if (!settingsManager.isMuted()) {
 				soundPool.play(soundPoolIds[sound_index], 1.0f, 1.0f, 1, 0, 1f);
 			}
 		}

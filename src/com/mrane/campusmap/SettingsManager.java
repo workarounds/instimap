@@ -53,4 +53,8 @@ public class SettingsManager implements OnSharedPreferenceChangeListener {
 		residencesPref = show;
 		sharedPrefs.edit().putBoolean(residencesKey, residencesPref).commit();
 	}
+	
+	public SharedPreferences getSharedPrefs(){
+		return sharedPrefs;
+	}
 }

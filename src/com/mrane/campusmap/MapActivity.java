@@ -408,6 +408,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void putFragment(Fragment tempFragment) {
 		this.dismissCard();
+		placeCard.setVisibility(View.GONE);
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -484,6 +485,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			} else {
 				removeMarker();
 			}
+			placeCard.setVisibility(View.VISIBLE);
 		}
 	}
 

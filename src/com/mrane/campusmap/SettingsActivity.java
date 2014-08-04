@@ -10,13 +10,13 @@ public class SettingsActivity extends ActionBarActivity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.test_settings);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Display the fragment as the main content.
-        getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.settings_fragment, new SettingsFragment())
+//                .commit();
     }
 	
 	public boolean onOptionsItemSelected(MenuItem item) {

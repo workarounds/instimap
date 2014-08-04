@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/in.designlabs.instimap"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <fragment 
+        android:id="@+id/settings_fragment"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        class="com.mrane.campusmap.SettingsFragment"/>
+    <com.mrane.campusmap.CustomCheckBoxPreference 
+        android:id="@+id/mute_pref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:name="@string/setting_mute_title"
+        custom:key="@string/setting_mute_key"
+        custom:defaultValue="false"/>
+    <com.mrane.campusmap.CustomCheckBoxPreference 
+        android:id="@+id/residences_pref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        custom:name="@string/setting_residences_title"
+        custom:key="@string/setting_residences_key"
+        custom:summaryOn="@string/setting_residences_summary_on"
+        custom:summaryOff="@string/setting_residences_summary_off"
+        custom:defaultValue="true"/>
+</LinearLayout>

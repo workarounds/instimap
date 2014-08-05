@@ -26,6 +26,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -614,9 +615,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			public boolean onTouch(View view, MotionEvent motionEvent) {
 				final float targetMinScale = getTargetMinScale();
 				int action = motionEvent.getAction();
+				if(action== MotionEvent.ACTION_DOWN){
+					if(motionEvent.getX()<20*density){
+						CampusMapView.this.setPanEnabled(false);
+					}
+					else{
+						CampusMapView.this.setPanEnabled(true);
+					}
+				}
+				else if(action == MotionEvent.ACTION_UP){
+					CampusMapView.this.setPanEnabled(true);
+				}
 				if (targetMinScale > getScale()) {
 					callSuperOnTouch(motionEvent);
+					
 					if (action == MotionEvent.ACTION_UP) {
+						
 						Runnable anim = new Runnable() {
 							public void run() {
 								AnimationBuilder animation = animateScale(targetMinScale);

@@ -31,6 +31,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -72,7 +73,6 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.mrane.data.Building;
-import com.mrane.data.GetLocations;
 import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
@@ -97,9 +97,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public RelativeLayout expandContainer;
 	public RelativeLayout newSmallCard;
 	public LinearLayout placeCard;
-	private RelativeLayout headerContainer;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
+	private View actionBarView;
 	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
@@ -177,11 +177,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onCreate(savedInstanceState);
 		setMainActivity(this);
 
-		getSupportActionBar().hide();
+		setUpActionBar();
 
 		setContentView(R.layout.activity_main);
 
-		headerContainer = (RelativeLayout) findViewById(R.id.header_container);
 		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
 		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
 		newSmallCard = (RelativeLayout) findViewById(R.id.new_small_card);
@@ -199,7 +198,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentContainer = (RelativeLayout) findViewById(R.id.fragment_container);
 
 		adapter = new FuzzySearchAdapter(this, markerlist);
-		editText = (EditText) findViewById(R.id.search);
+		editText = (EditText) actionBarView.findViewById(R.id.search);
 		editText.addTextChangedListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.setOnFocusChangeListener(this);
@@ -208,10 +207,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setImageAsset("map.jpg");
 		campusMapView.setData(data);
 
-		searchIcon = (ImageButton) findViewById(R.id.search_icon);
-		removeIcon = (ImageButton) findViewById(R.id.remove_icon);
-		indexIcon = (ImageButton) findViewById(R.id.index_icon);
-		mapIcon = (ImageButton) findViewById(R.id.map_icon);
+		removeIcon = (ImageButton) actionBarView.findViewById(R.id.remove_icon);
+		indexIcon = (ImageButton) actionBarView.findViewById(R.id.index_icon);
+		mapIcon = (ImageButton) actionBarView.findViewById(R.id.map_icon);
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 		toggleCardIcon = (ImageButton) findViewById(R.id.toggle_card_icon);
 
@@ -231,27 +229,31 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		// new GetLocations(JSONFILE, mainActivity).execute();
+	}
 
-		new GetLocations(JSONFILE, mainActivity).execute();
+	private void setUpActionBar() {
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(false);
+
+		actionBarView = LayoutInflater.from(this).inflate(R.layout.actionbar,
+				null); // layout which contains your button.
+
+		actionBar.setCustomView(actionBarView);
+
 	}
 
 	@Override
 	protected void onPause() {
-		// String s = campusMapView.getAddedMarkerString();
-		// Editor editor = sharedpreferences.edit();
-		// editor.putString("addedMarkers", s);
-		// editor.commit();
-		// Log.d("test123", "onPause called");
 		super.onPause();
 	}
 
 	@Override
 	protected void onDestroy() {
-		// String s = campusMapView.getAddedMarkerString();
-		// Editor editor = sharedpreferences.edit();
-		// editor.putString("addedMarkers", s);
-		// editor.commit();
-		// Log.d("test123", "onDestroy called");
 		super.onDestroy();
 	}
 
@@ -259,9 +261,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 		overridePendingTransition(R.anim.activity_slide_in_left, R.anim.nothing);
-		// transaction = fragmentManager.beginTransaction();
-		// transaction.add(R.id.settings_container, new SettingsFragment());
-		// transaction.commit();
 	}
 
 	private void initShowDefault() {
@@ -296,8 +295,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void setFonts() {
 		Typeface regular = Typeface.createFromAsset(getAssets(), FONT_REGULAR);
-		// Typeface semibold = Typeface.createFromAsset(getAssets(),
-		// FONT_SEMIBOLD);
 
 		placeNameTextView.setTypeface(regular, Typeface.BOLD);
 		placeSubHeadTextView.setTypeface(regular);
@@ -941,23 +938,37 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void setCorrectIcons() {
 		if (noFragments) {
-			this.setVisibleButton(indexIcon);
+			if (this.handleRemoveIcon()) {
+				this.noIndexButton();
+			} else {
+				this.setVisibleButton(indexIcon);
+			}
 		} else {
 			if (fragment instanceof ListFragment) {
-
+				if(this.handleRemoveIcon()) {
+					this.noIndexButton();
+				} else {
+					this.setVisibleButton(indexIcon);
+				}
 			} else {
 				setVisibleButton(mapIcon);
 			}
 		}
-		this.handleRemoveIcon();
 	}
 
-	private void handleRemoveIcon() {
+	private void noIndexButton() {
+		indexIcon.setVisibility(View.GONE);
+		mapIcon.setVisibility(View.GONE);
+	}
+
+	private boolean handleRemoveIcon() {
 		String text = editText.getText().toString();
 		if (text.isEmpty() || text.equals(null)) {
 			removeIcon.setVisibility(View.GONE);
+			return false;
 		} else {
 			removeIcon.setVisibility(View.VISIBLE);
+			return true;
 		}
 	}
 
@@ -972,14 +983,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void onFocusChange(View v, boolean focus) {
 		this.editTextFocused = focus;
 		if (focus) {
-			searchIcon.setVisibility(View.GONE);
 			this.putFragment(listFragment);
 			fragmentContainer.setOnTouchListener(this);
 			String text = editText.getText().toString()
 					.toLowerCase(Locale.getDefault());
 			adapter.filter(text);
 		} else {
-			searchIcon.setVisibility(View.GONE);
 			fragmentContainer.setOnTouchListener(null);
 		}
 		this.setCorrectIcons();
@@ -1001,10 +1010,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		}
 		return false;
 	}
-
-	// public void locateClick(View v) {
-	//
-	// }
 
 	public void addMarkerClick(View v) {
 		campusMapView.toggleMarker();
@@ -1063,8 +1068,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		// outState.putInt(INSTANCE_CARD_STATE,
-		// cardTouchListener.getCardState());
 		outState.putBoolean(INSTANCE_VISIBILITY_INDEX, indexIcon.isShown());
 	}
 
@@ -1115,7 +1118,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		long currentTime = System.currentTimeMillis();
 		if ((currentTime - lastUpdatedOn) > UPDATETIMEPERIOD) {
 			if (isNetworkAvailable()) {
-				Log.d("MapActivity","Checking for updates");
+				Log.d("MapActivity", "Checking for updates");
 				new UpdateLocations(JSONUrl, JSONFILE, this).execute();
 			}
 		}
@@ -1136,7 +1139,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void setUpdateTime() {
 		long lastUpdatedOn = System.currentTimeMillis();
-		settingsManager.setLastUpdatedOn(lastUpdatedOn);		
+		settingsManager.setLastUpdatedOn(lastUpdatedOn);
 	}
 
 }

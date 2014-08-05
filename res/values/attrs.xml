@@ -21,5 +21,13 @@ limitations under the License.
         <attr name="panEnabled" format="boolean"/>
         <attr name="zoomEnabled" format="boolean"/>
     </declare-styleable>
-
+    
+   	<declare-styleable name="CustomCheckBoxPreference">
+       <attr name="name" format="string" />
+       <attr name="summary" format="string" />
+       <attr name="summaryOn" format="string" />
+       <attr name="summaryOff" format="string" />
+       <attr name="defaultValue" format="boolean"/>
+       <attr name="key" format="string" />
+   </declare-styleable>
 </resources>

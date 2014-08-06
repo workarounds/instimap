@@ -30,6 +30,8 @@ public class FuzzySearchAdapter extends BaseAdapter {
 	private List<ScoredMarker> map;
 	private Locale l;
 	private String searchedText = "";
+	private SettingsManager settingsManager;
+	private boolean turnOnResidences;
 
 	public FuzzySearchAdapter(Context context, List<Marker> inputlist) {
 		mContext = context;
@@ -99,10 +101,19 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		// Set the results into TextViews
 
 		if (this.getResultSize() == 0) {
-			holder.label.setText("Sorry, no results found.");
+			if (settingsManager.showResidences()) {
+				holder.label.setText("Sorry, no results found.");
+			} else {
+				if (turnOnResidences) {
+					holder.label
+							.setText("There are results in residences. Select show residences from settings.");
+				} else {
+					holder.label.setText("Sorry, no results found.");
+				}
+			}
 		} else {
-			holder.label.setText(getSpannedText(resultlist.get(position).getName(),
-					searchedText));
+			holder.label.setText(getSpannedText(resultlist.get(position)
+					.getName(), searchedText));
 		}
 		return view;
 	}
@@ -186,23 +197,49 @@ public class FuzzySearchAdapter extends BaseAdapter {
 	}
 
 	public void filter(String charText) {
+		turnOnResidences = false;
 		charText = charText.toLowerCase(Locale.getDefault());
 		searchedText = charText;
 		resultlist.clear();
 		map.clear();
 		if (charText.length() == 0) {
-			resultlist.addAll(inputlist);
+			if (settingsManager.showResidences()) {
+				resultlist.addAll(inputlist);
+			} else {
+				for (Marker m : inputlist) {
+					if (m.getGroupIndex() != Marker.RESIDENCES) {
+						resultlist.add(m);
+					}
+				}
+			}
 		} else if (charText.length() > 10) {
 			for (Marker m : inputlist) {
-				if (m.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
-					resultlist.add(m);
+				if (m.getName().toLowerCase(Locale.getDefault())
+						.contains(charText)) {
+					if (settingsManager.showResidences()) {
+						resultlist.add(m);
+					} else {
+						if (m.getGroupIndex() != Marker.RESIDENCES) {
+							resultlist.add(m);
+						} else {
+							turnOnResidences = true;
+						}
+					}
 				}
 			}
 		} else {
 			for (Marker m : inputlist) {
 				int score = checkModifyMarker(m, charText);
 				if (score != 0) {
-					map.add(new ScoredMarker(score, m));
+					if (settingsManager.showResidences()) {
+						map.add(new ScoredMarker(score, m));
+					} else {
+						if (m.getGroupIndex() != Marker.RESIDENCES) {
+							map.add(new ScoredMarker(score, m));
+						} else {
+							turnOnResidences = true;
+						}
+					}
 				}
 			}
 			resultlist = sortByScore(map);
@@ -273,6 +310,14 @@ public class FuzzySearchAdapter extends BaseAdapter {
 		return false;
 	}
 
+	public SettingsManager getSettingsManager() {
+		return settingsManager;
+	}
+
+	public void setSettingsManager(SettingsManager settingsManager) {
+		this.settingsManager = settingsManager;
+	}
+
 	public class MarkerScoreComparator implements Comparator<ScoredMarker> {
 		public int compare(ScoredMarker m1, ScoredMarker m2) {
 			return m1.score - m2.score;
@@ -281,7 +326,8 @@ public class FuzzySearchAdapter extends BaseAdapter {
 
 	public class MarkerNameComparator implements Comparator<Marker> {
 		public int compare(Marker m1, Marker m2) {
-			return m1.getName().toLowerCase(l).compareTo(m2.getName().toLowerCase(l));
+			return m1.getName().toLowerCase(l)
+					.compareTo(m2.getName().toLowerCase(l));
 		}
 	}
 }

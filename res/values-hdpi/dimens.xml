@@ -10,4 +10,6 @@
    <dimen name="convocation_title_size">22sp</dimen>
    <dimen name="convocation_cheif_guest_subtitle_size">12sp</dimen>
    <dimen name="convocation_venue_title_size">16sp</dimen>
+   <dimen name="convocation_bar_text_size">16sp</dimen>
+   <dimen name="convocation_bar_margin">18dp</dimen>
 </resources>

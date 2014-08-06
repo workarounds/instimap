@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 
+import com.mrane.campusmap.ConvocationFragment;
 import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.SettingsManager;
 import com.mrane.data.Building;
@@ -44,6 +45,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Collection<Marker> markerList;
 	private ArrayList<Marker> addedMarkerList;
 	private ArrayList<Marker> specialMarkerList;
+	private ArrayList<Marker> convoMarkerList;
 	private Marker resultMarker;
 	private Bitmap bluePointer;
 	private Bitmap yellowPointer;
@@ -54,6 +56,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Bitmap greenMarker;
 	private Bitmap grayMarker;
 	private Bitmap blueLockedMarker;
+	private Bitmap blueConvoMarker;
 	private Bitmap yellowLockedMarker;
 	private Bitmap greenLockedMarker;
 	private Bitmap grayLockedMarker;
@@ -101,8 +104,15 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		if (isFirstLoad) {
 			Runnable runnable = new Runnable() {
 				public void run() {
-					AnimationBuilder anim = animateScaleAndCenter(
-							getTargetMinScale(), MapActivity.MAP_CENTER);
+					AnimationBuilder anim;
+					if(settingsManager.isInConvoMode()){
+					anim = animateScaleAndCenter(
+							getTargetMinScale(), MapActivity.CONVO_CENTER);
+					}
+					else{
+						anim = animateScaleAndCenter(
+								getTargetMinScale(), MapActivity.MAP_CENTER);
+					}
 					anim.withDuration(MapActivity.DURATION_INIT_MAP_ANIM)
 							.start();
 					isFirstLoad = false;
@@ -132,6 +142,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				drawable.marker_blue_s, options);
 		blueLockedMarker = BitmapFactory.decodeResource(getResources(),
 				drawable.marker_blue_h, options);
+		blueConvoMarker = BitmapFactory.decodeResource(getResources(),
+				drawable.marker_blue_h_convo, options);
 
 		yellowPointer = BitmapFactory.decodeResource(getResources(),
 				drawable.marker_dot_yellow, options);
@@ -178,6 +190,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				true);
 		blueLockedMarker = Bitmap.createScaledBitmap(blueLockedMarker, (int) w,
 				(int) h, true);
+		blueConvoMarker = Bitmap.createScaledBitmap(blueConvoMarker, (int) w,
+				(int) h, true);
 		yellowLockedMarker = Bitmap.createScaledBitmap(yellowLockedMarker,
 				(int) w, (int) h, true);
 		greenLockedMarker = Bitmap.createScaledBitmap(greenLockedMarker,
@@ -221,7 +235,9 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		markerList = data.values();
 		addedMarkerList = new ArrayList<Marker>();
 		specialMarkerList = new ArrayList<Marker>();
+		convoMarkerList = new ArrayList<Marker>();
 		setSpecialMarkers();
+		if(settingsManager.isInConvoMode()) setConvoMarkerList();
 	}
 
 	private void setSpecialMarkers() {
@@ -230,6 +246,22 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				specialMarkerList.add(m);
 			}
 		}
+	}
+	
+	public void setConvoMarkerList(){
+		for(String s : ConvocationFragment.markerNames){
+			Marker m = data.get(s);
+			convoMarkerList.add(m);
+			addMarker(m);
+		}
+	}
+	
+	public void removeConvoMarkers(){
+		for(String s : ConvocationFragment.markerNames){
+			Marker m = data.get(s);
+			removeAddedMarker(m);
+		}
+		convoMarkerList.clear();
 	}
 
 	public static int getShowPinRatio() {
@@ -518,8 +550,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
 
 		if (color == Marker.COLOR_BLUE) {
 			markerBitmap = blueMarker;
-			if (isAddedMarker(marker))
+			if (isAddedMarker(marker)){
 				markerBitmap = blueLockedMarker;
+				if(convoMarkerList.contains(marker)) markerBitmap = blueConvoMarker;
+			}
 		} else if (color == Marker.COLOR_YELLOW) {
 			markerBitmap = yellowMarker;
 			if (isAddedMarker(marker))
@@ -588,6 +622,20 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		valAnim.setStartDelay(delay);
 		valAnim.start();
 	}
+	
+	public Runnable getMinScaleAnim(final float scale){
+		Runnable anim = new Runnable() {
+			public void run() {
+				AnimationBuilder animation = animateScale(scale);
+				animation
+						.withDuration(200)
+						.withEasing(
+								SubsamplingScaleImageView.EASE_OUT_QUAD)
+						.start();
+			}
+		};
+		return anim;
+	}
 
 	private void setGestureDetector() {
 		final GestureDetector gestureDetector = new GestureDetector(
@@ -631,16 +679,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 					
 					if (action == MotionEvent.ACTION_UP) {
 						
-						Runnable anim = new Runnable() {
-							public void run() {
-								AnimationBuilder animation = animateScale(targetMinScale);
-								animation
-										.withDuration(200)
-										.withEasing(
-												SubsamplingScaleImageView.EASE_OUT_QUAD)
-										.start();
-							}
-						};
+						Runnable anim = getMinScaleAnim(targetMinScale);
 						if(isImageReady())	anim.run();
 					}
 					return true;

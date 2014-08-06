@@ -134,6 +134,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public int expandedGroup = -1;
 	private boolean noFragments = true;
 	private boolean editTextFocused = false;
+	private boolean resetScale = false;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
 	private final int MSG_INIT_LAYOUT = 2;
@@ -146,6 +147,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private static final String JSONUrl = "http://home.iitb.ac.in/~madhu.kiran/data.json";
 	private static final String JSONFILE = "data.json";
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
+	public static final PointF CONVO_CENTER = new PointF(3570f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
 	public static final int KEY_SOUND_ADD_MARKER = 1;
 	// public static final String FONT_BOLD = "myriadpro_bold_cn.ttf";
@@ -213,8 +215,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		editText.setOnEditorActionListener(this);
 		editText.setOnFocusChangeListener(this);
 
+		settingsManager = new SettingsManager(this);
+
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.jpg");
+		campusMapView.setSettingsManager(settingsManager);
 		campusMapView.setData(data);
 
 		removeIcon = (ImageButton) actionBarView.findViewById(R.id.remove_icon);
@@ -231,20 +236,20 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		indexFragment = new IndexFragment();
 		convocationFragment = new ConvocationFragment(this);
 
-		settingsManager = new SettingsManager(this);
-		campusMapView.setSettingsManager(settingsManager);
-		
+		adapter.setSettingsManager(settingsManager);
+
 		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
-		convoContainer.setOnClickListener(new OnClickListener(){
+		convoContainer.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				putFragment(convocationFragment);
 			}
-			
+
 		});
 		initSoundPool();
 		setFonts();
+		setConvoBar(true);
 
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -283,8 +288,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	}
 
- 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB) 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setUpActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -296,11 +300,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		actionBarView = LayoutInflater.from(this).inflate(R.layout.actionbar,
 				null); // layout which contains your button.
-		
 
 		actionBar.setCustomView(actionBarView);
-		
-		RelativeLayout rootActionView = (RelativeLayout) actionBarView.findViewById(R.id.root_action_view);
+
+		RelativeLayout rootActionView = (RelativeLayout) actionBarView
+				.findViewById(R.id.root_action_view);
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
 			Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
 
@@ -308,28 +312,25 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
 			layoutTransition.setDuration(LayoutTransition.APPEARING, 250);
 
-			layoutTransition.setStartDelay(
-					LayoutTransition.CHANGE_APPEARING, 0);
-			layoutTransition.setDuration(LayoutTransition.CHANGE_APPEARING,
-					500);
-			layoutTransition.setInterpolator(
-					LayoutTransition.CHANGE_APPEARING, i);
+			layoutTransition
+					.setStartDelay(LayoutTransition.CHANGE_APPEARING, 0);
+			layoutTransition
+					.setDuration(LayoutTransition.CHANGE_APPEARING, 500);
+			layoutTransition.setInterpolator(LayoutTransition.CHANGE_APPEARING,
+					i);
 
-			layoutTransition
-					.setStartDelay(LayoutTransition.DISAPPEARING, 0);
-			layoutTransition
-					.setDuration(LayoutTransition.DISAPPEARING, 250);
+			layoutTransition.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+			layoutTransition.setDuration(LayoutTransition.DISAPPEARING, 250);
 
 			layoutTransition.setStartDelay(
 					LayoutTransition.CHANGE_DISAPPEARING, 0);
-			layoutTransition.setDuration(
-					LayoutTransition.CHANGE_DISAPPEARING, 500);
+			layoutTransition.setDuration(LayoutTransition.CHANGE_DISAPPEARING,
+					500);
 			layoutTransition.setInterpolator(
 					LayoutTransition.CHANGE_DISAPPEARING, i);
 
 			rootActionView.setLayoutTransition(layoutTransition);
 		}
-
 
 	}
 
@@ -380,9 +381,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void initShowDefault() {
-		String[] keys = { "Canara Bank", "Convocation Hall", "Hostel 13",
-				"Hostel 15", "Main Gate no. 2",
-				"Market Gate, Y point Gate no. 3", };
+		String[] keys = { "Convocation Hall", "Hostel 13", "Hostel 15",
+				"Main Gate no. 2", "Market Gate, Y point Gate no. 3", };
 		for (String key : keys) {
 			if (data.containsKey(key)) {
 				data.get(key).setShowDefault(true);
@@ -421,8 +421,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		settingsTitle.setTypeface(regular);
 	}
 
-	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB) private void initLayout() {
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initLayout() {
 		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -531,7 +531,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
-			transaction.setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out);
+			if (tempFragment instanceof ConvocationFragment) {
+				transaction.setCustomAnimations(R.anim.fragment_slide_in,
+						R.anim.fragment_slide_out);
+			}
 			transaction.add(R.id.fragment_container, tempFragment);
 			transaction.addToBackStack(firstStackTag);
 			transaction.commit();
@@ -1084,8 +1087,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				} else {
 					this.setVisibleButton(indexIcon);
 				}
-			} else {
-				setVisibleButton(mapIcon);
+			} else if (fragment instanceof ConvocationFragment) {
+				if (handleRemoveIcon()) {
+					this.noIndexButton();
+				} else {
+					this.setVisibleButton(indexIcon);
+				}
+			} else if (fragment instanceof IndexFragment) {
+				this.setVisibleButton(mapIcon);
 			}
 		}
 	}
@@ -1098,10 +1107,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private boolean handleRemoveIcon() {
 		String text = editText.getText().toString();
 		if (text.isEmpty() || text.equals(null)) {
+			setConvoBar(true);
 			removeIcon.setVisibility(View.GONE);
 			return false;
 		} else {
 			removeIcon.setVisibility(View.VISIBLE);
+			setConvoBar(false);
 			return true;
 		}
 	}
@@ -1274,6 +1285,31 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void setUpdateTime() {
 		long lastUpdatedOn = System.currentTimeMillis();
 		settingsManager.setLastUpdatedOn(lastUpdatedOn);
+	}
+
+	public void setConvocationMode(boolean inConvoMode) {
+		if (inConvoMode) {
+			campusMapView.setConvoMarkerList();
+		} else {
+			campusMapView.removeConvoMarkers();
+		}
+		setConvoBar(inConvoMode);
+		resetScale = (campusMapView.getScale() == campusMapView
+				.getTargetMinScale());
+	}
+
+	private void setConvoBar(boolean showConvoBar) {
+		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
+		if (showConvoBar && settingsManager.isInConvoMode()) {
+			convoContainer.setVisibility(View.VISIBLE);
+		} else {
+			convoContainer.setVisibility(View.GONE);
+		}
+		if (resetScale) {
+			campusMapView.getMinScaleAnim(campusMapView.getTargetMinScale())
+					.run();
+			resetScale = false;
+		}
 	}
 
 }

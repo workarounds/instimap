@@ -30,7 +30,7 @@ import android.widget.RelativeLayout.LayoutParams;
 public class ConvocationFragment extends Fragment {
 	private ListView venuesListView;
 	private MapActivity mapActivity;
-	String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
+	public static String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
 	
 		public ConvocationFragment(MapActivity mapActivity){
 			this.mapActivity = mapActivity;

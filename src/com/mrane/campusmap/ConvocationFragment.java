@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -27,7 +29,12 @@ import android.widget.RelativeLayout.LayoutParams;
 
 public class ConvocationFragment extends Fragment {
 	private ListView venuesListView;
+	private MapActivity mapActivity;
+	String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
 	
+		public ConvocationFragment(MapActivity mapActivity){
+			this.mapActivity = mapActivity;
+		}
 		@Override
 		public View onCreateView(LayoutInflater inflater,
 				@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +49,7 @@ public class ConvocationFragment extends Fragment {
 		}
 		
 		private void initList() {
-			String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
+			
 			Venue convo = new Venue("Convocation Hall", "VVIP and Media", R.drawable.yellow_blue_dot, markerNames[0]);
 			Venue lhc = new Venue("Lecture Hall Complex 1, 2, 3 & 4", "Parents and Friends", R.drawable.green_dot, markerNames[1]);
 			Venue vmcc = new Venue("VMCC, Main Auditorium", "Faculty and Staff members", R.drawable.red_dot, markerNames[2]);
@@ -58,6 +65,16 @@ public class ConvocationFragment extends Fragment {
 			
 			VenueListAdapter adapter = new VenueListAdapter(getActivity(), R.layout.convocation_venue, venueList, names);
 			venuesListView.setAdapter(adapter);
+			
+			venuesListView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					mapActivity.editText.setText(markerNames[position]);
+					mapActivity.backToMap();
+				}
+			});
 		}
 		
 		private class Venue{

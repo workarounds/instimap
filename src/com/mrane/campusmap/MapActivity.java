@@ -229,7 +229,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-		convocationFragment = new ConvocationFragment();
+		convocationFragment = new ConvocationFragment(this);
 
 		settingsManager = new SettingsManager(this);
 		campusMapView.setSettingsManager(settingsManager);
@@ -533,6 +533,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
+			transaction.setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out);
 			transaction.add(R.id.fragment_container, tempFragment);
 			transaction.addToBackStack(firstStackTag);
 			transaction.commit();
@@ -544,7 +545,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		noFragments = false;
 	}
 
-	private void backToMap() {
+	public void backToMap() {
 		noFragments = true;
 		this.hideKeyboard();
 		fragmentManager.popBackStack(firstStackTag,

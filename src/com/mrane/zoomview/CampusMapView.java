@@ -617,10 +617,11 @@ public class CampusMapView extends SubsamplingScaleImageView {
 				int action = motionEvent.getAction();
 				if(action== MotionEvent.ACTION_DOWN){
 					if(motionEvent.getX()<20*density){
-						CampusMapView.this.setPanEnabled(false);
+						getParent().requestDisallowInterceptTouchEvent(false);
+						return true;
 					}
 					else{
-						CampusMapView.this.setPanEnabled(true);
+//						CampusMapView.this.setPanEnabled(true);
 					}
 				}
 				else if(action == MotionEvent.ACTION_UP){

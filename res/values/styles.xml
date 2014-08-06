@@ -37,7 +37,7 @@
     <style name="ConvocationSectionHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
@@ -48,6 +48,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">8dp</item>
         <item name="android:textSize">26sp</item>
         <item name="android:text">@string/convocation_cheif_guest_name</item>
     </style>
@@ -55,8 +56,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingLeft">4dp</item>
         <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingRight">8dp</item>
         <item name="android:textSize">@dimen/convocation_cheif_guest_subtitle_size</item>
         <item name="android:text">@string/convocation_cheif_guest_subtitle</item>
     </style>
@@ -65,15 +67,17 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textSize">@dimen/convocation_venue_title_size</item>
     </style>
     
     <style name="ConvocationVenueSubtitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textSize">@dimen/convocation_cheif_guest_subtitle_size</item>
     </style>

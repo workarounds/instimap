@@ -17,10 +17,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.MeasureSpec;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class ConvocationFragment extends Fragment {
 	private ListView venuesListView;
@@ -28,11 +31,12 @@ public class ConvocationFragment extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater,
 				@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-			View root = inflater.inflate(R.layout.convocation_fragment, container);
+			View root = inflater.inflate(R.layout.convocation_fragment, container, false);
 			venuesListView = (ListView)root.findViewById(R.id.convocation_venues_list);
 			initList();
+			setListViewHeightBasedOnChildren(venuesListView);
 			
-			applyFonts(container);
+			//applyFonts(container);
 			
 			return root;
 		}
@@ -40,9 +44,9 @@ public class ConvocationFragment extends Fragment {
 		private void initList() {
 			String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
 			Venue convo = new Venue("Convocation Hall", "VVIP and Media", R.drawable.yellow_blue_dot, markerNames[0]);
-			Venue lhc = new Venue("Lecture Hall Complex 1, 2, 3 and 4", "Parents and Friends", R.drawable.green_dot, markerNames[1]);
+			Venue lhc = new Venue("Lecture Hall Complex 1, 2, 3 & 4", "Parents and Friends", R.drawable.green_dot, markerNames[1]);
 			Venue vmcc = new Venue("VMCC, Main Auditorium", "Faculty and Staff members", R.drawable.red_dot, markerNames[2]);
-			ArrayList<Venue> venueList = new ArrayList();
+			ArrayList<Venue> venueList = new ArrayList<Venue>();
 			venueList.add(convo);
 			venueList.add(lhc);
 			venueList.add(vmcc);
@@ -98,16 +102,16 @@ public class ConvocationFragment extends Fragment {
 				TextView subTitleTextView = (TextView) mView.findViewById(R.id.convocation_venue_subtitle);
 				ImageView dotImage = (ImageView) mView.findViewById(R.id.convocation_venue_color);
 				if (venues.get(position) != null) {
-					Typeface regular = Typeface.createFromAsset(getActivity().getAssets(),
-							MapActivity.FONT_REGULAR);
+					//Typeface regular = Typeface.createFromAsset(getActivity().getAssets(),
+							//MapActivity.FONT_REGULAR);
 					SpannableString content = new SpannableString(venues.get(position).title);
 					content.setSpan(new UnderlineSpan(), 0, venues.get(position).title.length(), 0);
-					titleTextView.setTypeface(regular);
+					//titleTextView.setTypeface(regular);
 					titleTextView.setText(content);
 					titleTextView.setTextColor(Color.rgb(19, 140, 190));
 					
 					
-					subTitleTextView.setTypeface(regular);
+					//subTitleTextView.setTypeface(regular);
 					subTitleTextView.setText(venues.get(position).subTitle);
 					dotImage.setImageResource(venues.get(position).drawableId);
 				}
@@ -115,6 +119,31 @@ public class ConvocationFragment extends Fragment {
 				return mView;
 			}
 
+		}
+		
+		public static void setListViewHeightBasedOnChildren(ListView listView) {
+			ListAdapter listAdapter = listView.getAdapter();
+			if (listAdapter == null)
+				return;
+
+			int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(),
+					MeasureSpec.UNSPECIFIED);
+			int totalHeight = 0;
+			View view = null;
+			for (int i = 0; i < listAdapter.getCount(); i++) {
+				view = listAdapter.getView(i, view, listView);
+				if (i == 0)
+					view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,
+							LayoutParams.WRAP_CONTENT));
+
+				view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+				totalHeight += view.getMeasuredHeight();
+			}
+			ViewGroup.LayoutParams params = listView.getLayoutParams();
+			params.height = totalHeight
+					+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+			listView.setLayoutParams(params);
+			listView.requestLayout();
 		}
 
 		private void applyFonts(ViewGroup root) {

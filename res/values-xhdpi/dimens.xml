@@ -9,4 +9,5 @@
    
    <dimen name="convocation_title_size">24sp</dimen>
    <dimen name="convocation_cheif_guest_subtitle_size">14sp</dimen>
+   <dimen name="convocation_venue_title_size">19sp</dimen>
 </resources>

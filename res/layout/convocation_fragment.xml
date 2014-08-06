@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="match_parent">
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white" >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="204dp">
@@ -71,7 +75,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="12dp"
             android:padding="8dp"
             android:cropToPadding="true"
             android:src="@drawable/convo_venues_info"
@@ -80,6 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
+            android:paddingRight="8dp"
             android:tag="text_normal"
             android:textSize="@dimen/convocation_cheif_guest_subtitle_size"
             android:text="@string/convocation_venues_info"/>
@@ -90,3 +95,4 @@
         android:layout_height="wrap_content"/>
 
 </LinearLayout>
+</ScrollView>

@@ -99,6 +99,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
+	private ConvocationFragment convocationFragment;
 	private Fragment fragment;
 	private NewCardTouchListener newCardTouchListener;
 	public RelativeLayout expandContainer;
@@ -228,10 +229,20 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
+		convocationFragment = new ConvocationFragment();
 
 		settingsManager = new SettingsManager(this);
 		campusMapView.setSettingsManager(settingsManager);
+		
+		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
+		convoContainer.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				putFragment(convocationFragment);
+			}
+			
+		});
 		initSoundPool();
 		setFonts();
 

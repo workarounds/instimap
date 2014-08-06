@@ -641,7 +641,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 										.start();
 							}
 						};
-						anim.run();
+						if(isImageReady())	anim.run();
 					}
 					return true;
 				}

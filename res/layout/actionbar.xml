@@ -3,15 +3,22 @@
     android:id="@+id/root_action_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/small_card_bg"
-    android:animateLayoutChanges="true" >
+    android:animateLayoutChanges="true"
+    android:background="@drawable/small_card_bg" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+    </LinearLayout>
 
     <EditText
         android:id="@+id/search"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:background="@null"
         android:dropDownHeight="0dp"
         android:fontFamily="sans-serif-light"
@@ -30,8 +37,8 @@
         android:id="@+id/settings_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:fontFamily="sans-serif-light"
         android:paddingLeft="8dp"
         android:paddingRight="76dp"

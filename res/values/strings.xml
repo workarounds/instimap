@@ -19,4 +19,14 @@
 	<string name="setting_residences_summary_off">Residences will not be shown on the map</string>
 	<string name="setting_residences_title">Show residences</string>
 	<string name="settings_last_updated_key">lastupdated</string>
+	
+	<!-- Convocation Fragment -->
+	<string name="convocation_background">Convocation Background</string>
+	<string name="convocation_title">52nd Convocation, IIT Bombay</string>
+	<string name="convocation_date">9 August, 2014</string>
+	<string name="convocation_cheif_guest_header">CHEIF GUEST</string>
+	<string name="convocation_cheif_guest_name">Dr. R A Mashelkar</string>
+	<string name="convocation_cheif_guest_subtitle">National Research Scientist,\nCISR, National Chemical Laboratory, Pune </string>
+	<string name="convocation_venues_header">VENUES</string>
+	<string name="convocation_venues_info">Look for the colour of the dot on the back of your invitation card</string>
 </resources>

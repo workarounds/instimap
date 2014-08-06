@@ -483,7 +483,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 				mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
 			} else {
-				removeMarker();
+				campusMapView.setResultMarker(null);
+				this.dismissCard();
+				campusMapView.invalidate();
 			}
 			placeCard.setVisibility(View.VISIBLE);
 		}

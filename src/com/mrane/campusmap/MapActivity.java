@@ -99,6 +99,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
+	private ConvocationFragment convocationFragment;
 	private Fragment fragment;
 	private NewCardTouchListener newCardTouchListener;
 	public RelativeLayout expandContainer;
@@ -228,10 +229,20 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
+		convocationFragment = new ConvocationFragment(this);
 
 		settingsManager = new SettingsManager(this);
 		campusMapView.setSettingsManager(settingsManager);
+		
+		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
+		convoContainer.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				putFragment(convocationFragment);
+			}
+			
+		});
 		initSoundPool();
 		setFonts();
 
@@ -520,6 +531,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
+			transaction.setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out);
 			transaction.add(R.id.fragment_container, tempFragment);
 			transaction.addToBackStack(firstStackTag);
 			transaction.commit();
@@ -531,7 +543,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		noFragments = false;
 	}
 
-	private void backToMap() {
+	public void backToMap() {
 		noFragments = true;
 		this.hideKeyboard();
 		fragmentManager.popBackStack(firstStackTag,
@@ -589,7 +601,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				Message msg = mHandler.obtainMessage(MSG_ANIMATE, key);
 				mHandler.sendMessageDelayed(msg, DELAY_ANIMATE);
 			} else {
-				removeMarker();
+				campusMapView.setResultMarker(null);
+				this.dismissCard();
+				campusMapView.invalidate();
 			}
 			placeCard.setVisibility(View.VISIBLE);
 		}

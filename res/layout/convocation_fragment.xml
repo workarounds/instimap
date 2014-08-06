@@ -60,7 +60,6 @@
                 android:tag="text_normal"
                 style="@style/ConvocationCheifGuestName"/>
             <TextView
-                android:tag="text_normal"
                 style="@style/ConvocationCheifGuestSubtitle"/>
         </LinearLayout>
     </LinearLayout>
@@ -85,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
             android:paddingRight="8dp"
-            android:tag="text_normal"
             android:textSize="@dimen/convocation_cheif_guest_subtitle_size"
             android:text="@string/convocation_venues_info"/>
     </LinearLayout>

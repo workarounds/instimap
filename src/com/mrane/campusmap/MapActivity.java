@@ -154,6 +154,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public static final String FONT_SEMIBOLD = "rigascreen_bold.ttf";
 	// public static final String FONT_REGULAR = "myriadpro_regular.ttf";
 	public static final String FONT_REGULAR = "rigascreen_regular.ttf";
+	public static final String FONT_LIGHT = "roboto_light.ttf";
 	public static final String PREFERENCE_NAME = "preferences";
 	public static final int SOUND_ID_RESULT = 0;
 	public static final int SOUND_ID_ADD = 1;

@@ -43,7 +43,7 @@ public class ConvocationFragment extends Fragment {
 			initList();
 			setListViewHeightBasedOnChildren(venuesListView);
 			
-			//applyFonts(container);
+			applyFonts((ViewGroup)root);
 			
 			return root;
 		}
@@ -119,16 +119,15 @@ public class ConvocationFragment extends Fragment {
 				TextView subTitleTextView = (TextView) mView.findViewById(R.id.convocation_venue_subtitle);
 				ImageView dotImage = (ImageView) mView.findViewById(R.id.convocation_venue_color);
 				if (venues.get(position) != null) {
-					//Typeface regular = Typeface.createFromAsset(getActivity().getAssets(),
-							//MapActivity.FONT_REGULAR);
+					Typeface light = Typeface.createFromAsset(getActivity().getAssets(),
+							MapActivity.FONT_LIGHT);
 					SpannableString content = new SpannableString(venues.get(position).title);
 					content.setSpan(new UnderlineSpan(), 0, venues.get(position).title.length(), 0);
-					//titleTextView.setTypeface(regular);
+					titleTextView.setTypeface(light);
 					titleTextView.setText(content);
 					titleTextView.setTextColor(Color.rgb(19, 140, 190));
 					
 					
-					//subTitleTextView.setTypeface(regular);
 					subTitleTextView.setText(venues.get(position).subTitle);
 					dotImage.setImageResource(venues.get(position).drawableId);
 				}
@@ -164,7 +163,7 @@ public class ConvocationFragment extends Fragment {
 		}
 
 		private void applyFonts(ViewGroup root) {
-			Typeface normal = Typeface.createFromAsset(getActivity().getAssets(), MapActivity.FONT_REGULAR); 
+			Typeface normal = Typeface.createFromAsset(getActivity().getAssets(), MapActivity.FONT_LIGHT); 
 			ArrayList<View> textNormalViews = getViewsByTag(root, "text_normal");
 			for(View textNormalView : textNormalViews){
 				try{

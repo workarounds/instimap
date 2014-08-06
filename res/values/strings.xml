@@ -14,9 +14,14 @@
     <string name="activity_name_settings">Settings</string>
     <string name="setting_mute_key">mute</string>
     <string name="setting_mute_title">Mute</string>
+	<string name="setting_mute_summary_on">Animation sounds will not be played</string>
+	<string name="setting_mute_summary_off">Animation sounds will be played</string>
     <string name="setting_residences_key">residences</string>
 	<string name="setting_residences_summary_on">Residences will be shown on the map</string>
 	<string name="setting_residences_summary_off">Residences will not be shown on the map</string>
 	<string name="setting_residences_title">Show residences</string>
 	<string name="settings_last_updated_key">lastupdated</string>
+	<string name="drawer_open">Open the drawer</string>
+	<string name="drawer_close">Close the drawer</string>
+	<string name="settings_title">Settings</string>
 </resources>

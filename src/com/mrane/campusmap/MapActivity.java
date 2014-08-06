@@ -12,8 +12,10 @@ import java.util.regex.Pattern;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -25,12 +27,15 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -44,6 +49,8 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -120,6 +127,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public LocationManager locationManager;
 	public LocationListener locationListener;
 	public String addedMarkerString;
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
 	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
 	private boolean noFragments = true;
@@ -177,9 +186,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onCreate(savedInstanceState);
 		setMainActivity(this);
 
-		setUpActionBar();
-
 		setContentView(R.layout.activity_main);
+		setUpActionBar();
+		setUpDrawer();
 
 		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
 		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
@@ -229,9 +238,42 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-		// new GetLocations(JSONFILE, mainActivity).execute();
 	}
 
+	private void setUpDrawer() {
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
+
+			TextView settingsTitle = (TextView) actionBarView
+					.findViewById(R.id.settings_title);
+
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				settingsTitle.setVisibility(View.GONE);
+
+				editText.setVisibility(View.VISIBLE);
+				setCorrectIcons();
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				editText.setVisibility(View.GONE);
+				indexIcon.setVisibility(View.GONE);
+				mapIcon.setVisibility(View.GONE);
+				removeIcon.setVisibility(View.GONE);
+				settingsTitle.setVisibility(View.VISIBLE);
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+	}
+
+ 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB) 
 	private void setUpActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -240,11 +282,76 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
 
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+
 		actionBarView = LayoutInflater.from(this).inflate(R.layout.actionbar,
 				null); // layout which contains your button.
+		
 
 		actionBar.setCustomView(actionBarView);
+		
+		RelativeLayout rootActionView = (RelativeLayout) actionBarView.findViewById(R.id.root_action_view);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
 
+			LayoutTransition layoutTransition = new LayoutTransition();
+			layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
+			layoutTransition.setDuration(LayoutTransition.APPEARING, 250);
+
+			layoutTransition.setStartDelay(
+					LayoutTransition.CHANGE_APPEARING, 0);
+			layoutTransition.setDuration(LayoutTransition.CHANGE_APPEARING,
+					500);
+			layoutTransition.setInterpolator(
+					LayoutTransition.CHANGE_APPEARING, i);
+
+			layoutTransition
+					.setStartDelay(LayoutTransition.DISAPPEARING, 0);
+			layoutTransition
+					.setDuration(LayoutTransition.DISAPPEARING, 250);
+
+			layoutTransition.setStartDelay(
+					LayoutTransition.CHANGE_DISAPPEARING, 0);
+			layoutTransition.setDuration(
+					LayoutTransition.CHANGE_DISAPPEARING, 500);
+			layoutTransition.setInterpolator(
+					LayoutTransition.CHANGE_DISAPPEARING, i);
+
+			rootActionView.setLayoutTransition(layoutTransition);
+		}
+
+
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		// getMenuInflater().inflate(R.menu.home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -299,10 +406,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		placeNameTextView.setTypeface(regular, Typeface.BOLD);
 		placeSubHeadTextView.setTypeface(regular);
 		editText.setTypeface(regular);
+
+		TextView settingsTitle = (TextView) actionBarView
+				.findViewById(R.id.settings_title);
+		settingsTitle.setTypeface(regular);
 	}
 
-	@SuppressLint("NewApi")
-	private void initLayout() {
+	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB) private void initLayout() {
 		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
@@ -878,7 +989,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void settingsClick(View v) {
-		goToSettingsActivity();
+		hideKeyboard();
+		View drawerList = findViewById(R.id.drawer_list);
+		mDrawerLayout.openDrawer(drawerList);
+	}
+
+	public void backClick(View v) {
+		View drawerList = findViewById(R.id.drawer_list);
+		if (mDrawerLayout.isDrawerOpen(drawerList)) {
+			mDrawerLayout.closeDrawer(drawerList);
+		} else {
+			onBackPressed();
+		}
 	}
 
 	public void toggleCardClick(View v) {
@@ -945,7 +1067,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			}
 		} else {
 			if (fragment instanceof ListFragment) {
-				if(this.handleRemoveIcon()) {
+				if (this.handleRemoveIcon()) {
 					this.noIndexButton();
 				} else {
 					this.setVisibleButton(indexIcon);

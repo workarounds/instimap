@@ -36,7 +36,8 @@
             android:paddingRight="0dp"
             android:paddingTop="0dp" >
 
-            <!-- RelativeLayout
+            <!--
+            RelativeLayout
                 android:id="@+id/header_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,13 +129,14 @@
                     android:padding="8dp"
                     android:src="@drawable/ic_action_remove"
                     android:visibility="gone" />
-            </RelativeLayout-->
+            </RelativeLayout
+            -->
 
             <ImageView
                 android:id="@+id/north_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-				android:layout_alignParentTop="true"
+                android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/north" />
@@ -143,14 +145,14 @@
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-				android:layout_alignParentTop="true"
+                android:layout_alignParentTop="true"
                 android:orientation="vertical" >
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-				android:layout_alignParentTop="true"
+                android:layout_alignParentTop="true"
                 android:background="@drawable/shadow_gradient" />
         </RelativeLayout>
 
@@ -170,7 +172,8 @@
                 android:background="@android:color/transparent"
                 android:orientation="vertical" >
 
-                <!-- ImageView
+                <!--
+                     ImageView
                     android:id="@+id/settings_icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -178,7 +181,8 @@
                     android:cropToPadding="true"
                     android:onClick="settingsClick"
                     android:padding="10dp"
-                    android:src="@drawable/settings" /-->
+                    android:src="@drawable/settings" /
+                -->
 
                 <RelativeLayout
                     android:id="@+id/new_small_card"
@@ -352,14 +356,187 @@
         </RelativeLayout>
     </FrameLayout>
 
-    <ListView
+    <ScrollView
+        xmlns:custom="http://schemas.android.com/apk/res/in.designlabs.instimap"
         android:id="@+id/drawer_list"
-        android:layout_width="240dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#111"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:background="@color/list_item_gray_even"
+        android:choiceMode="singleChoice" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical" >
+
+                <com.mrane.campusmap.CustomCheckBoxPreference
+                    android:id="@+id/mute_pref"
+                    custom:name="@string/setting_mute_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:defaultValue="false"
+                    custom:key="@string/setting_mute_key"
+                    custom:summaryOff="@string/setting_mute_summary_off"
+                    custom:summaryOn="@string/setting_mute_summary_on" />
+
+                <com.mrane.campusmap.CustomCheckBoxPreference
+                    android:id="@+id/residences_pref"
+                    custom:name="@string/setting_residences_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:defaultValue="true"
+                    custom:key="@string/setting_residences_key"
+                    custom:summaryOff="@string/setting_residences_summary_off"
+                    custom:summaryOn="@string/setting_residences_summary_on" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/about_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/list_item_gray_even"
+                android:padding="16dp"
+                android:textColor="@android:color/darker_gray" >
+
+                <TextView
+                    android:id="@+id/about_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/about_version"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about_version_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/about_version"
+                    android:text="@string/about_version_date" />
+
+                <LinearLayout
+                    android:id="@+id/credits_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about_version_date"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Prof. Mandar Rane" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Design Lead" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Shishir Bhagade" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Map Design" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Jaikishan Patel" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="UI Design" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Madhu Kiran" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Developer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Manideep Polireddi" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Developer" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.v4.widget.DrawerLayout>

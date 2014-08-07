@@ -64,6 +64,7 @@
         </LinearLayout>
     </LinearLayout>
     <TextView 
+        android:tag="text_normal"
         style="@style/ConvocationSectionHeader"
         android:text="@string/convocation_venues_header"/>
     <LinearLayout

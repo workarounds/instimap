@@ -20,11 +20,7 @@
             android:focusableInTouchMode="true" >
         </LinearLayout>
 
-        <com.mrane.zoomview.CampusMapView
-            android:id="@+id/campusMapView"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="0dp" />
+        
 
         <RelativeLayout
             android:id="@+id/main_container"
@@ -149,23 +145,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/searchbar_background" >
+                android:background="@drawable/small_card_bg" >
 
                 <ImageView
                     android:id="@+id/convocation_hat"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="5dp"
                     android:padding="8dp"
                     android:src="@drawable/convocation_hat" />
 
                 <View
                     android:id="@+id/seperator"
                     android:layout_width="1dp"
-                    android:layout_height="38dp"
+                    android:layout_height="28dp"
                     android:layout_alignParentTop="true"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
                     android:layout_toRightOf="@id/convocation_hat"
                     android:background="@color/list_item_seperator_black" />
 
@@ -178,8 +175,24 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:text="52nd Convocation, IIT Bombay"
+                    android:textColor="#666666"
                     android:textSize="@dimen/convocation_bar_text_size" />
+                
+                <ImageView 
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:padding="8dp"
+                    android:src="@drawable/arrow_circle_up"/>
             </RelativeLayout>
+            
+            <com.mrane.zoomview.CampusMapView
+            android:id="@+id/campusMapView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/convocation_title_container"
+            android:layout_marginTop="0dp" />
 
             <RelativeLayout
                 android:id="@+id/fragment_container"

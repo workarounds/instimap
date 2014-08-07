@@ -197,7 +197,7 @@ public class Locations {
 				3908,
 				1077,
 				2,
-				"Hostel security: +912225762601\nHall Manager: +912225762701\nG.Sec: Ratikant +919930836852");
+				"Hostel security: +912225762601\nHall Manager: +912225762701\nG. Sec: Ratikant +919930836852");
 		data.put(m32.getName(), m32);
 		Marker m33 = new Marker(
 				"Hostel 10 Annexe (Girls Hostel)",
@@ -205,7 +205,7 @@ public class Locations {
 				2886,
 				2452,
 				2,
-				"Hostel security: +912225762610\nHall Manager: +912225762710\nG.Sec: Madhu Lekha +919769372532");
+				"Hostel security: +912225762610\nHall Manager: +912225762710\nG. Sec: Madhu Lekha +919769372532");
 		data.put(m33.getName(), m33);
 		Marker m34 = new Marker(
 				"Hostel 10 New (Girls Hostel)",
@@ -213,7 +213,7 @@ public class Locations {
 				3005,
 				2342,
 				2,
-				"Hostel security: +912225762610\nHall Manager: +912225762710\nG.Sec: Madhu Lekha +919769372532");
+				"Hostel security: +912225762610\nHall Manager: +912225762710\nG. Sec: Madhu Lekha +919769372532");
 		data.put(m34.getName(), m34);
 		Marker m35 = new Marker(
 				"Hostel 10A QIP building (Girls Hostel)",
@@ -221,7 +221,7 @@ public class Locations {
 				4716,
 				1448,
 				2,
-				"Hostel security: +912225762619\nHall Manager: +912225762719\nG.Sec: Sagarika Kumar +919167273231");
+				"Hostel security: +912225762619\nHall Manager: +912225762719\nG. Sec: Sagarika Kumar +919167273231");
 		data.put(m35.getName(), m35);
 		Marker m36 = new Building(
 				"Hostel 11 Athena (Girls Hostel)",
@@ -230,7 +230,7 @@ public class Locations {
 				1368,
 				2,
 				new String[] { "Printing and photocopying H11" },
-				"Hostel security: +912225762611\nHall Manager: +912225762711\nG.Sec: Nanditha +919769834234");
+				"Hostel security: +912225762611\nHall Manager: +912225762711\nG. Sec: Nanditha +919769834234");
 		data.put(m36.getName(), m36);
 		Marker m37 = new Marker(
 				"Hostel 12 Crown of the campus",
@@ -238,7 +238,7 @@ public class Locations {
 				2096,
 				667,
 				2,
-				"Hostel security: +912225762612\nHall Manager: +912225762712\nG.Sec: Ashutosh +919167782489");
+				"Hostel security: +912225762612\nHall Manager: +912225762712\nG. Sec: Ashutosh +919167782489");
 		data.put(m37.getName(), m37);
 		Marker m38 = new Building(
 				"Hostel 13 House of Titans",
@@ -247,7 +247,7 @@ public class Locations {
 				745,
 				2,
 				new String[] { "H13 Night Canteen" },
-				"Hostel security: +912225762613\nHall Manager: +912225762713\nG.Sec: Raj Kumar Yadav +919769484219");
+				"Hostel security: +912225762613\nHall Manager: +912225762713\nG. Sec: Raj Kumar Yadav +919769484219");
 		data.put(m38.getName(), m38);
 		Marker m39 = new Building(
 				"Hostel 14 Silicon ship",
@@ -256,13 +256,13 @@ public class Locations {
 				800,
 				2,
 				new String[] { "Amul Parlour" },
-				"Hostel security: +912225762614\nHall Manager: 022-25762714\nG.Sec: Mayuresh Pant +919730694513");
+				"Hostel security: +912225762614\nHall Manager: 022-25762714\nG. Sec: Mayuresh Pant +919730694513");
 		data.put(m39.getName(), m39);
 		Marker m40 = new Marker("Hostel 15", "H15", 4196, 870, 2,
-				"Hostel security: +912225762715\nHall Manager: \nG.Sec:");
+				"Hostel security: +912225762715\nHall Manager: \nG. Sec:");
 		data.put(m40.getName(), m40);
 		Marker m41 = new Marker("Hostel 16", "H16", 3972, 849, 2,
-				"Hostel security: +91222576 2716\nHall Manager: 022-2576\nG.Sec:");
+				"Hostel security: +91222576 2716\nHall Manager: 022-2576\nG. Sec:");
 		data.put(m41.getName(), m41);
 		Marker m42 = new Marker(
 				"Hostel 02 The wild ones",
@@ -270,7 +270,7 @@ public class Locations {
 				3672,
 				1000,
 				2,
-				"Hostel security:+912225762602\nHall Manager: +912225762702\nG.Sec: Manohar Reddy Devarpalli +918796879949");
+				"Hostel security:+912225762602\nHall Manager: +912225762702\nG. Sec: Manohar Reddy Devarpalli +918796879949");
 		data.put(m42.getName(), m42);
 		Marker m43 = new Marker(
 				"Hostel 03 Vitruvians",
@@ -278,7 +278,7 @@ public class Locations {
 				3435,
 				946,
 				2,
-				"Hostel security: +912225762603\nHall Manager: +912225762703\nG.Sec: Arvind Jangid +919820525369");
+				"Hostel security: +912225762603\nHall Manager: +912225762703\nG. Sec: Arvind Jangid +919820525369");
 		data.put(m43.getName(), m43);
 		Marker m44 = new Marker(
 				"Hostel 04 Madhouse",
@@ -286,7 +286,7 @@ public class Locations {
 				3176,
 				867,
 				2,
-				"Hostel security: +912225762604\nHall Manager: +912225762704\nG.Sec: Kumar Gaurav +919969800320");
+				"Hostel security: +912225762604\nHall Manager: +912225762704\nG. Sec: Kumar Gaurav +919969800320");
 		data.put(m44.getName(), m44);
 		Marker m45 = new Marker(
 				"Hostel 05 Penthouse",
@@ -294,7 +294,7 @@ public class Locations {
 				2820,
 				970,
 				2,
-				"Hostel security: +912225762605\nHall Manager: +912225762705\nG.Sec: Shashank Patidar +919820717487");
+				"Hostel security: +912225762605\nHall Manager: +912225762705\nG. Sec: Shashank Patidar +919820717487");
 		data.put(m45.getName(), m45);
 		Marker m46 = new Marker(
 				"Hostel 06 Vikings",
@@ -302,7 +302,7 @@ public class Locations {
 				2500,
 				748,
 				2,
-				"Hostel security: +912225762606\nHall Manager:+912225762706\nG.Sec: Anil Reddy +919022623186");
+				"Hostel security: +912225762606\nHall Manager:+912225762706\nG. Sec: Anil Reddy +919022623186");
 		data.put(m46.getName(), m46);
 		Marker m47 = new Marker(
 				"Hostel 07 The lady of the lake",
@@ -310,7 +310,7 @@ public class Locations {
 				2454,
 				942,
 				2,
-				"Hostel security: +912225762607\nHall Manager: +912225762707\nG.Sec: Archit Laddha +919930239739");
+				"Hostel security: +912225762607\nHall Manager: +912225762707\nG. Sec: Archit Laddha +919930239739");
 		data.put(m47.getName(), m47);
 		Marker m48 = new Building(
 				"Hostel 08 Woodland",
@@ -319,7 +319,7 @@ public class Locations {
 				1257,
 				2,
 				new String[] { "Printing and photocopying H8" },
-				"Hostel security: +912225762608\nHall Manager:+912225762708\nG.Sec: Mayur Kalambe +919920147585");
+				"Hostel security: +912225762608\nHall Manager:+912225762708\nG. Sec: Mayur Kalambe +919920147585");
 		data.put(m48.getName(), m48);
 		Marker m49 = new Marker(
 				"Hostel 09 Nawaabon Ki Basti",
@@ -327,7 +327,7 @@ public class Locations {
 				2676,
 				844,
 				2,
-				"Hostel security: +912225762609\nHall Manager: +912225762709\nG.Sec: Shubham Meena +919619835583");
+				"Hostel security: +912225762609\nHall Manager: +912225762709\nG. Sec: Shubham Meena +919619835583");
 		data.put(m49.getName(), m49);
 		Marker m50 = new Building(
 				"Humanities and Social Sciences Department",
@@ -374,8 +374,8 @@ public class Locations {
 		Marker m56 = new Marker("Kendriya Vidyalaya ", "KV", 3883, 2714, 7,
 				"Tel: +912225768983");
 		data.put(m56.getName(), m56);
-		Marker m57 = new Marker("Lake Side Gate no. 1", "0", 792, 2777, 10,
-				"Tel: +912225761124");
+		Marker m57 = new Marker("Lake Side Gate no. 1", "Lakeside Gate", 792,
+				2777, 10, "Tel: +912225761124");
 		data.put(m57.getName(), m57);
 		Marker m58 = new Building("Lecture Hall Complex - 1 & 2",
 				"Lec Hall 1 & 2", 3570, 2152, 4, new String[] {
@@ -409,7 +409,7 @@ public class Locations {
 						"Joint Entrance Examination Office",
 						"Printing and photocopying Main Building" }, "");
 		data.put(m60.getName(), m60);
-		Marker m61 = new Marker("Main Gate no. 2", "0", 2259, 3237, 10,
+		Marker m61 = new Marker("Main Gate no. 2", "Main Gate", 2259, 3237, 10,
 				"Tel: +9125768978 / +9125761123. Tum Tum coupons available at Main Gate");
 		data.put(m61.getName(), m61);
 		Marker m62 = new Marker("Market Gate, Y point Gate no. 3",
@@ -1242,232 +1242,232 @@ public class Locations {
 		data.put(m231.getName(), m231);
 		Marker m232 = new Marker("Tulsi C", "0", 4607, 1031, 3, "PS Quarters");
 		data.put(m232.getName(), m232);
-		Marker m233 = new Marker("2B 1 ", "0", 4421, 2264, 3,
+		Marker m233 = new Marker("Type 2B 1 ", "0", 4421, 2264, 3,
 				"2B-Type Quarters, Flat nos 1 - 6");
 		data.put(m233.getName(), m233);
-		Marker m234 = new Marker("2B 2", "0", 4381, 2311, 3,
+		Marker m234 = new Marker("Type 2B 2", "0", 4381, 2311, 3,
 				"2B-Type Quarters, Flat nos 7 - 12");
 		data.put(m234.getName(), m234);
-		Marker m235 = new Marker("2B 3", "0", 4331, 2388, 3,
+		Marker m235 = new Marker("Type 2B 3", "0", 4331, 2388, 3,
 				"2B-Type Quarters, Flat nos 13 - 18");
 		data.put(m235.getName(), m235);
-		Marker m236 = new Marker("2B 4", "0", 4284, 2462, 3,
+		Marker m236 = new Marker("Type 2B 4", "0", 4284, 2462, 3,
 				"2B-Type Quarters, Flat nos 19 - 24");
 		data.put(m236.getName(), m236);
-		Marker m237 = new Marker("2B 5", "0", 4196, 2455, 3,
+		Marker m237 = new Marker("Type 2B 5", "0", 4196, 2455, 3,
 				"2B-Type Quarters, Flat nos 25 - 30");
 		data.put(m237.getName(), m237);
-		Marker m238 = new Marker("2B 6", "0", 4243, 2391, 3,
+		Marker m238 = new Marker("Type 2B 6", "0", 4243, 2391, 3,
 				"2B-Type Quarters, Flat nos 31 - 36");
 		data.put(m238.getName(), m238);
-		Marker m239 = new Marker("2B 7", "0", 4296, 2312, 3,
+		Marker m239 = new Marker("Type 2B 7", "0", 4296, 2312, 3,
 				"2B-Type Quarters, Flat nos 37 - 42");
 		data.put(m239.getName(), m239);
-		Marker m240 = new Marker("2B 8", "0", 4348, 2247, 3,
+		Marker m240 = new Marker("Type 2B 8", "0", 4348, 2247, 3,
 				"2B-Type Quarters, Flat nos 43 - 48");
 		data.put(m240.getName(), m240);
-		Marker m241 = new Marker("2B 9", "0", 4384, 2192, 3,
+		Marker m241 = new Marker("Type 2B 9", "0", 4384, 2192, 3,
 				"2B-Type Quarters, Flat nos 49 - 54");
 		data.put(m241.getName(), m241);
-		Marker m242 = new Marker("2B 11", "0", 808, 2612, 3,
+		Marker m242 = new Marker("Type 2B 11", "0", 808, 2612, 3,
 				"2B-Type Quarters, Flat nos 61 - 66");
 		data.put(m242.getName(), m242);
-		Marker m243 = new Marker("2B 12", "0", 701, 2615, 3,
+		Marker m243 = new Marker("Type 2B 12", "0", 701, 2615, 3,
 				"2B-Type Quarters, Flat nos 67 - 72");
 		data.put(m243.getName(), m243);
-		Marker m244 = new Marker("2B 13", "0", 691, 2555, 3,
+		Marker m244 = new Marker("Type 2B 13", "0", 691, 2555, 3,
 				"2B-Type Quarters, Flat nos 73 - 78");
 		data.put(m244.getName(), m244);
-		Marker m245 = new Marker("2B 14", "0", 1144, 2866, 3,
+		Marker m245 = new Marker("Type 2B 14", "0", 1144, 2866, 3,
 				"2B-Type Quarters, Flat nos 79 - 84");
 		data.put(m245.getName(), m245);
-		Marker m246 = new Marker("2B 15", "0", 1076, 2833, 3,
+		Marker m246 = new Marker("Type 2B 15", "0", 1076, 2833, 3,
 				"2B-Type Quarters, Flat nos 85 - 90");
 		data.put(m246.getName(), m246);
-		Marker m247 = new Marker("2B 16", "0", 908, 2798, 3,
+		Marker m247 = new Marker("Type 2B 16", "0", 908, 2798, 3,
 				"2B-Type Quarters, Flat nos 91 - 96");
 		data.put(m247.getName(), m247);
-		Marker m248 = new Marker("2B 17", "0", 878, 2756, 3,
+		Marker m248 = new Marker("Type 2B 17", "0", 878, 2756, 3,
 				"2B-Type Quarters, Flat nos 97 - 102");
 		data.put(m248.getName(), m248);
-		Marker m249 = new Marker("2B 18", "0", 615, 2492, 3,
+		Marker m249 = new Marker("Type 2B 18", "0", 615, 2492, 3,
 				"2B-Type Quarters, Flat nos 103 - 108");
 		data.put(m249.getName(), m249);
-		Marker m250 = new Marker("2B 19", "0", 2573, 2468, 3,
+		Marker m250 = new Marker("Type 2B 19", "0", 2573, 2468, 3,
 				"2B-Type Quarters, Flat nos 109 - 114");
 		data.put(m250.getName(), m250);
-		Marker m251 = new Marker("2B 20", "0", 4786, 1431, 3,
+		Marker m251 = new Marker("Type 2B 20", "0", 4786, 1431, 3,
 				"2B-Type Quarters, Flat nos 115 - 134");
 		data.put(m251.getName(), m251);
-		Marker m252 = new Marker("2B 21", "0", 4720, 1371, 3,
+		Marker m252 = new Marker("Type 2B 21", "0", 4720, 1371, 3,
 				"2B-Type Quarters, Flat nos 135 - 140");
 		data.put(m252.getName(), m252);
-		Marker m253 = new Marker("2B 22", "0", 4761, 1315, 3,
+		Marker m253 = new Marker("Type 2B 22", "0", 4761, 1315, 3,
 				"2B-Type Quarters, Flat nos 141 - 164");
 		data.put(m253.getName(), m253);
-		Marker m254 = new Marker("2B 23", "0", 4365, 1180, 3,
+		Marker m254 = new Marker("Type 2B 23", "0", 4365, 1180, 3,
 				"2B-Type Quarters, Flat nos 165 - 192");
 		data.put(m254.getName(), m254);
-		Marker m255 = new Marker("2B 24", "0", 4124, 1238, 3,
+		Marker m255 = new Marker("Type 2B 24", "0", 4124, 1238, 3,
 				"2B-Type Quarters, Flat nos 193 - 220");
 		data.put(m255.getName(), m255);
-		Marker m256 = new Marker("A2 Bungalow", "A2", 2491, 2581, 3,
+		Marker m256 = new Marker("Bungalow A2 ", "A2", 2491, 2581, 3,
 				"A-Type Bungalow");
 		data.put(m256.getName(), m256);
-		Marker m257 = new Marker("A3 Bungalow", "A3", 2415, 2682, 3,
+		Marker m257 = new Marker("Bungalow A3 ", "A3", 2415, 2682, 3,
 				"A-Type Bungalow");
 		data.put(m257.getName(), m257);
-		Marker m258 = new Marker("A4 Bungalow", "A4", 2373, 2767, 3,
+		Marker m258 = new Marker("Bungalow A4 ", "A4", 2373, 2767, 3,
 				"A-Type Bungalow");
 		data.put(m258.getName(), m258);
-		Marker m259 = new Marker("A5 Bungalow", "A5", 2319, 2848, 3,
+		Marker m259 = new Marker("Bungalow A5 ", "A5", 2319, 2848, 3,
 				"A-Type Bungalow");
 		data.put(m259.getName(), m259);
-		Marker m260 = new Marker("A6 Bungalow", "A6", 2254, 2963, 3,
+		Marker m260 = new Marker("Bungalow A6 ", "A6", 2254, 2963, 3,
 				"A-Type Bungalow");
 		data.put(m260.getName(), m260);
-		Marker m261 = new Marker("A7 Bungalow", "A7", 2211, 3055, 3,
+		Marker m261 = new Marker("Bungalow A7 ", "A7", 2211, 3055, 3,
 				"A-Type Bungalow");
 		data.put(m261.getName(), m261);
-		Marker m262 = new Marker("A8 Bungalow", "A8", 2176, 3135, 3,
+		Marker m262 = new Marker("Bungalow A8 ", "A8", 2176, 3135, 3,
 				"A-Type Bungalow");
 		data.put(m262.getName(), m262);
-		Marker m263 = new Marker("A9 Bungalow", "A9", 1888, 2960, 3,
+		Marker m263 = new Marker("Bungalow A9 ", "A9", 1888, 2960, 3,
 				"A-Type Bungalow");
 		data.put(m263.getName(), m263);
-		Marker m264 = new Marker("A10 Bungalow", "A10", 1962, 2928, 3,
+		Marker m264 = new Marker("Bungalow A10 ", "A10", 1962, 2928, 3,
 				"A-Type Bungalow");
 		data.put(m264.getName(), m264);
-		Marker m265 = new Marker("A11 Bungalow", "A11", 2074, 2885, 3,
+		Marker m265 = new Marker("Bungalow A11 ", "A11", 2074, 2885, 3,
 				"A-Type Bungalow");
 		data.put(m265.getName(), m265);
-		Marker m266 = new Marker("A12 Bungalow", "A12", 2157, 2855, 3,
+		Marker m266 = new Marker("Bungalow A12 ", "A12", 2157, 2855, 3,
 				"A-Type Bungalow");
 		data.put(m266.getName(), m266);
-		Marker m267 = new Marker("A13 Bungalow", "A13", 2536, 2374, 3,
+		Marker m267 = new Marker("Bungalow A13 ", "A13", 2536, 2374, 3,
 				"A-Type Bungalow");
 		data.put(m267.getName(), m267);
-		Marker m268 = new Marker("A14 Bungalow", "A14", 3950, 1273, 3,
+		Marker m268 = new Marker("Bungalow A14 ", "A14", 3950, 1273, 3,
 				"A-Type Bungalow");
 		data.put(m268.getName(), m268);
-		Marker m269 = new Marker("A15 Bungalow", "A15", 4017, 1243, 3,
+		Marker m269 = new Marker("Bungalow A15 ", "A15", 4017, 1243, 3,
 				"A-Type Bungalow");
 		data.put(m269.getName(), m269);
-		Marker m270 = new Marker("A16 Bungalow", "A16", 4085, 1210, 3,
+		Marker m270 = new Marker("Bungalow A16 ", "A16", 4085, 1210, 3,
 				"A-Type Bungalow");
 		data.put(m270.getName(), m270);
-		Marker m271 = new Marker("A17 Bungalow", "A17", 4155, 1175, 3,
+		Marker m271 = new Marker("Bungalow A17 ", "A17", 4155, 1175, 3,
 				"A-Type Bungalow");
 		data.put(m271.getName(), m271);
-		Marker m272 = new Marker("A18 Bungalow", "A18", 4220, 1142, 3,
+		Marker m272 = new Marker("Bungalow A18 ", "A18", 4220, 1142, 3,
 				"A-Type Bungalow");
 		data.put(m272.getName(), m272);
-		Marker m273 = new Marker("A19 Bungalow", "A19", 4280, 1110, 3,
+		Marker m273 = new Marker("Bungalow A19 ", "A19", 4280, 1110, 3,
 				"A-Type Bungalow");
 		data.put(m273.getName(), m273);
-		Marker m274 = new Marker("B1", "0", 2680, 2368, 3,
+		Marker m274 = new Marker("Type B-1", "B1", 2680, 2368, 3,
 				"B-Type Quarters Flat nos. 1 - 6");
 		data.put(m274.getName(), m274);
-		Marker m275 = new Marker("B2", "0", 2848, 2685, 3,
+		Marker m275 = new Marker("Type B-2", "B2", 2848, 2685, 3,
 				"B-Type Quarters Flat nos. 7 - 10");
 		data.put(m275.getName(), m275);
-		Marker m276 = new Marker("B3", "0", 2797, 2820, 3,
+		Marker m276 = new Marker("Type B-3", "B3", 2797, 2820, 3,
 				"B-Type Quarters Flat nos. 11 - 14");
 		data.put(m276.getName(), m276);
-		Marker m277 = new Marker("B4", "0", 2743, 2947, 3,
+		Marker m277 = new Marker("Type B-4", "B4", 2743, 2947, 3,
 				"B-Type Quarters Flat nos. 15 - 18");
 		data.put(m277.getName(), m277);
-		Marker m278 = new Marker("B5", "0", 2687, 3079, 3,
+		Marker m278 = new Marker("Type B-5", "B5", 2687, 3079, 3,
 				"B-Type Quarters Flat nos. 19 - 22");
 		data.put(m278.getName(), m278);
-		Marker m279 = new Marker("B6", "0", 2508, 3189, 3,
+		Marker m279 = new Marker("Type B-6", "B6", 2508, 3189, 3,
 				"B-Type Quarters Flat nos. 23 - 26");
 		data.put(m279.getName(), m279);
-		Marker m280 = new Marker("B7", "0", 2529, 3009, 3,
+		Marker m280 = new Marker("Type B-7", "B7", 2529, 3009, 3,
 				"B-Type Quarters Flat nos. 27 - 30");
 		data.put(m280.getName(), m280);
-		Marker m281 = new Marker("B8", "0", 2600, 2867, 3,
+		Marker m281 = new Marker("Type B-8", "B8", 2600, 2867, 3,
 				"B-Type Quarters Flat nos. 31 - 34");
 		data.put(m281.getName(), m281);
-		Marker m282 = new Marker("B9", "0", 2653, 2748, 3,
+		Marker m282 = new Marker("Type B-9", "B9", 2653, 2748, 3,
 				"B-Type Quarters Flat nos. 35 - 38");
 		data.put(m282.getName(), m282);
-		Marker m283 = new Marker("B10", "0", 2726, 2634, 3,
+		Marker m283 = new Marker("Type B-10", "B10", 2726, 2634, 3,
 				"B-Type Quarters Flat nos. 39 - 42");
 		data.put(m283.getName(), m283);
-		Marker m284 = new Marker("B11", "0", 2232, 2552, 3,
+		Marker m284 = new Marker("Type B-11", "B11", 2232, 2552, 3,
 				"B-Type Quarters Flat nos. 43 - 46");
 		data.put(m284.getName(), m284);
-		Marker m285 = new Marker("B12", "0", 2080, 2631, 3,
+		Marker m285 = new Marker("Type B-12", "B12", 2080, 2631, 3,
 				"B-Type Quarters Flat nos. 47 - 50");
 		data.put(m285.getName(), m285);
-		Marker m286 = new Marker("B13", "0", 2356, 2478, 3,
+		Marker m286 = new Marker("Type B-13", "B13", 2356, 2478, 3,
 				"B-Type Quarters Flat nos. 51 - 54");
 		data.put(m286.getName(), m286);
-		Marker m287 = new Marker("B14", "0", 2470, 2291, 3,
+		Marker m287 = new Marker("Type B-14", "B14", 2470, 2291, 3,
 				"B-Type Quarters Flat nos. 55 - 58");
 		data.put(m287.getName(), m287);
-		Marker m288 = new Marker("B15", "0", 2192, 2665, 3,
+		Marker m288 = new Marker("Type B-15", "B15", 2192, 2665, 3,
 				"B-Type Quarters Flat nos. 59 - 62");
 		data.put(m288.getName(), m288);
-		Marker m289 = new Marker("B16", "0", 2085, 2719, 3,
+		Marker m289 = new Marker("Type B-16", "B16", 2085, 2719, 3,
 				"B-Type Quarters Flat nos. 63 - 66");
 		data.put(m289.getName(), m289);
-		Marker m290 = new Marker("B17", "0", 3040, 2461, 3,
+		Marker m290 = new Marker("Type B-17", "B17", 3040, 2461, 3,
 				"B-Type Quarters Flat nos. 67 - 72");
 		data.put(m290.getName(), m290);
-		Marker m291 = new Marker("B18", "0", 3159, 2368, 3,
+		Marker m291 = new Marker("Type B-18", "B18", 3159, 2368, 3,
 				"B-Type Quarters Flat nos. 73 - 74 and 73A - 74A ");
 		data.put(m291.getName(), m291);
 		Marker m292 = new Marker("BTR Building - A & B", "BTR A & B", 2002,
 				3087, 3, "A new Type B building is proposed  here.");
 		data.put(m292.getName(), m292);
-		Marker m293 = new Marker("C2", "0", 3108, 2552, 3,
+		Marker m293 = new Marker("Type C-2", "C2", 3108, 2552, 3,
 				"C-Type Quarters Flat nos. 13 - 18");
 		data.put(m293.getName(), m293);
-		Marker m294 = new Marker("C5", "0", 3464, 2708, 3,
+		Marker m294 = new Marker("Type C-5", "C5", 3464, 2708, 3,
 				"C-Type Quarters Flat nos. 31 - 36");
 		data.put(m294.getName(), m294);
-		Marker m295 = new Marker("C6", "0", 3547, 2771, 3,
+		Marker m295 = new Marker("Type C-6", "C6", 3547, 2771, 3,
 				"C-Type Quarters Flat nos. 37 - 42");
 		data.put(m295.getName(), m295);
-		Marker m296 = new Marker("C7", "0", 3440, 2787, 3,
+		Marker m296 = new Marker("Type C-7", "C7", 3440, 2787, 3,
 				"C-Type Quarters Flat nos. 43 - 48");
 		data.put(m296.getName(), m296);
-		Marker m297 = new Marker("C8", "0", 3078, 2878, 3,
+		Marker m297 = new Marker("Type C-8", "C8", 3078, 2878, 3,
 				"C-Type Quarters Flat nos. 49 - 54");
 		data.put(m297.getName(), m297);
-		Marker m298 = new Marker("C9", "0", 2904, 2910, 3,
+		Marker m298 = new Marker("Type C-9", "C9", 2904, 2910, 3,
 				"C-Type Quarters Flat nos. 55 - 60");
 		data.put(m298.getName(), m298);
-		Marker m299 = new Marker("C10", "0", 2944, 2820, 3,
+		Marker m299 = new Marker("Type C-10", "C10", 2944, 2820, 3,
 				"C-Type Quarters Flat nos. 61 - 66");
 		data.put(m299.getName(), m299);
-		Marker m300 = new Marker("C11", "0", 2832, 3131, 3,
+		Marker m300 = new Marker("Type C-11", "C11", 2832, 3131, 3,
 				"C-Type Quarters Flat nos. 67 - 72");
 		data.put(m300.getName(), m300);
-		Marker m301 = new Marker("C12", "0", 2867, 3006, 3,
+		Marker m301 = new Marker("Type C-12", "C12", 2867, 3006, 3,
 				"C-Type Quarters Flat nos. 73 - 78");
 		data.put(m301.getName(), m301);
-		Marker m302 = new Marker("C13", "0", 2974, 3070, 3,
+		Marker m302 = new Marker("Type C-13", "C13", 2974, 3070, 3,
 				"C-Type Quarters Flat nos. 79 - 84");
 		data.put(m302.getName(), m302);
-		Marker m303 = new Marker("C14", "0", 3140, 3047, 3,
+		Marker m303 = new Marker("Type C-14", "C14", 3140, 3047, 3,
 				"C-Type Quarters Flat nos. 85 - 90");
 		data.put(m303.getName(), m303);
-		Marker m304 = new Marker("C15", "0", 3360, 3033, 3,
+		Marker m304 = new Marker("Type C-15", "C15", 3360, 3033, 3,
 				"C-Type Quarters Flat nos. 91 - 96");
 		data.put(m304.getName(), m304);
-		Marker m305 = new Marker("C16", "0", 3162, 2991, 3,
+		Marker m305 = new Marker("Type C-16", "C16", 3162, 2991, 3,
 				"C-Type Quarters Flat nos. 97 - 102");
 		data.put(m305.getName(), m305);
-		Marker m306 = new Marker("C17", "0", 3453, 2987, 3,
+		Marker m306 = new Marker("Type C-17", "C17", 3453, 2987, 3,
 				"C-Type Quarters Flat nos. 103 - 108");
 		data.put(m306.getName(), m306);
-		Marker m307 = new Marker("C18", "0", 3537, 2963, 3,
+		Marker m307 = new Marker("Type C-18", "C18", 3537, 2963, 3,
 				"C-Type Quarters Flat nos. 109 - 114");
 		data.put(m307.getName(), m307);
-		Marker m308 = new Marker("CSRE A", "0", 4275, 1177, 3,
+		Marker m308 = new Marker("CSRE A", "0", 4283, 1163, 3,
 				"CSRE Quarters C139, C140, C143. C144. C147, C148");
 		data.put(m308.getName(), m308);
 		Marker m309 = new Marker("CTR 19", "0", 1815, 3040, 3,
@@ -1521,7 +1521,7 @@ public class Locations {
 		Marker m325 = new Marker("Type H1 - BB", "BB-H1", 921, 2122, 3,
 				"H1 BB Type Quarters Flat nos. 1 - 26");
 		data.put(m325.getName(), m325);
-		Marker m326 = new Marker("H2 1", "1-H2", 1257, 2812, 3,
+		Marker m326 = new Marker("Type H2 1", "1-H2", 1257, 2812, 3,
 				"H2 Type Quarters Flat nos. 1 - 8");
 		data.put(m326.getName(), m326);
 		Marker m327 = new Marker("Type H2 - 2", "2-H2", 1344, 2832, 3,
@@ -1678,7 +1678,7 @@ public class Locations {
 				"Type 1 Quarters Flat nos. 290 - 309");
 		data.put(m377.getName(), m377);
 		Marker m378 = new Marker("Type1 - 22", "22-Type1", 2565, 680, 3,
-				"Type 1 Quarters Flat nos. 310 - 321");
+				"Type 1 Quarters Flat nos. 310 - 321\nHostel for married PhD students");
 		data.put(m378.getName(), m378);
 		Marker m379 = new Marker("QIP 1", "0", 4830, 1376, 3,
 				"QIP Quarters Flat nos. 1 - 16");
@@ -1686,10 +1686,10 @@ public class Locations {
 		Marker m380 = new Marker("QIP 2", "0", 4869, 1328, 3,
 				"QIP Quarters Flat nos. 17 - 35");
 		data.put(m380.getName(), m380);
-		Marker m381 = new Marker("CSRE B", "0", 4275, 1177, 3,
+		Marker m381 = new Marker("CSRE B", "0", 4251, 1179, 3,
 				"CSRE Quarters C141, C142, C145, C146, C149, C150");
 		data.put(m381.getName(), m381);
-		Marker m382 = new Marker("CSRE C", "0", 4275, 1177, 3,
+		Marker m382 = new Marker("CSRE C", "0", 4270, 1188, 3,
 				"CSRE Quarters D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12");
 		data.put(m382.getName(), m382);
 		Marker m384 = new Room(
@@ -1703,9 +1703,9 @@ public class Locations {
 				"Named after Faqir Chand Kohli, who is often reffered as Father of Indian Software Industry");
 		data.put(m384.getName(), m384);
 		Marker m385 = new Room("Amul Parlour", "0", 2114, 800, 5,
-				"Hostel 14 Silicon ship", "Outside", "Deserts and drinks");
+				"Hostel 14 Silicon ship", "Outside", "Desserts and drinks");
 		data.put(m385.getName(), m385);
-		Marker m386 = new Marker("Type2B 10", "", 737, 2651, 3, "");
+		Marker m386 = new Marker("Type 2B 10", "", 737, 2651, 3, "");
 		data.put(m386.getName(), m386);
 		Marker m387 = new Marker("Mess for hostels 12|13|14", "Mess", 2044,
 				734, 5, "");
@@ -1779,5 +1779,8 @@ public class Locations {
 		data.put(m407.getName(), m407);
 		Marker m408 = new Marker("Hockey Ground", "0", 3303, 1368, 8, "");
 		data.put(m408.getName(), m408);
+		Marker m409 = new Marker("CSRE D", "0", 4302, 1171, 3,
+				"CSRE Quarters D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12");
+		data.put(m409.getName(), m409);
 	}
 }

@@ -153,11 +153,21 @@
 
                 <ImageView
                     android:id="@+id/convocation_hat"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:layout_alignParentLeft="true"
                     android:padding="8dp"
                     android:src="@drawable/convocation_hat" />
+
+                <View
+                    android:id="@+id/seperator"
+                    android:layout_width="1dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_toRightOf="@id/convocation_hat"
+                    android:background="@color/list_item_seperator_black" />
 
                 <TextView
                     android:id="@+id/convocation_title"
@@ -165,10 +175,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/convocation_hat"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="4dp"
+                    android:paddingLeft="8dp"
                     android:paddingRight="8dp"
-                    android:paddingTop="8dp"
                     android:text="52nd Convocation, IIT Bombay"
                     android:textSize="@dimen/convocation_bar_text_size" />
             </RelativeLayout>
@@ -487,21 +495,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Prof. Mandar Rane" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_black"
-                        android:padding="0dp" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_white"
-                        android:padding="0dp" />
+                        android:text="Prof. Mandar Rane"
+                        android:textColor="#555555" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -509,21 +504,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Shishir Bhagade" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_black"
-                        android:padding="0dp" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_white"
-                        android:padding="0dp" />
+                        android:text="Shishir Bhagade"
+                        android:textColor="#555555" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -531,21 +513,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Jaikishan Patel" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_black"
-                        android:padding="0dp" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_white"
-                        android:padding="0dp" />
+                        android:text="Jaikishan Patel"
+                        android:textColor="#555555" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -553,21 +522,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Aditi Kulkarni" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_black"
-                        android:padding="0dp" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_white"
-                        android:padding="0dp" />
+                        android:text="Aditi Kulkarni"
+                        android:textColor="#555555" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -575,21 +531,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Manideep Polireddi" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_black"
-                        android:padding="0dp" />
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="0dp"
-                        android:background="@color/list_item_seperator_white"
-                        android:padding="0dp" />
+                        android:text="Manideep Polireddi"
+                        android:textColor="#555555" />
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -597,7 +540,8 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:paddingLeft="4dp"
-                        android:text="Madhu kiran" />
+                        android:text="Madhu kiran"
+                        android:textColor="#555555" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

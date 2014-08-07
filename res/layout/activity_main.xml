@@ -20,6 +20,11 @@
             android:focusableInTouchMode="true" >
         </LinearLayout>
 
+        <com.mrane.zoomview.CampusMapView
+            android:id="@+id/campusMapView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="0dp" />
 
         <RelativeLayout
             android:id="@+id/main_container"
@@ -142,38 +147,32 @@
             <RelativeLayout
                 android:id="@+id/convocation_title_container"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/small_card_bg" >
-				<ImageView 
-				    android:id="@+id/convocation_hat"
-				    android:layout_width="48dp"
-				    android:layout_height="48dp"
-				    android:layout_alignParentLeft="true"
-				    android:padding="8dp"
-				    android:layout_marginLeft="@dimen/convocation_bar_margin"
-				    android:src="@drawable/convocation_hat"/>
+                android:background="@drawable/searchbar_background" >
+
+                <ImageView
+                    android:id="@+id/convocation_hat"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentLeft="true"
+                    android:padding="8dp"
+                    android:src="@drawable/convocation_hat" />
+
                 <TextView
                     android:id="@+id/convocation_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/convocation_hat"
-                    android:textSize="@dimen/convocation_bar_text_size"                 
                     android:layout_centerVertical="true"
-                    android:paddingLeft="4dp"
-                    android:paddingTop="8dp"
+                    android:layout_toRightOf="@id/convocation_hat"
                     android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
                     android:paddingRight="8dp"
-                    android:text="52nd Convocation, IIT Bombay" />
+                    android:paddingTop="8dp"
+                    android:text="52nd Convocation, IIT Bombay"
+                    android:textSize="@dimen/convocation_bar_text_size" />
             </RelativeLayout>
 
-            <com.mrane.zoomview.CampusMapView
-            android:id="@+id/campusMapView"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/convocation_title_container"
-            android:layout_marginTop="0dp" />
-            
             <RelativeLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
@@ -182,11 +181,13 @@
                 android:orientation="vertical" >
             </RelativeLayout>
 
-            <!-- View
+            <!--
+                 View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/shadow_gradient" /-->
+                android:background="@drawable/shadow_gradient" /
+            -->
         </RelativeLayout>
 
         <RelativeLayout
@@ -428,7 +429,7 @@
                     custom:key="@string/setting_residences_key"
                     custom:summaryOff="@string/setting_residences_summary_off"
                     custom:summaryOn="@string/setting_residences_summary_on" />
-                
+
                 <com.mrane.campusmap.CustomCheckBoxPreference
                     android:id="@+id/convo_pref"
                     custom:name="@string/setting_convo_title"

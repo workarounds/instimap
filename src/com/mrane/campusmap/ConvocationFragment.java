@@ -30,7 +30,7 @@ import android.widget.RelativeLayout.LayoutParams;
 public class ConvocationFragment extends Fragment {
 	private ListView venuesListView;
 	private MapActivity mapActivity;
-	public static String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 1 & 2", "Victor Menezes Convention Centre"};
+	public static String[] markerNames = {"Convocation Hall", "Lecture Hall Complex - 3", "Victor Menezes Convention Centre"};
 	
 		public ConvocationFragment(MapActivity mapActivity){
 			this.mapActivity = mapActivity;
@@ -51,7 +51,7 @@ public class ConvocationFragment extends Fragment {
 		private void initList() {
 			
 			Venue convo = new Venue("Convocation Hall", "VVIP and Media", R.drawable.yellow_blue_dot, markerNames[0]);
-			Venue lhc = new Venue("Lecture Hall Complex 1, 2, 3 & 4", "Parents and Friends", R.drawable.green_dot, markerNames[1]);
+			Venue lhc = new Venue("Lecture Hall Complex 3", "Parents and Friends", R.drawable.green_dot, markerNames[1]);
 			Venue vmcc = new Venue("VMCC, Main Auditorium", "Faculty and Staff members", R.drawable.red_dot, markerNames[2]);
 			ArrayList<Venue> venueList = new ArrayList<Venue>();
 			venueList.add(convo);

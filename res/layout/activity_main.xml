@@ -20,8 +20,6 @@
             android:focusableInTouchMode="true" >
         </LinearLayout>
 
-        
-
         <RelativeLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"
@@ -177,22 +175,22 @@
                     android:text="52nd Convocation, IIT Bombay"
                     android:textColor="#666666"
                     android:textSize="@dimen/convocation_bar_text_size" />
-                
-                <ImageView 
+
+                <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="5dp"
                     android:padding="8dp"
-                    android:src="@drawable/arrow_circle_up"/>
+                    android:src="@drawable/arrow_circle_up" />
             </RelativeLayout>
-            
+
             <com.mrane.zoomview.CampusMapView
-            android:id="@+id/campusMapView"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/convocation_title_container"
-            android:layout_marginTop="0dp" />
+                android:id="@+id/campusMapView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@id/convocation_title_container"
+                android:layout_marginTop="0dp" />
 
             <RelativeLayout
                 android:id="@+id/fragment_container"
@@ -239,80 +237,88 @@
                     android:src="@drawable/settings" /
                 -->
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/new_small_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/small_card_bg"
+                    android:orientation="horizontal"
                     android:visibility="gone" >
 
                     <ImageView
                         android:id="@+id/place_color"
                         android:layout_width="12dp"
-                        android:layout_height="@dimen/hidden_card_height"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" />
+                        android:layout_height="fill_parent" />
 
-                    <ImageButton
-                        android:id="@+id/toggle_card_icon"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/search"
-                        android:cropToPadding="true"
-                        android:onClick="toggleCardClick"
-                        android:padding="8dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/arrow_circle_up" />
-
-                    <ImageButton
-                        android:id="@+id/add_marker_icon"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="0dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_toLeftOf="@id/toggle_card_icon"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/search"
-                        android:cropToPadding="true"
-                        android:onClick="addMarkerClick"
-                        android:padding="8dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/lock_all_off" />
-
-                    <TextView
-                        android:id="@+id/place_name"
-                        android:layout_width="fill_parent"
+                    <RelativeLayout
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toLeftOf="@id/add_marker_icon"
-                        android:layout_toRightOf="@id/place_color"
-                        android:fontFamily="sans_serif"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="8dp"
-                        android:textSize="@dimen/place_name_text_size" >
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/place_sub_head"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/place_name"
-                        android:layout_toLeftOf="@id/add_marker_icon"
-                        android:layout_toRightOf="@id/place_color"
-                        android:fontFamily="sans_serif_light"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text="@string/location_search"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/place_sub_head_text_size" />
-                </RelativeLayout>
+                        android:paddingBottom="8dp"
+                        android:minHeight="@dimen/hidden_card_height" >
+
+                        <ImageButton
+                            android:id="@+id/toggle_card_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/search"
+                            android:cropToPadding="true"
+                            android:onClick="toggleCardClick"
+                            android:padding="8dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/arrow_circle_up" />
+
+                        <ImageButton
+                            android:id="@+id/add_marker_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="0dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_toLeftOf="@id/toggle_card_icon"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/search"
+                            android:cropToPadding="true"
+                            android:onClick="addMarkerClick"
+                            android:padding="8dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/lock_all_off" />
+
+                        <TextView
+                            android:id="@+id/place_name"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toLeftOf="@id/add_marker_icon"
+							android:layout_alignParentLeft="true"
+                            android:ellipsize="end"
+                            android:fontFamily="sans_serif"
+                            android:maxLines="1"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="8dp"
+                            android:textSize="@dimen/place_name_text_size" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/place_sub_head"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/place_name"
+                            android:layout_toLeftOf="@id/add_marker_icon"
+                            android:layout_alignParentLeft="true"
+                            android:fontFamily="sans_serif_light"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="@string/location_search"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/place_sub_head_text_size" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/new_expand_container"

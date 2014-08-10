@@ -4,12 +4,13 @@ import in.designlabs.instimap.R;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class NewCardTouchListener implements OnTouchListener {
 	private MapActivity mainActivity;
 	private RelativeLayout expandContainer;
-	private RelativeLayout newSmallCard;
+	private LinearLayout newSmallCard;
 	public final static int STATE_EXPANDED = 1;
 	public final static int STATE_HIDDEN = 2;
 	public final static int STATE_DISMISSED = 3;

@@ -103,7 +103,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private Fragment fragment;
 	private NewCardTouchListener newCardTouchListener;
 	public RelativeLayout expandContainer;
-	public RelativeLayout newSmallCard;
+	public LinearLayout newSmallCard;
 	public LinearLayout placeCard;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
@@ -196,7 +196,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
 		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
-		newSmallCard = (RelativeLayout) findViewById(R.id.new_small_card);
+		newSmallCard = (LinearLayout) findViewById(R.id.new_small_card);
 		placeCard = (LinearLayout) findViewById(R.id.linear_place_card);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);

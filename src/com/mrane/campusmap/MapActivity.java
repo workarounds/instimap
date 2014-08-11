@@ -84,6 +84,7 @@ import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
+import com.mrane.slidinguppanel.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
 import com.mrane.zoomview.SubsamplingScaleImageView;
 import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
@@ -101,14 +102,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private IndexFragment indexFragment;
 	private ConvocationFragment convocationFragment;
 	private Fragment fragment;
-	private NewCardTouchListener newCardTouchListener;
-	public RelativeLayout expandContainer;
 	public LinearLayout newSmallCard;
-	public LinearLayout placeCard;
 	public ImageView placeColor;
 	private RelativeLayout fragmentContainer;
 	private View actionBarView;
-	public RelativeLayout bottomLayoutContainer;
 	public TextView placeNameTextView;
 	public TextView placeSubHeadTextView;
 	public EditText editText;
@@ -130,6 +127,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public String addedMarkerString;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
+	private SlidingUpPanelLayout slidingLayout;
+	private ViewGroup dragView;
 	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
 	private boolean noFragments = true;
@@ -194,10 +193,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		setUpActionBar();
 		setUpDrawer();
 
-		bottomLayoutContainer = (RelativeLayout) findViewById(R.id.bottom_layout_container);
-		expandContainer = (RelativeLayout) findViewById(R.id.new_expand_container);
 		newSmallCard = (LinearLayout) findViewById(R.id.new_small_card);
-		placeCard = (LinearLayout) findViewById(R.id.linear_place_card);
+		slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+		dragView = (ViewGroup) findViewById(R.id.dragView);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
@@ -229,8 +227,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 		toggleCardIcon = (ImageButton) findViewById(R.id.toggle_card_icon);
 
-		newCardTouchListener = new NewCardTouchListener(this);
-		placeCard.setOnTouchListener(newCardTouchListener);
+		// newCardTouchListener = new NewCardTouchListener(this);
+		// placeCard.setOnTouchListener(newCardTouchListener);
 
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
@@ -382,8 +380,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void initShowDefault() {
-		String[] keys = { "Convocation Hall", "Hostel 13 House of Titans", "Hostel 15",
-				"Main Gate no. 2", "Market Gate, Y point Gate no. 3", "Lake Side Gate no. 1",};
+		String[] keys = { "Convocation Hall", "Hostel 13 House of Titans",
+				"Hostel 15", "Main Gate no. 2",
+				"Market Gate, Y point Gate no. 3", "Lake Side Gate no. 1", };
 		for (String key : keys) {
 			if (data.containsKey(key)) {
 				data.get(key).setShowDefault(true);
@@ -422,40 +421,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		settingsTitle.setTypeface(regular);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void initLayout() {
 		if (!campusMapView.isImageReady()) {
 			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
 			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		} else {
-			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-				Interpolator i = new DecelerateInterpolator(INTERPOLATOR_FACTOR);
-
-				LayoutTransition layoutTransition = new LayoutTransition();
-				layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
-				layoutTransition.setDuration(LayoutTransition.APPEARING, 0);
-
-				layoutTransition.setStartDelay(
-						LayoutTransition.CHANGE_APPEARING, 0);
-				layoutTransition.setDuration(LayoutTransition.CHANGE_APPEARING,
-						500);
-				layoutTransition.setInterpolator(
-						LayoutTransition.CHANGE_APPEARING, i);
-
-				layoutTransition
-						.setStartDelay(LayoutTransition.DISAPPEARING, 0);
-				layoutTransition
-						.setDuration(LayoutTransition.DISAPPEARING, 500);
-
-				layoutTransition.setStartDelay(
-						LayoutTransition.CHANGE_DISAPPEARING, 0);
-				layoutTransition.setDuration(
-						LayoutTransition.CHANGE_DISAPPEARING, 500);
-				layoutTransition.setInterpolator(
-						LayoutTransition.CHANGE_DISAPPEARING, i);
-
-				placeCard.setLayoutTransition(layoutTransition);
-			}
 		}
 	}
 
@@ -526,7 +496,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void putFragment(Fragment tempFragment) {
 		this.dismissCard();
-		placeCard.setVisibility(View.GONE);
+		dragView.setVisibility(View.GONE);
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -609,7 +579,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				this.dismissCard();
 				campusMapView.invalidate();
 			}
-			placeCard.setVisibility(View.VISIBLE);
+			dragView.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -633,12 +603,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
 		setAddMarkerIcon(marker);
 		addDescriptionView(marker);
-		bottomLayoutContainer.setVisibility(View.VISIBLE);
 		newSmallCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));
-		placeCard.findViewById(R.id.place_group_color).setBackgroundColor(
+		dragView.findViewById(R.id.place_group_color).setBackgroundColor(
 				marker.getColor());
-		expandContainer.setVisibility(View.GONE);
 		toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
 		reCenterMarker(marker);
 		// Runnable anim = cardTouchListener.showCardAnimation();
@@ -654,7 +622,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void addDescriptionView(Marker marker) {
-		LinearLayout parent = (LinearLayout) placeCard
+		LinearLayout parent = (LinearLayout) dragView
 				.findViewById(R.id.other_details);
 		parent.removeAllViews();
 		if (!marker.getImageUri().isEmpty()) {
@@ -874,7 +842,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				public void onClick(View widget) {
 					updateDrawState(ds);
 					widget.invalidate();
-					newCardTouchListener.toggleExpansion();
+					// newCardTouchListener.toggleExpansion();
 				}
 
 				@Override
@@ -893,7 +861,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				public void onClick(View widget) {
 					updateDrawState(ds);
 					widget.invalidate();
-					newCardTouchListener.toggleExpansion();
+					// newCardTouchListener.toggleExpansion();
 				}
 
 				@Override
@@ -918,7 +886,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 				@Override
 				public void onClick(View v) {
-					newCardTouchListener.toggleExpansion();
+					// newCardTouchListener.toggleExpansion();
 				}
 			});
 		}
@@ -943,7 +911,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void expandCard() {
-		expandContainer.setVisibility(View.VISIBLE);
 		reCenterMarker();
 		// Runnable anim = cardTouchListener.expandCardAnimation();
 		// anim.run();
@@ -957,8 +924,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void reCenterMarker(Marker marker) {
 		PointF p = marker.getPoint();
 		float shift = getResources().getDimension(R.dimen.expanded_card_height) / 2.0f;
-		if (newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED)
-			shift = 0;
+		// if (newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED)
+		//	shift = 0;
 		PointF center = new PointF(p.x, p.y + shift);
 		AnimationBuilder anim = campusMapView.animateCenter(center);
 		anim.start();
@@ -967,7 +934,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void dismissCard() {
 		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE);
 		newSmallCard.setVisibility(View.GONE);
-		expandContainer.setVisibility(View.GONE);
 		// Runnable anim = cardTouchListener.dismissCardAnimation();
 		// anim.run();
 	}
@@ -976,7 +942,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		if (campusMapView.getResultMarker() == null) {
 			return false;
 		} else {
-			final int state = newCardTouchListener.getCardState();
+			/** final int state = newCardTouchListener.getCardState();
 			switch (state) {
 			case NewCardTouchListener.STATE_DISMISSED:
 			case NewCardTouchListener.STATE_HIDDEN:
@@ -990,8 +956,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				showCard();
 				break;
 			default:
-				break;
-			}
+				break; 
+			} **/
 			return true;
 		}
 	}
@@ -1020,7 +986,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void toggleCardClick(View v) {
-		newCardTouchListener.toggleExpansion();
+		// newCardTouchListener.toggleExpansion();
 	}
 
 	public void removeClick(View v) {

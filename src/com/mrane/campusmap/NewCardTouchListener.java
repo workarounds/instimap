@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 
 public class NewCardTouchListener implements OnTouchListener {
 	private MapActivity mainActivity;
-	private RelativeLayout expandContainer;
 	private LinearLayout newSmallCard;
 	public final static int STATE_EXPANDED = 1;
 	public final static int STATE_HIDDEN = 2;
@@ -18,7 +17,6 @@ public class NewCardTouchListener implements OnTouchListener {
 
 	public NewCardTouchListener(MapActivity main) {
 		mainActivity = main;
-		expandContainer = main.expandContainer;
 		newSmallCard = main.newSmallCard;
 	}
 
@@ -32,7 +30,7 @@ public class NewCardTouchListener implements OnTouchListener {
 		} else if (action == MotionEvent.ACTION_UP) {
 			toggleExpansion();
 		}
-		return true;
+		return false;
 	}
 
 	public void toggleExpansion() {
@@ -48,11 +46,9 @@ public class NewCardTouchListener implements OnTouchListener {
 	public int getCardState() {
 		if (newSmallCard.getVisibility() == View.GONE) {
 			return STATE_DISMISSED;
-		} else if ((newSmallCard.getVisibility() == View.VISIBLE)
-				&& (expandContainer.getVisibility() == View.GONE)) {
+		} else if ((newSmallCard.getVisibility() == View.VISIBLE)) {
 			return STATE_HIDDEN;
-		} else if ((newSmallCard.getVisibility() == View.VISIBLE)
-				&& (expandContainer.getVisibility() == View.VISIBLE)) {
+		} else if ((newSmallCard.getVisibility() == View.VISIBLE)) {
 			return STATE_EXPANDED;
 		}
 		return STATE_UNKNOWN;

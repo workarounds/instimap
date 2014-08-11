@@ -30,114 +30,6 @@
             android:paddingRight="0dp"
             android:paddingTop="0dp" >
 
-            <!--
-            RelativeLayout
-                android:id="@+id/header_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/small_card_bg" >
-
-                <View
-                    android:id="@+id/seperator"
-                    android:layout_width="1dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="48dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/list_item_seperator_black" />
-
-                <ImageButton
-                    android:id="@+id/search_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@id/seperator"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/search"
-                    android:cropToPadding="true"
-                    android:onClick="searchClick"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="8dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_action_search"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/index_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="index"
-                    android:cropToPadding="true"
-                    android:onClick="indexClick"
-                    android:padding="12dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/dept_menu" />
-
-                <ImageButton
-                    android:id="@+id/map_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="map"
-                    android:cropToPadding="true"
-                    android:onClick="mapClick"
-                    android:padding="12dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/dept_menu_off"
-                    android:visibility="gone" />
-
-                <EditText
-                    android:id="@+id/search"
-                    android:layout_width="fill_parent"
-                    android:layout_height="48dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@id/search_icon"
-                    android:background="@null"
-                    android:dropDownHeight="0dp"
-                    android:fontFamily="sans-serif-light"
-                    android:hint="@string/search"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="76dp"
-                    android:paddingTop="8dp"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textSize="@dimen/searchbar_text_size" />
-
-                <ImageButton
-                    android:id="@+id/remove_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="remove"
-                    android:onClick="removeClick"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_action_remove"
-                    android:visibility="gone" />
-            </RelativeLayout
-            -->
-
-
-            <!--
-                 ImageView
-                android:id="@+id/north_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_margin="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/north" /
-            -->
-
             <RelativeLayout
                 android:id="@+id/convocation_title_container"
                 android:layout_width="match_parent"
@@ -185,12 +77,193 @@
                     android:src="@drawable/arrow_circle_up" />
             </RelativeLayout>
 
-            <com.mrane.zoomview.CampusMapView
-                android:id="@+id/campusMapView"
+            <com.mrane.slidinguppanel.SlidingUpPanelLayout
+                xmlns:sothree="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sliding_layout"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_above="@id/convocation_title_container"
-                android:layout_marginTop="0dp" />
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                sothree:dragView="@+id/dragView"
+                sothree:panelHeight="80dp"
+                sothree:paralaxOffset="100dp"
+                sothree:shadowHeight="4dp" >
+
+                <!-- MAIN CONTENT -->
+
+                <com.mrane.zoomview.CampusMapView
+                    android:id="@+id/campusMapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_above="@id/convocation_title_container"
+                    android:layout_marginTop="0dp" />
+
+                <!-- SLIDING LAYOUT -->
+
+                <LinearLayout
+                    android:id="@+id/dragView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#eeeeee"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/new_small_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/small_card_bg"
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
+
+                        <ImageView
+                            android:id="@+id/place_color"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent" />
+
+                        <RelativeLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/hidden_card_height"
+                            android:paddingBottom="8dp" >
+
+                            <ImageButton
+                                android:id="@+id/toggle_card_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginRight="4dp"
+                                android:layout_marginTop="4dp"
+                                android:background="@android:color/transparent"
+                                android:contentDescription="@string/search"
+                                android:cropToPadding="true"
+                                android:onClick="toggleCardClick"
+                                android:padding="8dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/arrow_circle_up" />
+
+                            <ImageButton
+                                android:id="@+id/add_marker_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginRight="0dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_toLeftOf="@id/toggle_card_icon"
+                                android:background="@android:color/transparent"
+                                android:contentDescription="@string/search"
+                                android:cropToPadding="true"
+                                android:onClick="addMarkerClick"
+                                android:padding="8dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/lock_all_off" />
+
+                            <TextView
+                                android:id="@+id/place_name"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_toLeftOf="@id/add_marker_icon"
+                                android:ellipsize="end"
+                                android:fontFamily="sans_serif"
+                                android:maxLines="1"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="8dp"
+                                android:textSize="@dimen/place_name_text_size" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/place_sub_head"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_below="@id/place_name"
+                                android:layout_toLeftOf="@id/add_marker_icon"
+                                android:fontFamily="sans_serif_light"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:text="@string/location_search"
+                                android:textColor="@color/gray"
+                                android:textSize="@dimen/place_sub_head_text_size" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/new_expand_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@color/list_item_gray_even" >
+
+                        <ScrollView
+                            android:id="@+id/new_expanded_place_card_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true" >
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" >
+
+                                <LinearLayout
+                                    android:id="@+id/expanded_place_card"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#e5e5e5"
+                                    android:orientation="horizontal" >
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/other_details"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentTop="true"
+                                    android:orientation="vertical" >
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </ScrollView>
+
+                        <RelativeLayout
+                            android:id="@+id/color_strip"
+                            android:layout_width="12dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true" >
+
+                            <View
+                                android:id="@+id/place_group_color"
+                                android:layout_width="12dp"
+                                android:layout_height="@dimen/expanded_card_height"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="0dp"
+                                android:alpha="0.5"
+                                android:paddingLeft="0dp" />
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="@dimen/expanded_card_height"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="0dp"
+                                android:alpha="0.5"
+                                android:background="@color/transparent_black"
+                                android:paddingLeft="0dp" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_alignParentTop="true"
+                            android:background="@drawable/shadow_gradient" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </com.mrane.slidinguppanel.SlidingUpPanelLayout>
 
             <RelativeLayout
                 android:id="@+id/fragment_container"
@@ -199,200 +272,6 @@
                 android:layout_alignParentTop="true"
                 android:orientation="vertical" >
             </RelativeLayout>
-
-            <!--
-                 View
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/shadow_gradient" /
-            -->
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/bottom_layout_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp" >
-
-            <LinearLayout
-                android:id="@+id/linear_place_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:animateLayoutChanges="true"
-                android:background="@android:color/darker_gray"
-                android:orientation="vertical" >
-
-                <!--
-                     ImageView
-                    android:id="@+id/settings_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/searchbar_background"
-                    android:cropToPadding="true"
-                    android:onClick="settingsClick"
-                    android:padding="10dp"
-                    android:src="@drawable/settings" /
-                -->
-
-                <LinearLayout
-                    android:id="@+id/new_small_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/small_card_bg"
-                    android:orientation="horizontal"
-                    android:visibility="gone" >
-
-                    <ImageView
-                        android:id="@+id/place_color"
-                        android:layout_width="12dp"
-                        android:layout_height="fill_parent" />
-
-                    <RelativeLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:paddingBottom="8dp"
-                        android:minHeight="@dimen/hidden_card_height" >
-
-                        <ImageButton
-                            android:id="@+id/toggle_card_icon"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginTop="4dp"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="@string/search"
-                            android:cropToPadding="true"
-                            android:onClick="toggleCardClick"
-                            android:padding="8dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/arrow_circle_up" />
-
-                        <ImageButton
-                            android:id="@+id/add_marker_icon"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginRight="0dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_toLeftOf="@id/toggle_card_icon"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="@string/search"
-                            android:cropToPadding="true"
-                            android:onClick="addMarkerClick"
-                            android:padding="8dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/lock_all_off" />
-
-                        <TextView
-                            android:id="@+id/place_name"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_toLeftOf="@id/add_marker_icon"
-							android:layout_alignParentLeft="true"
-                            android:ellipsize="end"
-                            android:fontFamily="sans_serif"
-                            android:maxLines="1"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="8dp"
-                            android:textSize="@dimen/place_name_text_size" >
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/place_sub_head"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/place_name"
-                            android:layout_toLeftOf="@id/add_marker_icon"
-                            android:layout_alignParentLeft="true"
-                            android:fontFamily="sans_serif_light"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:text="@string/location_search"
-                            android:textColor="@color/gray"
-                            android:textSize="@dimen/place_sub_head_text_size" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/new_expand_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/list_item_gray_even"
-                    android:visibility="gone" >
-
-                    <ScrollView
-                        android:id="@+id/new_expanded_place_card_scroll"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/expanded_card_height"
-                        android:layout_alignParentTop="true" >
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <LinearLayout
-                                android:id="@+id/expanded_place_card"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="#e5e5e5"
-                                android:orientation="horizontal" >
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/other_details"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:orientation="vertical" >
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </ScrollView>
-
-                    <RelativeLayout
-                        android:id="@+id/color_strip"
-                        android:layout_width="12dp"
-                        android:layout_height="@dimen/expanded_card_height"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" >
-
-                        <View
-                            android:id="@+id/place_group_color"
-                            android:layout_width="12dp"
-                            android:layout_height="@dimen/expanded_card_height"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="0dp"
-                            android:alpha="0.5"
-                            android:paddingLeft="0dp" />
-
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="@dimen/expanded_card_height"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="0dp"
-                            android:alpha="0.5"
-                            android:background="@color/transparent_black"
-                            android:paddingLeft="0dp" />
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:layout_alignParentTop="true"
-                        android:background="@drawable/shadow_gradient" />
-                </RelativeLayout>
-            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout

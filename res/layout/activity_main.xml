@@ -127,29 +127,13 @@
                             android:paddingBottom="8dp" >
 
                             <ImageButton
-                                android:id="@+id/toggle_card_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:layout_marginRight="4dp"
-                                android:layout_marginTop="4dp"
-                                android:background="@android:color/transparent"
-                                android:contentDescription="@string/search"
-                                android:cropToPadding="true"
-                                android:onClick="toggleCardClick"
-                                android:padding="8dp"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/arrow_circle_up" />
-
-                            <ImageButton
                                 android:id="@+id/add_marker_icon"
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="0dp"
                                 android:layout_marginTop="4dp"
-                                android:layout_toLeftOf="@id/toggle_card_icon"
+                                android:layout_alignParentRight="true"
                                 android:background="@android:color/transparent"
                                 android:contentDescription="@string/search"
                                 android:cropToPadding="true"

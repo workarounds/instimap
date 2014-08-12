@@ -36,10 +36,8 @@ public class NewCardTouchListener implements OnTouchListener {
 	public void toggleExpansion() {
 		if (getCardState() == STATE_HIDDEN) {
 			mainActivity.expandCard();
-			mainActivity.toggleCardIcon.setImageResource(R.drawable.arrow_circle_down);
 		} else if(getCardState() == STATE_EXPANDED) {
 			mainActivity.showCard();
-			mainActivity.toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
 		}
 	}
 

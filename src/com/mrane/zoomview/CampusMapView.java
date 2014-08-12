@@ -26,7 +26,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -623,7 +622,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		valAnim.start();
 	}
 	
-	public Runnable getMinScaleAnim(final float scale){
+	public Runnable getScaleAnim(final float scale){
 		Runnable anim = new Runnable() {
 			public void run() {
 				AnimationBuilder animation = animateScale(scale);
@@ -635,6 +634,13 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			}
 		};
 		return anim;
+	}
+	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		if(getTargetMinScale() > getScale()){
+			setScaleAndCenter(getTargetMinScale(), getCenter());
+		}
 	}
 
 	private void setGestureDetector() {
@@ -680,7 +686,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 					
 					if (action == MotionEvent.ACTION_UP) {
 						
-						Runnable anim = getMinScaleAnim(targetMinScale);
+						Runnable anim = getScaleAnim(targetMinScale);
 						if(isImageReady())	anim.run();
 					}
 					return true;

@@ -1,4 +1,4 @@
-package com.mrane.slidinguppanel;
+package com.mrane.navigation;
 
 import in.designlabs.instimap.R;
 import android.annotation.SuppressLint;
@@ -385,6 +385,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     public void setPanelHeight(int val) {
         mPanelHeight = val;
+        int newTop = computePanelTopPosition(0.0f);
+        mSlideOffset = computeSlideOffset(newTop);
         requestLayout();
     }
 

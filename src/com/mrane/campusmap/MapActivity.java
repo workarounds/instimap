@@ -14,7 +14,6 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -53,6 +52,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -84,9 +84,9 @@ import com.mrane.data.Locations;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
-import com.mrane.slidinguppanel.SlidingUpPanelLayout;
+import com.mrane.navigation.CardSlideListener;
+import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
-import com.mrane.zoomview.SubsamplingScaleImageView;
 import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
@@ -128,7 +128,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private SlidingUpPanelLayout slidingLayout;
-	private ViewGroup dragView;
+	private CardSlideListener cardSlideListener;
 	// public AudioManager audiomanager;
 	public int expandedGroup = -1;
 	private boolean noFragments = true;
@@ -136,9 +136,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private boolean resetScale = false;
 	private final String firstStackTag = "FIRST_TAG";
 	private final int MSG_ANIMATE = 1;
-	private final int MSG_INIT_LAYOUT = 2;
-	private final int MSG_PLAY_SOUND = 3;
-	private final int MSG_DISPLAY_MAP = 4;
+	private final int MSG_PLAY_SOUND = 2;
+	private final int MSG_DISPLAY_MAP = 3;
 	private final long DELAY_ANIMATE = 150;
 	private final long DELAY_INIT_LAYOUT = 250;
 	private Toast toast;
@@ -170,9 +169,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			case MSG_ANIMATE:
 				showResultOnMap((String) msg.obj);
 				break;
-			case MSG_INIT_LAYOUT:
-				initLayout();
-				break;
 			case MSG_PLAY_SOUND:
 				playAnimSound(msg.arg1);
 				break;
@@ -189,16 +185,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onCreate(savedInstanceState);
 		setMainActivity(this);
 
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_main);
 		setUpActionBar();
 		setUpDrawer();
 
 		newSmallCard = (LinearLayout) findViewById(R.id.new_small_card);
 		slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-		dragView = (ViewGroup) findViewById(R.id.dragView);
 		placeNameTextView = (TextView) findViewById(R.id.place_name);
 		placeColor = (ImageView) findViewById(R.id.place_color);
 		placeSubHeadTextView = (TextView) findViewById(R.id.place_sub_head);
+
+		cardSlideListener = new CardSlideListener(this);
+		slidingLayout.setPanelSlideListener(cardSlideListener);
+		slidingLayout.setOverlayed(true);
+		slidingLayout.post(setAnchor());
 
 		Locations mLocations = new Locations(this);
 		data = mLocations.data;
@@ -249,9 +250,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		initSoundPool();
 		setFonts();
 		setConvoBar(true);
-
-		Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
-		mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 	}
 
@@ -373,11 +371,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		super.onDestroy();
 	}
 
-	private void goToSettingsActivity() {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivity(intent);
-		overridePendingTransition(R.anim.activity_slide_in_left, R.anim.nothing);
-	}
+	// private void goToSettingsActivity() {
+	// Intent intent = new Intent(this, SettingsActivity.class);
+	// startActivity(intent);
+	// overridePendingTransition(R.anim.activity_slide_in_left, R.anim.nothing);
+	// }
 
 	private void initShowDefault() {
 		String[] keys = { "Convocation Hall", "Hostel 13 House of Titans",
@@ -421,12 +419,20 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		settingsTitle.setTypeface(regular);
 	}
 
-	private void initLayout() {
-		if (!campusMapView.isImageReady()) {
-			Message msg = mHandler.obtainMessage(MSG_INIT_LAYOUT);
-			mHandler.sendMessageDelayed(msg, DELAY_INIT_LAYOUT);
-		} else {
-		}
+	private Runnable setAnchor() {
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				int totalHeight = slidingLayout.getHeight();
+				int expandedCardHeight = getResources().getDimensionPixelSize(
+						R.dimen.expanded_card_height);
+				float anchorPoint = expandedCardHeight * 1.0f / totalHeight;
+				slidingLayout.setAnchorPoint(anchorPoint);
+				Log.d("testing", "Anchor point = " + anchorPoint);
+			}
+		};
+
+		return runnable;
 	}
 
 	private void initSoundPool() {
@@ -496,7 +502,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	private void putFragment(Fragment tempFragment) {
 		this.dismissCard();
-		dragView.setVisibility(View.GONE);
 		transaction = fragmentManager.beginTransaction();
 		// transaction.setCustomAnimations(R.anim.fragment_slide_in,
 		// R.anim.fragment_slide_out);
@@ -579,7 +584,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				this.dismissCard();
 				campusMapView.invalidate();
 			}
-			dragView.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -600,15 +604,15 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			name = marker.getShortName();
 		placeNameTextView.setText(name);
 		setSubHeading(marker);
-		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
+		// campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_CUSTOM);
 		setAddMarkerIcon(marker);
 		addDescriptionView(marker);
-		newSmallCard.setVisibility(View.VISIBLE);
 		placeColor.setImageDrawable(new ColorDrawable(marker.getColor()));
-		dragView.findViewById(R.id.place_group_color).setBackgroundColor(
+		findViewById(R.id.place_group_color).setBackgroundColor(
 				marker.getColor());
 		toggleCardIcon.setImageResource(R.drawable.arrow_circle_up);
 		reCenterMarker(marker);
+		cardSlideListener.showCard();
 		// Runnable anim = cardTouchListener.showCardAnimation();
 		// anim.run();
 	}
@@ -622,8 +626,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void addDescriptionView(Marker marker) {
-		LinearLayout parent = (LinearLayout) dragView
-				.findViewById(R.id.other_details);
+		LinearLayout parent = (LinearLayout) findViewById(R.id.other_details);
 		parent.removeAllViews();
 		if (!marker.getImageUri().isEmpty()) {
 			setImage(parent, marker);
@@ -912,8 +915,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	public void expandCard() {
 		reCenterMarker();
-		// Runnable anim = cardTouchListener.expandCardAnimation();
-		// anim.run();
 	}
 
 	private void reCenterMarker() {
@@ -924,42 +925,38 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private void reCenterMarker(Marker marker) {
 		PointF p = marker.getPoint();
 		float shift = getResources().getDimension(R.dimen.expanded_card_height) / 2.0f;
-		// if (newCardTouchListener.getCardState() != NewCardTouchListener.STATE_EXPANDED)
-		//	shift = 0;
+		// if (newCardTouchListener.getCardState() !=
+		// NewCardTouchListener.STATE_EXPANDED)
+		// shift = 0;
 		PointF center = new PointF(p.x, p.y + shift);
 		AnimationBuilder anim = campusMapView.animateCenter(center);
 		anim.start();
-	}
-
-	public void dismissCard() {
-		campusMapView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE);
-		newSmallCard.setVisibility(View.GONE);
-		// Runnable anim = cardTouchListener.dismissCardAnimation();
-		// anim.run();
 	}
 
 	public boolean removeMarker() {
 		if (campusMapView.getResultMarker() == null) {
 			return false;
 		} else {
-			/** final int state = newCardTouchListener.getCardState();
-			switch (state) {
-			case NewCardTouchListener.STATE_DISMISSED:
-			case NewCardTouchListener.STATE_HIDDEN:
-				editText.getText().clear();
+			if (slidingLayout.isPanelExpanded()
+					|| slidingLayout.isPanelAnchored()) {
+				slidingLayout.collapsePanel();
+			} else {
+				editText.setText("");
 				campusMapView.setResultMarker(null);
-				this.dismissCard();
-				campusMapView.invalidate();
-				break;
-			case NewCardTouchListener.STATE_EXPANDED:
-			case NewCardTouchListener.STATE_UNKNOWN:
-				showCard();
-				break;
-			default:
-				break; 
-			} **/
+				dismissCard();
+			}
 			return true;
 		}
+	}
+
+	/**
+	 * Hides the card
+	 * 
+	 * @return true if the card was visible while this function was called
+	 */
+	public void dismissCard() {
+		cardSlideListener.dismissCard();
+		campusMapView.invalidate();
 	}
 
 	public void searchClick(View v) {
@@ -1273,10 +1270,14 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			convoContainer.setVisibility(View.GONE);
 		}
 		if (resetScale) {
-			campusMapView.getMinScaleAnim(campusMapView.getTargetMinScale())
+			campusMapView.getScaleAnim(campusMapView.getTargetMinScale())
 					.run();
 			resetScale = false;
 		}
+	}
+
+	public SlidingUpPanelLayout getSlidingLayout() {
+		return slidingLayout;
 	}
 
 }

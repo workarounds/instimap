@@ -15,7 +15,7 @@
  */
 
 
-package com.mrane.slidinguppanel;
+package com.mrane.navigation;
 
 import java.util.Arrays;
 

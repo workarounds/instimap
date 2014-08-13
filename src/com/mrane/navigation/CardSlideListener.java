@@ -47,6 +47,9 @@ public class CardSlideListener implements PanelSlideListener,
 		if(slideOffset >= slidingLayout.getAnchorPoint()){
 			mainActivity.getSupportActionBar().hide();
 		}
+		else{
+			mainActivity.getSupportActionBar().show();
+		}
 	}
 
 	@Override

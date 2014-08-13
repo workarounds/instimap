@@ -43,7 +43,10 @@ public class CardSlideListener implements PanelSlideListener,
 
 	@Override
 	public void onPanelSlide(View panel, float slideOffset) {
-		setActionBarTranslation(slidingLayout.getCurrentParalaxOffset());
+//		setActionBarTranslation(slidingLayout.getCurrentParalaxOffset());
+		if(slideOffset >= slidingLayout.getAnchorPoint()){
+			mainActivity.getSupportActionBar().hide();
+		}
 	}
 
 	@Override

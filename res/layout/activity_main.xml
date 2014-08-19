@@ -180,7 +180,7 @@
                         android:layout_height="fill_parent"
                         android:background="@color/list_item_gray_even" >
 
-                        <ScrollView
+                        <com.mrane.navigation.EndDetectScrollView
                             android:id="@+id/new_expanded_place_card_scroll"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -207,7 +207,7 @@
                                     android:orientation="vertical" >
                                 </LinearLayout>
                             </RelativeLayout>
-                        </ScrollView>
+                        </com.mrane.navigation.EndDetectScrollView>
 
                         <RelativeLayout
                             android:id="@+id/color_strip"
@@ -291,7 +291,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?android:attr/actionBarSize"
+            android:layout_marginTop="48dp"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -329,6 +329,17 @@
                     custom:key="@string/setting_convo_key"
                     custom:summaryOff="@string/setting_convo_summary_off"
                     custom:summaryOn="@string/setting_convo_summary_on" />
+                
+                <TextView
+                    android:id="@+id/events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/events"
+                    android:textSize="18sp"
+                    android:onClick="eventClick"
+                    android:padding="10dp"
+                    android:clickable="true" />
+
             </LinearLayout>
 
             <RelativeLayout

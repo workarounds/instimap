@@ -52,12 +52,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
@@ -81,9 +81,11 @@ import android.widget.Toast;
 
 import com.mrane.data.Building;
 import com.mrane.data.Locations;
+import com.mrane.data.MapEvent;
 import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
+import com.mrane.data.UpdateMapEvents;
 import com.mrane.navigation.CardSlideListener;
 import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
@@ -101,6 +103,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
 	private ConvocationFragment convocationFragment;
+	private EventsFragment eventsFragment;
 	private Fragment fragment;
 	public LinearLayout newSmallCard;
 	public ImageView placeColor;
@@ -112,6 +115,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public HashMap<String, Marker> data;
 	private HashMap<Integer, String> idMap;
 	private HashMap<String, Marker> valueMap;
+	private HashMap<Integer, String> eventIdMap;
+	private HashMap<String, MapEvent> eventValueMap;
 	private List<Marker> markerlist;
 	public FragmentTransaction transaction;
 	public CampusMapView campusMapView;
@@ -143,6 +148,8 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private String message = "Sorry, no such place in our data.";
 	private static final String JSONUrl = "http://home.iitb.ac.in/~madhu.kiran/data.json";
 	private static final String JSONFILE = "data.json";
+	private static final String JSONEVENTUrl = "http://home.iitb.ac.in/~madhu.kiran/events.json";
+	private static final String JSONEVENTFILE = "events.json";
 	public static final PointF MAP_CENTER = new PointF(2971f, 1744f);
 	public static final PointF CONVO_CENTER = new PointF(3570f, 1744f);
 	public static final long DURATION_INIT_MAP_ANIM = 500;
@@ -232,6 +239,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
 		convocationFragment = new ConvocationFragment(this);
+		eventsFragment = new EventsFragment();
 
 		adapter.setSettingsManager(settingsManager);
 
@@ -248,6 +256,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		setFonts();
 		setConvoBar(true);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+
+		updateEvents();
+	}
+
+	private void updateEvents() {
+		new UpdateMapEvents(JSONEVENTUrl, JSONEVENTFILE, mainActivity)
+				.execute();
 	}
 
 	private void setUpDrawer() {
@@ -258,7 +273,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 			TextView settingsTitle = (TextView) actionBarView
 					.findViewById(R.id.settings_title);
-
+			
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
@@ -962,6 +977,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
+	
+	public void eventClick(View v) {
+		putFragment(eventsFragment);
+	}
 
 	public void settingsClick(View v) {
 		hideKeyboard();
@@ -1266,14 +1285,40 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			convoContainer.setVisibility(View.GONE);
 		}
 		if (resetScale) {
-			campusMapView.getScaleAnim(campusMapView.getTargetMinScale())
-					.run();
+			campusMapView.getScaleAnim(campusMapView.getTargetMinScale()).run();
 			resetScale = false;
 		}
 	}
 
 	public SlidingUpPanelLayout getSlidingLayout() {
 		return slidingLayout;
+	}
+
+	public HashMap<Integer, String> getEventIdMap() {
+		return eventIdMap;
+	}
+
+	public void setEventIdMap(HashMap<Integer, String> eventIdMap) {
+		this.eventIdMap = eventIdMap;
+	}
+
+	public HashMap<String, MapEvent> getEventValueMap() {
+		return eventValueMap;
+	}
+
+	public void setEventValueMap(HashMap<String, MapEvent> eventValueMap) {
+		this.eventValueMap = eventValueMap;
+	}
+
+	public void checkForEventUpdate() {
+		if (isNetworkAvailable()) {
+			Log.d("MapActivity", "Checking for events");
+			new UpdateMapEvents(JSONEVENTUrl, JSONEVENTFILE, this).execute();
+		}
+	}
+
+	public void onEventsUpdated() {
+		eventsFragment.onDataChanged();
 	}
 
 }

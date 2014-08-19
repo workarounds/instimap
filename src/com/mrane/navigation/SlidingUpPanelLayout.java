@@ -779,7 +779,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
             }
         }
 
-        return mDragHelper.shouldInterceptTouchEvent(ev) || isPanelAnchored();
+        return mDragHelper.shouldInterceptTouchEvent(ev);
     }
 
     @Override

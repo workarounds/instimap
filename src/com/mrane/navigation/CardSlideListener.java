@@ -1,6 +1,7 @@
 package com.mrane.navigation;
 
 import in.designlabs.instimap.R;
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ public class CardSlideListener implements PanelSlideListener,
 		AnimatorUpdateListener {
 	private MapActivity mainActivity;
 	private SlidingUpPanelLayout slidingLayout;
-	private ScrollView scrollView;
+	private EndDetectScrollView scrollView;
 	private ValueAnimator animator;
 
 	private static final long TIME_ANIMATION_SHOW = 250;
@@ -27,7 +28,7 @@ public class CardSlideListener implements PanelSlideListener,
 	public CardSlideListener(MapActivity mainActivity) {
 		this.mainActivity = mainActivity;
 		slidingLayout = mainActivity.getSlidingLayout();
-		scrollView = (ScrollView) mainActivity
+		scrollView = (EndDetectScrollView) mainActivity
 				.findViewById(R.id.new_expanded_place_card_scroll);
 
 		animator = new ValueAnimator();
@@ -56,17 +57,20 @@ public class CardSlideListener implements PanelSlideListener,
 	@Override
 	public void onPanelExpanded(View panel) {
 		scrollView.requestDisallowInterceptTouchEvent(false);
+		scrollView.setScrollingEnabled(true);
 	}
 
 	@Override
 	public void onPanelAnchored(View panel) {
 		scrollView.requestDisallowInterceptTouchEvent(true);
+		scrollView.setScrollingEnabled(false);
 	}
 
 	@Override
 	public void onPanelHidden(View panel) {
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB) 
 	public void setActionBarTranslation(float y) {
 		// Figure out the actionbar height
 		int actionBarHeight = mainActivity.getSupportActionBar().getHeight();

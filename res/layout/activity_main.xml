@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:layout_above="@id/convocation_title_container"
-                    android:layout_marginTop="0dp" />
+                    android:paddingTop="48dp" />
 
                 <!-- SLIDING LAYOUT -->
 

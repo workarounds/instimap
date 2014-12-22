@@ -5,12 +5,9 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.ScrollView;
 
 import com.mrane.campusmap.MapActivity;
-import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.navigation.SlidingUpPanelLayout.PanelSlideListener;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;

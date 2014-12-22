@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_action_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/small_card_bg" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:dropDownHeight="0dp"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/search"
+        android:imeOptions="actionSearch"
+        android:inputType="textNoSuggestions"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="50dp"
+        android:paddingTop="8dp"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:textSize="@dimen/searchbar_text_size" />
+
+    <TextView
+        android:id="@+id/settings_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="sans-serif-light"
+        android:paddingLeft="8dp"
+        android:paddingRight="76dp"
+        android:text="@string/settings_title"
+        android:textSize="@dimen/searchbar_text_size"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/index_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="index"
+        android:cropToPadding="true"
+        android:onClick="indexClick"
+        android:padding="12dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/dept_menu" />
+
+    <ImageButton
+        android:id="@+id/map_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="map"
+        android:cropToPadding="true"
+        android:onClick="mapClick"
+        android:padding="12dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/dept_menu_off"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/remove_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="remove"
+        android:onClick="removeClick"
+        android:padding="8dp"
+        android:src="@drawable/ic_action_remove"
+        android:visibility="gone" />
+
+</RelativeLayout>

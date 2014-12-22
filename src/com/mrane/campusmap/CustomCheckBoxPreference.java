@@ -112,6 +112,10 @@ public class CustomCheckBoxPreference extends RelativeLayout implements OnTouchL
 		container.setBackgroundColor(Color.TRANSPARENT);
 		checkBox.setBackgroundColor(Color.TRANSPARENT);
 	}
+	
+	public boolean isChecked(){
+		return checkBox.isChecked();
+	}
 
 	Rect rect;
 	boolean ignore = false;

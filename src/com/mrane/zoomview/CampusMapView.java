@@ -641,6 +641,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		if(getTargetMinScale() > getScale()){
 			setScaleAndCenter(getTargetMinScale(), getCenter());
 		}
+		super.onSizeChanged(w, h, oldw, oldh);
+		
 	}
 
 	private void setGestureDetector() {

@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/small_card_bg" >
+                android:background="@drawable/small_card_bg"
+                android:visibility="gone" >
 
                 <ImageView
                     android:id="@+id/convocation_hat"
@@ -95,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:layout_above="@id/convocation_title_container"
-                    android:layout_marginTop="0dp" />
+                    android:paddingTop="48dp" />
 
                 <!-- SLIDING LAYOUT -->
 
@@ -339,7 +340,8 @@
                     android:textSize="18sp"
                     android:onClick="eventClick"
                     android:padding="10dp"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -257,7 +257,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		setConvoBar(true);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 
-		updateEvents();
+		//updateEvents();
 	}
 
 	private void updateEvents() {
@@ -438,7 +438,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				int totalHeight = slidingLayout.getHeight();
 				int expandedCardHeight = getResources().getDimensionPixelSize(
 						R.dimen.expanded_card_height);
-				float anchorPoint = expandedCardHeight * 1.0f / totalHeight;
+				float anchorPoint = 0.5f;
 				slidingLayout.setAnchorPoint(anchorPoint);
 				Log.d("testing", "Anchor point = " + anchorPoint);
 			}

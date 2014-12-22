@@ -387,7 +387,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
         mPanelHeight = val;
         int newTop = computePanelTopPosition(0.0f);
         mSlideOffset = computeSlideOffset(newTop);
-        requestLayout();
+        onPanelDragged(newTop);
     }
 
     /**

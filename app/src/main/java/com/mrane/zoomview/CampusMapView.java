@@ -104,14 +104,8 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			Runnable runnable = new Runnable() {
 				public void run() {
 					AnimationBuilder anim;
-					if(settingsManager.isInConvoMode()){
-					anim = animateScaleAndCenter(
-							getTargetMinScale(), MapActivity.CONVO_CENTER);
-					}
-					else{
 						anim = animateScaleAndCenter(
 								getTargetMinScale(), MapActivity.MAP_CENTER);
-					}
 					anim.withDuration(MapActivity.DURATION_INIT_MAP_ANIM)
 							.start();
 					isFirstLoad = false;
@@ -236,7 +230,6 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		specialMarkerList = new ArrayList<Marker>();
 		convoMarkerList = new ArrayList<Marker>();
 		setSpecialMarkers();
-		if(settingsManager.isInConvoMode()) setConvoMarkerList();
 	}
 
 	private void setSpecialMarkers() {

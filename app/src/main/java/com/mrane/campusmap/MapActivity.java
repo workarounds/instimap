@@ -20,8 +20,6 @@ import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
@@ -102,7 +100,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private FragmentManager fragmentManager;
 	private ListFragment listFragment;
 	private IndexFragment indexFragment;
-	private ConvocationFragment convocationFragment;
 	private EventsFragment eventsFragment;
 	private Fragment fragment;
 	public LinearLayout newSmallCard;
@@ -124,10 +121,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public ImageButton removeIcon;
 	public ImageButton indexIcon;
 	public ImageButton mapIcon;
-	public ImageButton menuIcon;
 	public ImageButton addMarkerIcon;
-	public LocationManager locationManager;
-	public LocationListener locationListener;
 	public String addedMarkerString;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -188,10 +182,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@SuppressLint("ShowToast")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setMainActivity(this);
-
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+
+        super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 		setUpActionBar();
 		setUpDrawer();
@@ -238,23 +233,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		fragmentManager = getSupportFragmentManager();
 		listFragment = new ListFragment();
 		indexFragment = new IndexFragment();
-		convocationFragment = new ConvocationFragment(this);
 		eventsFragment = new EventsFragment();
 
 		adapter.setSettingsManager(settingsManager);
 
-		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
-		convoContainer.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				putFragment(convocationFragment);
-			}
-
-		});
 		initSoundPool();
 		setFonts();
-		setConvoBar(true);
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 
 		//updateEvents();
@@ -519,10 +503,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		// R.anim.fragment_slide_out);
 		fragment = tempFragment;
 		if (noFragments) {
-			if (tempFragment instanceof ConvocationFragment) {
-				transaction.setCustomAnimations(R.anim.fragment_slide_in,
-						R.anim.fragment_slide_out);
-			}
 			transaction.add(R.id.fragment_container, tempFragment);
 			transaction.addToBackStack(firstStackTag);
 			transaction.commit();
@@ -1086,12 +1066,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private boolean handleRemoveIcon() {
 		String text = editText.getText().toString();
 		if (text.isEmpty() || text.equals(null)) {
-			setConvoBar(true);
 			removeIcon.setVisibility(View.GONE);
 			return false;
 		} else {
 			removeIcon.setVisibility(View.VISIBLE);
-			setConvoBar(false);
 			return true;
 		}
 	}
@@ -1264,30 +1242,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	public void setUpdateTime() {
 		long lastUpdatedOn = System.currentTimeMillis();
 		settingsManager.setLastUpdatedOn(lastUpdatedOn);
-	}
-
-	public void setConvocationMode(boolean inConvoMode) {
-		if (inConvoMode) {
-			campusMapView.setConvoMarkerList();
-		} else {
-			campusMapView.removeConvoMarkers();
-		}
-		setConvoBar(inConvoMode);
-		resetScale = (campusMapView.getScale() == campusMapView
-				.getTargetMinScale());
-	}
-
-	private void setConvoBar(boolean showConvoBar) {
-		RelativeLayout convoContainer = (RelativeLayout) findViewById(R.id.convocation_title_container);
-		if (showConvoBar && settingsManager.isInConvoMode()) {
-			convoContainer.setVisibility(View.VISIBLE);
-		} else {
-			convoContainer.setVisibility(View.GONE);
-		}
-		if (resetScale) {
-			campusMapView.getScaleAnim(campusMapView.getTargetMinScale()).run();
-			resetScale = false;
-		}
 	}
 
 	public SlidingUpPanelLayout getSlidingLayout() {

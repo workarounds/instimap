@@ -7,4 +7,11 @@
     <item name="transparent_black" type="color">#20000000</item>
     <item name="list_item_seperator_black" type="color">#30000000</item>
     <item name="list_item_seperator_white" type="color">#90FFFFFF</item>
+
+    <color name="primary">#3412EF</color>
+    <color name="primaryDark">#1202DF</color>
+
+    <color name="ripple">#ff80ab</color>
+    <color name="accent">#ff4081</color>
+    <color name="accent_pressed">#f50057</color>
 </resources>

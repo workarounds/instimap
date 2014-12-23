@@ -2,9 +2,15 @@
 <resources>
     <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values-v11/styles.xml -->
     <eat-comment/>
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!-- API 11 theme customizations can go here. -->
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="AppTheme" parent="AppTheme.Base">
+
+    </style>
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
     </style>
     <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values-v11/values.xml -->
     <eat-comment/>
@@ -376,5 +382,12 @@
         <item name="android:dropDownListViewStyle">@style/Widget.AppCompat.ListView.DropDown</item>
         <item name="android:listChoiceIndicatorSingle">@drawable/abc_btn_radio_material</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/abc_btn_check_material</item>
+    </style>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values-v11/styles.xml -->
+    <eat-comment/>
+    <style name="ToolbarTheme" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
+        <item name="actionMenuTextColor">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
     </style>
 </resources>

@@ -28,13 +28,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -183,12 +184,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setMainActivity(this);
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-
         super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-		setUpActionBar();
+		// setUpActionBar();
 		setUpDrawer();
 
 		newSmallCard = (LinearLayout) findViewById(R.id.new_small_card);
@@ -223,8 +222,26 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		campusMapView.setData(data);
 
 		removeIcon = (ImageButton) actionBarView.findViewById(R.id.remove_icon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeClick(v);
+            }
+        });
 		indexIcon = (ImageButton) actionBarView.findViewById(R.id.index_icon);
+        indexIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                indexClick(v);
+            }
+        });
 		mapIcon = (ImageButton) actionBarView.findViewById(R.id.map_icon);
+        mapIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapClick(v);
+            }
+        });
 		addMarkerIcon = (ImageButton) findViewById(R.id.add_marker_icon);
 
 		// newCardTouchListener = new NewCardTouchListener(this);
@@ -250,14 +267,21 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	private void setUpDrawer() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        actionBarView = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, R.string.drawer_open,
+		mDrawerToggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                mToolbar,
+                R.string.drawer_open,
 				R.string.drawer_close) {
 
 			TextView settingsTitle = (TextView) actionBarView
 					.findViewById(R.id.settings_title);
-			
+
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
@@ -283,6 +307,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setUpActionBar() {
+
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setDisplayUseLogoEnabled(false);

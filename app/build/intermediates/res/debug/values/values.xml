@@ -16,8 +16,18 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="accent">#ff4081</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="accent_pressed">#f50057</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <color name="background_floating_material_dark">#ff424242</color>
     <color name="background_floating_material_light">#ffeeeeee</color>
     <color name="background_material_dark">#ff303030</color>
@@ -63,6 +73,12 @@
     <color name="material_blue_grey_950">#ff21272b</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
     <color name="material_deep_teal_500">#ff009688</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="primary">#3412EF</color>
+    <color name="primaryDark">#1202DF</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <color name="primary_dark_material_dark">#ff000000</color>
     <color name="primary_dark_material_light">#ff757575</color>
     <color name="primary_material_dark">#ff212121</color>
@@ -71,6 +87,11 @@
     <color name="primary_text_default_material_light">#de000000</color>
     <color name="primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="primary_text_disabled_material_light">#39000000</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="ripple">#ff80ab</color>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <color name="ripple_material_dark">#40ffffff</color>
     <color name="ripple_material_light">#40000000</color>
     <color name="secondary_text_default_material_dark">#b3ffffff</color>
@@ -232,16 +253,14 @@
     <string name="settings_title">Settings</string>
     <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/styles.xml -->
     <eat-comment/>
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="AppTheme" parent="AppTheme.Base">
+
     </style>
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
     <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
@@ -1308,6 +1327,15 @@
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="ToolbarTheme" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
+        <item name="actionMenuTextColor">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
+    </style>
+    <!-- From: file:/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Base.Widget.AppCompat.ActionBar"/>
     <style name="Widget.AppCompat.ActionBar.Solid" parent="Base.Widget.AppCompat.ActionBar.Solid"/>
     <style name="Widget.AppCompat.ActionBar.TabBar" parent="Base.Widget.AppCompat.ActionBar.TabBar"/>

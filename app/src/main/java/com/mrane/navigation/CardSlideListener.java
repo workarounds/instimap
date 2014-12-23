@@ -42,12 +42,12 @@ public class CardSlideListener implements PanelSlideListener,
 	@Override
 	public void onPanelSlide(View panel, float slideOffset) {
 //		setActionBarTranslation(slidingLayout.getCurrentParalaxOffset());
-		if(slideOffset >= slidingLayout.getAnchorPoint()){
-			mainActivity.getSupportActionBar().hide();
-		}
-		else{
-			mainActivity.getSupportActionBar().show();
-		}
+//		if(slideOffset >= slidingLayout.getAnchorPoint()){
+//			mainActivity.getSupportActionBar().hide();
+//		}
+//		else{
+//			mainActivity.getSupportActionBar().show();
+//		}
 	}
 
 	@Override
@@ -58,13 +58,14 @@ public class CardSlideListener implements PanelSlideListener,
 	public void onPanelExpanded(View panel) {
 		scrollView.requestDisallowInterceptTouchEvent(false);
 		scrollView.setScrollingEnabled(true);
-	}
+
+    }
 
 	@Override
 	public void onPanelAnchored(View panel) {
 		scrollView.requestDisallowInterceptTouchEvent(true);
 		scrollView.setScrollingEnabled(false);
-	}
+    }
 
 	@Override
 	public void onPanelHidden(View panel) {

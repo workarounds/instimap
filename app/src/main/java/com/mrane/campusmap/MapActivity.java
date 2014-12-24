@@ -85,6 +85,7 @@ import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
 import com.mrane.data.UpdateMapEvents;
+import com.mrane.database.models.Notice;
 import com.mrane.navigation.CardSlideListener;
 import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
@@ -258,8 +259,18 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		setFonts();
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 
+        test();
 		//updateEvents();
 	}
+
+    private void test() {
+        Notice notice = new Notice(true);
+        notice.setId(notice.getDbId());
+        notice.save();
+
+        Notice notice2 = Notice.findById(Notice.class, 20L);
+        Log.d("Sugar test", "" + notice2.getData());
+    }
 
 	private void updateEvents() {
 		new UpdateMapEvents(JSONEVENTUrl, JSONEVENTFILE, mainActivity)

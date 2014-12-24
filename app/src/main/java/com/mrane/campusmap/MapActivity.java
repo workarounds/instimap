@@ -261,16 +261,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
         test();
 		//updateEvents();
-        test();
 	}
 
     public void test(){
-        Notice notice = new Notice(true);
-        notice.save();
-        long id = 7L;
-        notice = new Notice(true);
-        notice.setId(id);
-        notice.save();
+        
     }
 
 	private void updateEvents() {

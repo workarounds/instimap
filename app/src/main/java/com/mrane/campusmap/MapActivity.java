@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -163,6 +166,24 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	private final static long UPDATETIMEPERIOD = 3 * 24 * 3600 * 1000;
 	public SoundPool soundPool;
 	public int[] soundPoolIds;
+
+    // Constants
+    // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "com.mrane.sync.provider";
+    // An account type, in the form of a domain name
+    public static final String ACCOUNT_TYPE = "com.mrane.sync";
+    // The account name
+    public static final String ACCOUNT = "dummyaccount";
+    // Instance fields
+    Account mAccount;
+
+    // Sync interval constants
+    public static final long SECONDS_PER_MINUTE = 60L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 24*60L;
+    public static final long SYNC_INTERVAL =
+            SYNC_INTERVAL_IN_MINUTES *
+                    SECONDS_PER_MINUTE;
+
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@Override
@@ -261,7 +282,33 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
         test();
 		//updateEvents();
+
+        mAccount = createSyncAccount(this);
+        refreshData();
 	}
+
+    public static Account createSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(
+                ACCOUNT, ACCOUNT_TYPE);
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(
+                        ACCOUNT_SERVICE);
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+        accountManager.addAccountExplicitly(newAccount, null, null);
+        return newAccount;
+    }
+
+    public void refreshData(){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+
+        ContentResolver.requestSync(mAccount, AUTHORITY, bundle);
+    }
 
     public void test(){
         Notice notice = new Notice(true);

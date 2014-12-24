@@ -85,7 +85,7 @@ import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
 import com.mrane.data.UpdateMapEvents;
-import com.mrane.database.models.Notice;
+import com.mrane.models.Notice;
 import com.mrane.navigation.CardSlideListener;
 import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
@@ -261,15 +261,16 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
         test();
 		//updateEvents();
+        test();
 	}
 
-    private void test() {
+    public void test(){
         Notice notice = new Notice(true);
-        notice.setId(notice.getDbId());
         notice.save();
-
-        Notice notice2 = Notice.findById(Notice.class, 20L);
-        Log.d("Sugar test", "" + notice2.getData());
+        long id = 7L;
+        notice = new Notice(true);
+        notice.setId(id);
+        notice.save();
     }
 
 	private void updateEvents() {
@@ -999,9 +1000,10 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
 	public void settingsClick(View v) {
-		hideKeyboard();
-		View drawerList = findViewById(R.id.drawer_list);
-		mDrawerLayout.openDrawer(drawerList);
+        View drawerLayout = findViewById(R.id.drawer_list);
+        mDrawerLayout.closeDrawer(drawerLayout);
+        SettingsFragment settingsFragment = new SettingsFragment();
+        putFragment(settingsFragment);
 	}
 
 	public void backClick(View v) {

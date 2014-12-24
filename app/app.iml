@@ -86,7 +86,10 @@
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="android-support-v4-preferencefragment-master" level="project" />
     <orderEntry type="library" exported="" name="sugar-1.3" level="project" />
+<<<<<<< HEAD
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
+=======
+>>>>>>> b1146fb4121496492686c9e7627e2e4a45afc649
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="nineoldandroids-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />

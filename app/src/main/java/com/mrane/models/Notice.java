@@ -1,4 +1,4 @@
-package com.mrane.database.models;
+package com.mrane.models;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;

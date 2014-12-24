@@ -1,0 +1,9 @@
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/classes/debug
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-b89fbd5b1d899327785570accad9bb294b9b3369.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/android-support-v4-preferencefragment-master-15aeca948f5d957fb6fa8609118845eef918ad5c.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/classes-99f4b7f122e769a975bc0fdef5bc5398ce9e1a19.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/nineoldandroids-2.4.0-29ba9b4aab5de2a6048a5eac371cb4b9abf2532a.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/gson-2.2.4-f5a8fe7500bf3dec59c9c8988c1a64e938e38f49.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-22b543e9e95c02257df01f3bc1ad13daab362a4b.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/classes-54c8f602123819a10b8aec7658bc8409b995b1cf.jar
+/Users/madki/AndroidstudioProjects/campusmap/app/build/intermediates/pre-dexed/debug/classes-ab20b8f57d9d2eb76e996968b28363ce5faef85c.jar

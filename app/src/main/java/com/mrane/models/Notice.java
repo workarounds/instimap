@@ -1,12 +1,11 @@
 package com.mrane.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
 import java.util.Date;
 
-public class Notice extends SugarRecord<Notice> {
+public class Notice extends ExtendedSugarRecord<Notice> {
 
     public String getData() {
         return data;

@@ -169,9 +169,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
     // Constants
     // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = "com.mrane.sync.provider";
-    // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "com.mrane.sync";
+    public static final String AUTHORITY = "com.mrane.provider";
     // The account name
     public static final String ACCOUNT = "dummyaccount";
     // Instance fields
@@ -287,10 +285,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
         refreshData();
 	}
 
-    public static Account createSyncAccount(Context context) {
+    public Account createSyncAccount(Context context) {
+//        String account_type = getResources().getString(R.string.account_type);
         // Create the account type and default account
         Account newAccount = new Account(
-                ACCOUNT, ACCOUNT_TYPE);
+                ACCOUNT, "com.mrane");
         // Get an instance of the Android account manager
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(
@@ -306,22 +305,12 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
     public void refreshData(){
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-
+        Log.d("MapActivity", "starting sync");
         ContentResolver.requestSync(mAccount, AUTHORITY, bundle);
     }
 
     public void test(){
-        Notice notice = new Notice(true);
-        notice.saveOrUpdate(Notice.class, notice.getDbId());
-        notice.saveOrUpdate(Notice.class, notice.getDbId());
 
-        Notice notice2 = new Notice(true);
-        notice2.saveOrUpdate(Notice.class, notice2.getDbId());
-
-        List<Notice> result = Notice.listAll(Notice.class);
-        for (Notice n: result) {
-            Log.d("Sugar test", "" + n.getId());
-        }
     }
 
 	private void updateEvents() {

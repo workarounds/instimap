@@ -22,32 +22,6 @@
     <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/> -->
 
-    <service
-        android:name="com.mrane.sync.AuthenticatorService">
-        <intent-filter>
-            <action android:name="android.accounts.AccountAuthenticator"/>
-        </intent-filter>
-        <meta-data
-            android:name="android.accounts.AccountAuthenticator"
-            android:resource="@xml/authenticator" />
-    </service>
-
-    <service
-        android:name="com.mrane.sync.SyncService"
-        android:exported="true"
-        android:process=":sync">
-        <intent-filter>
-            <action android:name="android.content.SyncAdapter"/>
-        </intent-filter>
-        <meta-data android:name="android.content.SyncAdapter"
-            android:resource="@xml/syncadapter" />
-    </service>
-
-    <provider android:name="com.mrane.sync.DummyProvider"
-        android:authorities="com.mrane.sync.provider"
-        android:syncable="true"
-        android:label="DummyProvider" />
-
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
@@ -75,6 +49,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name="com.mrane.sync.AuthenticatorService"
+            android:exported="true"
+            android:process=":auth">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <service
+            android:name="com.mrane.sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+        <provider android:name="com.mrane.sync.DummyProvider"
+            android:authorities="com.mrane.provider"
+            android:syncable="true"
+            android:label="DummyProvider" />
         <activity
             android:name="com.mrane.campusmap.SettingsActivity"
             android:label="@string/activity_name_settings" >

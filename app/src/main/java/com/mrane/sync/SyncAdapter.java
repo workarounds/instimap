@@ -1,6 +1,7 @@
 package com.mrane.sync;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -36,7 +37,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
      * constructor maintains compatibility with Android 3.0
      * and later platform versions
      */
-    @TargetApi(11)
+    @SuppressLint("NewApi")
     public SyncAdapter(
             Context context,
             boolean autoInitialize,

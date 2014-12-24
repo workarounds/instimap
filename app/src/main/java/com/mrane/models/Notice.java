@@ -1,7 +1,6 @@
 package com.mrane.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.dsl.Ignore;
 
 import java.util.Date;
 
@@ -15,19 +14,19 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         this.data = data;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public int getPositionId() {
+    public long getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(int positionId) {
+    public void setPositionId(long positionId) {
         this.positionId = positionId;
     }
 
@@ -47,11 +46,11 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         this.modified = modified;
     }
 
-    public int getParent() {
+    public long getParent() {
         return parent;
     }
 
-    public void setParent(int parent) {
+    public void setParent(long parent) {
         this.parent = parent;
     }
 
@@ -127,7 +126,7 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         this.updatesAbove = updatesAbove;
     }
 
-    public int getVenueId() {
+    public long getVenueId() {
         return venueId;
     }
 
@@ -147,12 +146,12 @@ public class Notice extends ExtendedSugarRecord<Notice> {
     long dbId;
     String data;
     @SerializedName("user_id")
-    int userId;
+    long userId;
     @SerializedName("position_id")
-    int positionId;
+    long positionId;
     Date created;
     Date modified;
-    int parent;
+    long parent;
     boolean visible;
     @SerializedName("comment_count")
     int commentCount;
@@ -170,7 +169,7 @@ public class Notice extends ExtendedSugarRecord<Notice> {
     @SerializedName("updates_above")
     int updatesAbove;
     @SerializedName("venue_id")
-    int venueId;
+    long venueId;
 
     public class Corner {
         String name;

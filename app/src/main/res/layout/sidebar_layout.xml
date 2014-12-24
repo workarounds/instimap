@@ -1,0 +1,28 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_list"
+    android:layout_width="304dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/list_item_gray_even"
+    android:choiceMode="singleChoice" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="left|center_vertical"
+            android:onClick="settingsClick">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:textSize="16sp"
+                android:paddingLeft="16dp"
+                android:text="Settings"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

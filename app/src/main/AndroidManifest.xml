@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="in.designlabs.instimap"
+    android:installLocation="auto"
+    android:versionCode="16"
+    android:versionName="1.2" >
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="21" />
+
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <uses-permission
+        android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    
+    <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/> -->
+
+    <service
+        android:name="com.mrane.sync.AuthenticatorService">
+        <intent-filter>
+            <action android:name="android.accounts.AccountAuthenticator"/>
+        </intent-filter>
+        <meta-data
+            android:name="android.accounts.AccountAuthenticator"
+            android:resource="@xml/authenticator" />
+    </service>
+
+    <service
+        android:name="com.mrane.sync.SyncService"
+        android:exported="true"
+        android:process=":sync">
+        <intent-filter>
+            <action android:name="android.content.SyncAdapter"/>
+        </intent-filter>
+        <meta-data android:name="android.content.SyncAdapter"
+            android:resource="@xml/syncadapter" />
+    </service>
+
+    <provider android:name="com.mrane.sync.DummyProvider"
+        android:authorities="com.mrane.sync.provider"
+        android:syncable="true"
+        android:label="DummyProvider" />
+
+    <application
+        android:name="com.orm.SugarApp"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        tools:replace="android:icon"
+        android:theme="@style/AppTheme" >
+
+        <meta-data android:name="DATABASE" android:value="sugar.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.mrane.models" />
+        <activity
+            android:name="com.mrane.campusmap.MapActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="com.mrane.campusmap.PARENT_ACTIVITY"
+                android:value="com.mrane.campusmap.MapActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mrane.campusmap.SettingsActivity"
+            android:label="@string/activity_name_settings" >
+        </activity>
+    </application>
+
+</manifest>

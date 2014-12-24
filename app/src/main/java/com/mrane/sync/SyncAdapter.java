@@ -65,5 +65,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
      * Put the data transfer code here.
      */
         Log.d("SyncAdapter", "Yo sync running");
+        NetworkRequest networkRequest = new NetworkRequest("notices", "updates", "2");
     }
 }

@@ -264,7 +264,17 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	}
 
     public void test(){
-        
+        Notice notice = new Notice(true);
+        notice.saveOrUpdate(Notice.class, notice.getDbId());
+        notice.saveOrUpdate(Notice.class, notice.getDbId());
+
+        Notice notice2 = new Notice(true);
+        notice2.saveOrUpdate(Notice.class, notice2.getDbId());
+
+        List<Notice> result = Notice.listAll(Notice.class);
+        for (Notice n: result) {
+            Log.d("Sugar test", "" + n.getId());
+        }
     }
 
 	private void updateEvents() {

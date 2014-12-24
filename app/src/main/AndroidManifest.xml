@@ -13,6 +13,16 @@
     <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/> -->
 
+    <service
+        android:name="com.example.android.syncadapter.AuthenticatorService">
+        <intent-filter>
+            <action android:name="android.accounts.AccountAuthenticator"/>
+        </intent-filter>
+        <meta-data
+            android:name="android.accounts.AccountAuthenticator"
+            android:resource="@xml/authenticator" />
+    </service>
+
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"

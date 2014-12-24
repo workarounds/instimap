@@ -261,7 +261,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
         test();
 		//updateEvents();
-        test();
 	}
 
     public void test(){

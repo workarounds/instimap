@@ -3,14 +3,16 @@ package com.mrane.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Venue {
+import java.util.Date;
 
-    @SerializedName("id")
+public class Venue extends ExtendedSugarRecord{
+
     long dbId;
     String name;
     @SerializedName("short_name")
     String shortName;
-    int group;
+    @SerializedName("group_id")
+    int groupId;
     @SerializedName("pixel_x")
     int pixelX;
     @SerializedName("pixel_y")
@@ -19,6 +21,25 @@ public class Venue {
     @SerializedName("parent_relation")
     String parentRelation;
     String description;
+    Date created;
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    Date modified;
     long lat;
     long lng;
 
@@ -46,12 +67,12 @@ public class Venue {
         this.shortName = shortName;
     }
 
-    public int getGroup() {
-        return group;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setGroup(int group) {
-        this.group = group;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public int getPixelX() {

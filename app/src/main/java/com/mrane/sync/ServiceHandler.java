@@ -1,6 +1,8 @@
 package com.mrane.sync;
 
 
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -11,6 +13,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -21,6 +25,7 @@ public class ServiceHandler {
     static String response = null;
     public final static int GET = 1;
     public final static int POST = 2;
+    public final static String baseUrl = "http://workarounds.in/vnb/api/";
  
     public ServiceHandler() {
  
@@ -84,5 +89,34 @@ public class ServiceHandler {
          
         return response;
  
+    }
+
+    public String getExtractedResponse(String url) {
+        return this.getExtractedResponse(url, GET, null);
+    }
+
+    public String getExtractedResponse(String url, List<NameValuePair> params) {
+        return this.getExtractedResponse(url, GET, params);
+    }
+
+    public String getExtractedResponse(String url, int method,
+                                        List<NameValuePair> params) {
+        String result = null;
+        url = this.baseUrl + url;
+        String response = this.makeServiceCall(url, method, params);
+        if(response != null) {
+            Log.d("NetworkRequest", response);
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean success = jsonResponse.getBoolean("success");
+                if(success) {
+                    result = jsonResponse.getString("data");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

@@ -5,13 +5,49 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class Notice extends ExtendedSugarRecord<Notice> {
+    // @SerializedName("id")
+    long dbId;
+    String dataJson;
+    @SerializedName("user_id")
+    long userId;
+    @SerializedName("position_id")
+    long positionId;
+    Date created;
+    Date modified;
+    long parent;
+    boolean visible;
+    @SerializedName("comment_count")
+    int commentCount;
+    @SerializedName("like_count")
+    int likeCount;
+    @SerializedName("start_time")
+    Date startTime;
+    @SerializedName("end_time")
+    Date endTime;
+    @SerializedName("public")
+    boolean isPublic;
+    String cornersJson;
+    @SerializedName("upStrings_below")
+    int updatesBelow;
+    @SerializedName("updates_above")
+    int updatesAbove;
+    @SerializedName("venue_id")
+    long venueId;
 
-    public String getData() {
-        return data;
+    public long getDbId() {
+        return dbId;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDbId(long dbId) {
+        this.dbId = dbId;
+    }
+
+    public String getDataJson() {
+        return dataJson;
+    }
+
+    public void setDataJson(String dataJson) {
+        this.dataJson = dataJson;
     }
 
     public long getUserId() {
@@ -30,21 +66,6 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         this.positionId = positionId;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
 
     public long getParent() {
         return parent;
@@ -78,6 +99,22 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         this.likeCount = likeCount;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
     public Date getStartTime() {
         return startTime;
     }
@@ -98,16 +135,16 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         return isPublic;
     }
 
-    public void setPublic(boolean aPublic) {
-        this.isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
-    public String getCorners() {
-        return corners;
+    public String getCornersJson() {
+        return cornersJson;
     }
 
-    public void setCorners(String corners) {
-        this.corners = corners;
+    public void setCornersJson(String cornersJson) {
+        this.cornersJson = cornersJson;
     }
 
     public int getUpdatesBelow() {
@@ -130,75 +167,19 @@ public class Notice extends ExtendedSugarRecord<Notice> {
         return venueId;
     }
 
-    public void setVenueId(int venueId) {
+    public void setVenueId(long venueId) {
         this.venueId = venueId;
     }
-
-    public long getDbId() {
-        return dbId;
-    }
-
-    public void setDbId(long dbId) {
-        this.dbId = dbId;
-    }
-
-    @SerializedName("id")
-    long dbId;
-    String data;
-    @SerializedName("user_id")
-    long userId;
-    @SerializedName("position_id")
-    long positionId;
-    Date created;
-    Date modified;
-    long parent;
-    boolean visible;
-    @SerializedName("comment_count")
-    int commentCount;
-    @SerializedName("like_count")
-    int likeCount;
-    @SerializedName("start_time")
-    Date startTime;
-    @SerializedName("end_time")
-    Date endTime;
-    @SerializedName("public")
-    boolean isPublic;
-    String corners;
-    @SerializedName("updates_below")
-    int updatesBelow;
-    @SerializedName("updates_above")
-    int updatesAbove;
-    @SerializedName("venue_id")
-    long venueId;
 
     public class Corner {
         String name;
         String tag;
 
-        public Corner() {}
+        public Corner() {
+        }
     }
 
-    public Notice() {}
-
-    public Notice(boolean test) {
-        this.dbId = 20L;
-        this.data = "test success!";
-        this.userId = 1;
-        this.positionId = 1;
-        this.created = new Date();
-        this.modified = new Date();
-        this.parent = 2;
-        this.visible = true;
-        this.commentCount = 10;
-        this.likeCount = 20;
-        this.startTime = new Date();
-        this.endTime = new Date();
-        this.isPublic = true;
-        this.corners = "";
-        this.updatesAbove = 0;
-        this.updatesBelow = 0;
-        this.venueId = 1;
+    public Notice() {
     }
-
 }
 

@@ -98,13 +98,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.d("SyncAdapter", "maxId: " + maxId);
-        Log.d("SyncAdapter", "modified: " + df.format(from));
         ServiceHandler serviceHandler = new ServiceHandler();
         String data = null;
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         String url = "notices/modified";
         params.add(new BasicNameValuePair("id", Long.toString(maxId)));
         if(from != null) {
+            Log.d("SyncAdapter", "modified: " + df.format(from));
             params.add(new BasicNameValuePair("from", df.format(from)));
         }
         data = serviceHandler.getExtractedResponse(url, ServiceHandler.GET, params);
@@ -131,13 +131,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.d("SyncAdapter", "maxId: " + maxId);
-        Log.d("SyncAdapter", "modified: " + df.format(from));
         ServiceHandler serviceHandler = new ServiceHandler();
         String data = null;
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         String url = "venues/modified";
         params.add(new BasicNameValuePair("id", Long.toString(maxId)));
         if(from != null) {
+            Log.d("SyncAdapter", "modified: " + df.format(from));
             params.add(new BasicNameValuePair("from", df.format(from)));
         }
         data = serviceHandler.getExtractedResponse(url, ServiceHandler.GET, params);

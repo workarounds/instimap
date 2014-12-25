@@ -1,15 +1,5 @@
 package com.mrane.campusmap;
 
-import in.designlabs.instimap.R;
-import in.designlabs.instimap.R.color;
-
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Pattern;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.LayoutTransition;
@@ -31,13 +21,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -87,11 +77,20 @@ import com.mrane.data.Marker;
 import com.mrane.data.Room;
 import com.mrane.data.UpdateLocations;
 import com.mrane.data.UpdateMapEvents;
-import com.mrane.models.Notice;
 import com.mrane.navigation.CardSlideListener;
 import com.mrane.navigation.SlidingUpPanelLayout;
 import com.mrane.zoomview.CampusMapView;
 import com.mrane.zoomview.SubsamplingScaleImageView.AnimationBuilder;
+
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+import in.designlabs.instimap.R;
+import in.designlabs.instimap.R.color;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
@@ -219,7 +218,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		slidingLayout.setPanelSlideListener(cardSlideListener);
 		slidingLayout.post(setAnchor());
 
-		Locations mLocations = new Locations(this);
+		Locations mLocations = new Locations();
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 		initShowDefault();

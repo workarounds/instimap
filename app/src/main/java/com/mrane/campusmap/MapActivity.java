@@ -280,6 +280,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		//updateEvents();
 
         mAccount = createSyncAccount(this);
+        setPeriodicSync();
         refreshData();
 	}
 
@@ -305,6 +306,13 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         Log.d("MapActivity", "starting sync");
         ContentResolver.requestSync(mAccount, AUTHORITY, bundle);
+    }
+
+    public void setPeriodicSync(){
+        ContentResolver resolver = getContentResolver();
+        resolver.setIsSyncable(mAccount, AUTHORITY, 1);
+        resolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+        resolver.addPeriodicSync(mAccount, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
     }
 
     public void test(){
@@ -352,7 +360,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

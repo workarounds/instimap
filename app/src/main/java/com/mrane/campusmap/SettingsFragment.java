@@ -2,7 +2,6 @@ package com.mrane.campusmap;
 
 import android.content.Context;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

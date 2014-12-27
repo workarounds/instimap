@@ -354,7 +354,6 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

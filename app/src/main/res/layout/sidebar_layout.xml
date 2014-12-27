@@ -1,9 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_list"
-    android:layout_width="304dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@android:color/white"
+    android:background="@color/list_item_gray_even"
     android:choiceMode="singleChoice" >
 
     <LinearLayout
@@ -14,23 +15,182 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="start|center_vertical"
-            android:onClick="settingsClick">
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:layout_marginLeft="4dp"
-                android:src="@drawable/ic_settings_black_24dp"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical" >
+
+            <com.mrane.campusmap.CustomCheckBoxPreference
+                android:id="@+id/mute_pref"
+                custom:name="@string/setting_mute_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginLeft="20dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="Settings"/>
+                custom:defaultValue="false"
+                custom:key="@string/setting_mute_key"
+                custom:summaryOff="@string/setting_mute_summary_off"
+                custom:summaryOn="@string/setting_mute_summary_on" />
+
+            <com.mrane.campusmap.CustomCheckBoxPreference
+                android:id="@+id/residences_pref"
+                custom:name="@string/setting_residences_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                custom:defaultValue="true"
+                custom:key="@string/setting_residences_key"
+                custom:summaryOff="@string/setting_residences_summary_off"
+                custom:summaryOn="@string/setting_residences_summary_on" />
+
+            <com.mrane.campusmap.CustomCheckBoxPreference
+                android:id="@+id/convo_pref"
+                custom:name="@string/setting_convo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                custom:defaultValue="true"
+                custom:key="@string/setting_convo_key"
+                custom:summaryOff="@string/setting_convo_summary_off"
+                custom:summaryOn="@string/setting_convo_summary_on" />
+
+            <TextView
+                android:id="@+id/events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/events"
+                android:textSize="18sp"
+                android:onClick="eventClick"
+                android:padding="10dp"
+                android:clickable="true"
+                android:visibility="gone" />
+
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/about_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/list_item_gray_even"
+            android:padding="16dp"
+            android:textColor="@android:color/darker_gray" >
+
+            <TextView
+                android:id="@+id/about_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/about_version"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/about_version_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/about_version"
+                android:text="@string/about_version_date" />
+
+            <LinearLayout
+                android:id="@+id/credits_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_version_date"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Designlabs, IIT Bombay"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Prof. Mandar Rane"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Shishir Bhagade"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Jaikishan Patel"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Aditi Kulkarni"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Manideep Polireddi"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Madhu kiran"
+                    android:textColor="#555555" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </ScrollView>
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@+id/drawer_list"-->
+    <!--android:layout_width="304dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="start"-->
+    <!--android:background="@android:color/white"-->
+    <!--android:choiceMode="singleChoice" >-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical" >-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_gravity="start|center_vertical"-->
+            <!--android:onClick="settingsClick">-->
+            <!--<ImageView-->
+                <!--android:layout_width="48dp"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:padding="12dp"-->
+                <!--android:layout_marginLeft="4dp"-->
+                <!--android:src="@drawable/ic_settings_black_24dp"/>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="16sp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:paddingTop="12dp"-->
+                <!--android:paddingBottom="12dp"-->
+                <!--android:text="Settings"/>-->
+        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+<!--</ScrollView>-->

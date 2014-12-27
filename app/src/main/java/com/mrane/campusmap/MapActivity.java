@@ -218,7 +218,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		slidingLayout.setPanelSlideListener(cardSlideListener);
 		slidingLayout.post(setAnchor());
 
-		Locations mLocations = new Locations();
+		Locations mLocations = new Locations(this);
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 		initShowDefault();

@@ -26,7 +26,7 @@
 
         <meta-data
             android:name="DATABASE"
-            android:value="sugar.db" />
+            android:value="vnb.db" />
         <meta-data
             android:name="VERSION"
             android:value="1" />

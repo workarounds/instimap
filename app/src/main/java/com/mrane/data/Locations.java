@@ -1,16 +1,31 @@
 package com.mrane.data;
 
-import com.mrane.models.Venue;
+import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mrane.models.Venue;
+import com.mrane.parser.CustomGson;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Locations {
 	public HashMap<String, Marker> data = new HashMap<String, Marker>();
+    private Context context;
+    private final String JSON_FILE = "data.json";
 
-    public Locations() {
+    public Locations(Context context) {
+        this.context = context;
         List<Venue> venues = Venue.listAll(Venue.class);
+        if(venues.isEmpty()) {
+            venues = this.populateFromJson();
+        }
+
         for (Venue venue: venues) {
             String parentName = null;
             List<String> childList = new ArrayList<String>();
@@ -43,5 +58,36 @@ public class Locations {
             }
             data.put(venue.getName(), marker);
         }
+    }
+
+    private List<Venue> populateFromJson() {
+        String venueJson = this.readFromAssets();
+        CustomGson customGson = new CustomGson();
+        Gson gson = customGson.getGson();
+        Type listType = new TypeToken<ArrayList<Venue>>() {}.getType();
+        List<Venue> venues = gson.fromJson(venueJson, listType);
+        for (Venue v: venues) {
+            v.saveOrUpdate(Venue.class, v.getDbId());
+        }
+
+        return venues;
+    }
+
+    private String readFromAssets() {
+        String fileContent = "";
+
+        try {
+            InputStream stream = context.getAssets().open(JSON_FILE);
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            fileContent = new String(buffer);
+        } catch (IOException e) {
+            // Handle exceptions here
+        }
+
+        return fileContent;
     }
 }

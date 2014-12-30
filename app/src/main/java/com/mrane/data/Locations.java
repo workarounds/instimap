@@ -18,8 +18,9 @@ public class Locations {
 	public HashMap<String, Marker> data = new HashMap<String, Marker>();
     private Context context;
     private final String JSON_FILE = "data.json";
+    private static Locations mLocations;
 
-    public Locations(Context context) {
+    private Locations(Context context) {
         this.context = context;
         List<Venue> venues = Venue.listAll(Venue.class);
         if(venues.isEmpty()) {
@@ -58,6 +59,22 @@ public class Locations {
             }
             data.put(venue.getName(), marker);
         }
+    }
+
+    public static Locations getInstance(Context context){
+        if(mLocations == null){
+            mLocations = new Locations(context);
+        }
+        return mLocations;
+    }
+
+    public Marker getMarkerById(Long id){
+        List<Venue> venues = Venue.find(Venue.class, "db_id = ?", id.toString());
+        if(!venues.isEmpty()){
+            String name = venues.get(0).getName();
+            return data.get(name);
+        }
+        return null;
     }
 
     private List<Venue> populateFromJson() {

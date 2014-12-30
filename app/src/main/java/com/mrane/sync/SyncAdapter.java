@@ -94,7 +94,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         List<Notice> fromNotices = Notice.find(Notice.class, null, null, null, "modified DESC", "1");
         Date from = null;
         if(!fromNotices.isEmpty()) {
-            from = maxNotices.get(0).getModified();
+            from = fromNotices.get(0).getModified();
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.d("SyncAdapter", "maxId: " + maxId);

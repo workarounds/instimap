@@ -40,13 +40,13 @@
 
             <com.mrane.campusmap.CustomCheckBoxPreference
                 android:id="@+id/convo_pref"
-                custom:name="@string/setting_convo_title"
+                custom:name="@string/setting_events_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 custom:defaultValue="true"
-                custom:key="@string/setting_convo_key"
-                custom:summaryOff="@string/setting_convo_summary_off"
-                custom:summaryOn="@string/setting_convo_summary_on" />
+                custom:key="@string/setting_events_key"
+                custom:summaryOff="@string/setting_events_summary_off"
+                custom:summaryOn="@string/setting_events_summary_on" />
 
             <TextView
                 android:id="@+id/events"

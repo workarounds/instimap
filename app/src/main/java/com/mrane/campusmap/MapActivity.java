@@ -94,7 +94,7 @@ import in.designlabs.instimap.R.color;
 
 public class MapActivity extends ActionBarActivity implements TextWatcher,
 		OnEditorActionListener, OnItemClickListener, OnFocusChangeListener,
-		OnTouchListener, OnChildClickListener {
+		OnTouchListener, OnChildClickListener, BarViewController.BarViewCallbacks {
 	private static MapActivity mainActivity;
 	boolean isOpened = false;
 	private SettingsManager settingsManager;
@@ -218,7 +218,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		slidingLayout.setPanelSlideListener(cardSlideListener);
 		slidingLayout.post(setAnchor());
 
-		Locations mLocations = new Locations(this);
+		Locations mLocations = Locations.getInstance(this);
 		data = mLocations.data;
 		markerlist = new ArrayList<Marker>(data.values());
 		initShowDefault();
@@ -232,7 +232,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		editText.setOnEditorActionListener(this);
 		editText.setOnFocusChangeListener(this);
 
-		settingsManager = new SettingsManager(this);
+		settingsManager = SettingsManager.getInstance(this);
 
 		campusMapView = (CampusMapView) findViewById(R.id.campusMapView);
 		campusMapView.setImageAsset("map.jpg");
@@ -276,13 +276,24 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 		setFonts();
 		toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 
-        test();
+        initBarView();
 		//updateEvents();
 
         mAccount = createSyncAccount(this);
         setPeriodicSync();
         refreshData();
 	}
+
+    private void initBarView(){
+        View barView = findViewById(R.id.bar_view);
+        BarViewController barViewCtrl = new BarViewController(this, barView);
+        barViewCtrl.setBarViewCallbackListener(this);
+    }
+
+    @Override
+    public void onEventListChanged(ArrayList<Marker> eventList) {
+        campusMapView.setEventMarkerList(eventList);
+    }
 
     public Account createSyncAccount(Context context) {
 //        String account_type = getResources().getString(R.string.account_type);
@@ -686,6 +697,11 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 				marker.getColor());
 		reCenterMarker(marker);
 		cardSlideListener.showCard();
+
+        if(settingsManager.isInEventsMode()) {
+            View barView = findViewById(R.id.bar_view);
+            barView.setVisibility(View.GONE);
+        }
 		// Runnable anim = cardTouchListener.showCardAnimation();
 		// anim.run();
 	}
@@ -819,7 +835,7 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 
 	}
 
-	private class CustomListAdapter extends ArrayAdapter<String> {
+    private class CustomListAdapter extends ArrayAdapter<String> {
 
 		private Context mContext;
 		private int id;
@@ -1028,6 +1044,9 @@ public class MapActivity extends ActionBarActivity implements TextWatcher,
 	 * @return true if the card was visible while this function was called
 	 */
 	public void dismissCard() {
+        View barView = findViewById(R.id.bar_view);
+        barView.setVisibility(View.VISIBLE);
+
 		cardSlideListener.dismissCard();
 		campusMapView.invalidate();
 	}

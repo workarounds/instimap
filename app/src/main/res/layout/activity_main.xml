@@ -50,11 +50,27 @@
 
                 <!-- MAIN CONTENT -->
 
-                <com.mrane.zoomview.CampusMapView
-                    android:id="@+id/campusMapView"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:paddingTop="48dp" />
+                    android:layout_height="fill_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/bar_view"
+                        android:layout_height="48dp"
+                        android:layout_width="match_parent"
+                        android:layout_alignParentBottom="true">
+
+                        <include layout="@layout/bar_view_layout" />
+
+                    </RelativeLayout>
+                    <com.mrane.zoomview.CampusMapView
+                        android:id="@+id/campusMapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_above="@id/bar_view"
+                        android:paddingTop="48dp" />
+
+                </RelativeLayout>
 
                 <!-- SLIDING LAYOUT -->
                 <include layout="@layout/card_layout" />

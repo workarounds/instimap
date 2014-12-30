@@ -9,20 +9,31 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
-public class SettingsManager implements OnSharedPreferenceChangeListener{
+public class SettingsManager{
+    private static SettingsManager mSettingsManager;
 	private SharedPreferences sharedPrefs;
 	private String muteKey;
 	private String residencesKey;
 	private String lastUpdatedKey;
+    private String eventsKey;
 
-	public SettingsManager(Context context){
+	private SettingsManager(Context context){
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 		Resources res = context.getResources();
 		muteKey = res.getString(R.string.setting_mute_key);
 		residencesKey = res.getString(R.string.setting_residences_key);
 		lastUpdatedKey = res.getString(R.string.settings_last_updated_key);
+        eventsKey = res.getString(R.string.setting_events_key);
 	}
+
+    public static SettingsManager getInstance(Context context){
+        if(mSettingsManager == null){
+            mSettingsManager = new SettingsManager(context);
+        }
+        return mSettingsManager;
+    }
+
+    public boolean isInEventsMode(){ return sharedPrefs.getBoolean(eventsKey, true); }
 	
 	public boolean isMuted(){
 		return sharedPrefs.getBoolean(muteKey, false);
@@ -33,11 +44,11 @@ public class SettingsManager implements OnSharedPreferenceChangeListener{
 	}
 
 	public void setMuted(boolean mute){
-		sharedPrefs.edit().putBoolean(muteKey, mute).commit();
+		sharedPrefs.edit().putBoolean(muteKey, mute).apply();
 	}
 	
 	public void setShowResidences(boolean show){
-		sharedPrefs.edit().putBoolean(residencesKey, show).commit();
+		sharedPrefs.edit().putBoolean(residencesKey, show).apply();
 	}
 	
 	public SharedPreferences getSharedPrefs(){
@@ -50,11 +61,6 @@ public class SettingsManager implements OnSharedPreferenceChangeListener{
 
 	public void setLastUpdatedOn(long lastUpdatedOn) {
 		sharedPrefs.edit().putLong(lastUpdatedKey, lastUpdatedOn).commit();
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-
 	}
 
 	

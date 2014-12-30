@@ -31,7 +31,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 
-import com.mrane.campusmap.ConvocationFragment;
 import com.mrane.campusmap.MapActivity;
 import com.mrane.campusmap.SettingsManager;
 import com.mrane.data.Building;
@@ -44,7 +43,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 	private Collection<Marker> markerList;
 	private ArrayList<Marker> addedMarkerList;
 	private ArrayList<Marker> specialMarkerList;
-	private ArrayList<Marker> convoMarkerList;
+	private ArrayList<Marker> eventsMarkerList;
 	private Marker resultMarker;
 	private Bitmap bluePointer;
 	private Bitmap yellowPointer;
@@ -228,7 +227,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		markerList = data.values();
 		addedMarkerList = new ArrayList<Marker>();
 		specialMarkerList = new ArrayList<Marker>();
-		convoMarkerList = new ArrayList<Marker>();
+		eventsMarkerList = new ArrayList<Marker>();
 		setSpecialMarkers();
 	}
 
@@ -240,21 +239,10 @@ public class CampusMapView extends SubsamplingScaleImageView {
 		}
 	}
 	
-	public void setConvoMarkerList(){
-		for(String s : ConvocationFragment.markerNames){
-			Marker m = data.get(s);
-			convoMarkerList.add(m);
-			addMarker(m);
-		}
-	}
-	
-	public void removeConvoMarkers(){
-		for(String s : ConvocationFragment.markerNames){
-			Marker m = data.get(s);
-			removeAddedMarker(m);
-		}
-		convoMarkerList.clear();
-	}
+	public void setEventMarkerList(ArrayList<Marker> eventsMarkerList){
+        this.eventsMarkerList = eventsMarkerList;
+        invalidate();
+    }
 
 	public static int getShowPinRatio() {
 		return RATIO_SHOW_PIN;
@@ -544,7 +532,7 @@ public class CampusMapView extends SubsamplingScaleImageView {
 			markerBitmap = blueMarker;
 			if (isAddedMarker(marker)){
 				markerBitmap = blueLockedMarker;
-				if(convoMarkerList.contains(marker)) markerBitmap = blueConvoMarker;
+				if(eventsMarkerList.contains(marker)) markerBitmap = blueConvoMarker;
 			}
 		} else if (color == Marker.COLOR_YELLOW) {
 			markerBitmap = yellowMarker;

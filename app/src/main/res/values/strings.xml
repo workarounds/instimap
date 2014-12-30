@@ -22,10 +22,10 @@
 	<string name="setting_residences_summary_off">Residences will not be shown on the map</string>
 	<string name="setting_residences_title">Show residences</string>
 	<string name="settings_last_updated_key">lastupdated</string>
-	<string name="setting_convo_key">convo</string>
-	<string name="setting_convo_title">Events Mode</string>
-	<string name="setting_convo_summary_on">Shows events related content</string>
-	<string name="setting_convo_summary_off">Hides events related content</string>
+	<string name="setting_events_key">events</string>
+	<string name="setting_events_title">Events Mode</string>
+	<string name="setting_events_summary_on">Shows events related content</string>
+	<string name="setting_events_summary_off">Hides events related content</string>
 	
 	<!-- Convocation Fragment -->
 	<string name="convocation_background">Convocation Background</string>

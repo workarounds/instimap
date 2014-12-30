@@ -1,5 +1,6 @@
 package com.mrane.campusmap;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.LoaderManager;
 import android.content.Context;
 import android.support.v4.content.Loader;
@@ -27,7 +28,7 @@ import in.designlabs.instimap.R;
 /**
  * Created by manidesto on 29/12/14.
  */
-public class BarViewController implements LoaderManager.LoaderCallbacks<List<Marker>>{
+public class BarViewController implements LoaderManager.LoaderCallbacks<List<Marker>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     public interface BarViewCallbacks {
         public void onEventListChanged(ArrayList<Marker> eventList);
@@ -62,6 +63,8 @@ public class BarViewController implements LoaderManager.LoaderCallbacks<List<Mar
 
     private void initialize(){
         settingsManager = SettingsManager.getInstance(context);
+        SharedPreferences prefs = settingsManager.getSharedPrefs();
+        prefs.registerOnSharedPreferenceChangeListener(this);
         date = new Date();
         setDate();
 
@@ -82,6 +85,14 @@ public class BarViewController implements LoaderManager.LoaderCallbacks<List<Mar
         });
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String eventsKey = context.getResources().getString(R.string.setting_events_key);
+        if(key.equals(eventsKey)){
+            setDate();
+        }
+    }
+
     private void setDate(){
         if(settingsManager.isInEventsMode()) {
             DateFormat dateFormat = new SimpleDateFormat("MMM dd");
@@ -91,7 +102,7 @@ public class BarViewController implements LoaderManager.LoaderCallbacks<List<Mar
             TextView dateView = (TextView) barView.findViewById(R.id.date_text_view);
             dateView.setText(dateString);
 
-            context.getSupportLoaderManager().initLoader(0,null,this);
+            context.getSupportLoaderManager().initLoader(0, null, this);
         }
     }
 

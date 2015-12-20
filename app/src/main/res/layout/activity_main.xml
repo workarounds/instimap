@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"
-            tools:context="com.mrane.campusmap.MainActivity"
+            tools:context="com.workarounds.campusmap.MainActivity"
             tools:ignore="MergeRootFrame">
 
             <LinearLayout
@@ -38,7 +38,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"></LinearLayout>
 
-            <com.mrane.navigation.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+            <in.workarounds.instimap.navigation.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/sliding_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -63,7 +63,7 @@
                         <include layout="@layout/bar_view_layout" />
 
                     </RelativeLayout>
-                    <com.mrane.zoomview.CampusMapView
+                    <in.workarounds.instimap.zoomview.CampusMapView
                         android:id="@+id/campusMapView"
                         android:layout_width="match_parent"
                         android:layout_height="fill_parent"
@@ -75,7 +75,7 @@
                 <!-- SLIDING LAYOUT -->
                 <include layout="@layout/card_layout" />
 
-            </com.mrane.navigation.SlidingUpPanelLayout>
+            </in.workarounds.instimap.navigation.SlidingUpPanelLayout>
 
             <RelativeLayout
                 android:id="@+id/fragment_container"

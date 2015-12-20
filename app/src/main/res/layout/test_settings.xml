@@ -41,7 +41,7 @@
                     android:background="@android:color/white"
                     android:orientation="vertical">
 
-                    <com.mrane.campusmap.CustomCheckBoxPreference
+                    <in.workarounds.instimap.campusmap.CustomCheckBoxPreference
                         android:id="@+id/mute_pref"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                         custom:key="@string/setting_mute_key"
                         custom:name="@string/setting_mute_title" />
 
-                    <com.mrane.campusmap.CustomCheckBoxPreference
+                    <in.workarounds.instimap.campusmap.CustomCheckBoxPreference
                         android:id="@+id/residences_pref"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -79,7 +79,7 @@
         android:layout_height="fill_parent"
         android:background="@color/list_item_gray_even" >
 
-        <com.mrane.navigation.EndDetectScrollView
+        <in.workarounds.instimap.navigation.EndDetectScrollView
             android:id="@+id/new_expanded_place_card_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -106,7 +106,7 @@
                     android:orientation="vertical" >
                 </LinearLayout>
             </RelativeLayout>
-        </com.mrane.navigation.EndDetectScrollView>
+        </in.workarounds.instimap.navigation.EndDetectScrollView>
 
         <RelativeLayout
             android:id="@+id/color_strip"

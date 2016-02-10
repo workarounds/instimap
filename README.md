@@ -23,4 +23,4 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-*Note* The map used in the app is not distributed under this license, please contact (Prof. Mandar Rane)[http://www.mrane.com/] for using/distributing the map in any format.
+**Note** The map used in the app is not distributed under this license, please contact [Prof. Mandar Rane](http://www.mrane.com/) for using/distributing the map in any format.
